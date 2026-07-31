@@ -121,7 +121,7 @@ export default component$(() => {
     : null;
 
   return (
-    <section class="mx-auto flex min-h-svh max-w-5xl flex-col px-6 pt-20">
+    <section class="mx-auto flex min-h-svh max-w-6xl flex-col px-6 pt-20">
       <Link
         href="/serverlist"
         class="text-lum-text-secondary hover:text-lum-accent mb-2 inline-flex items-center gap-1 text-sm"

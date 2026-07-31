@@ -2,7 +2,7 @@ import { component$ } from '@qwik.dev/core';
 import { Link } from '@qwik.dev/router';
 import Star from 'lucide-icons-qwik/icons/Star';
 import Users from 'lucide-icons-qwik/icons/Users';
-import Tag from 'lucide-icons-qwik/icons/Tag';
+import Hash from 'lucide-icons-qwik/icons/Hash';
 import type { ServerWithVotes } from '~/util/db';
 import type { ServerStatus } from '~/util/serverlist/status';
 import { rgbDefaults } from '@birdflop/rgbirdflop';
@@ -67,8 +67,11 @@ export default component$<ServerCardProps>(({ server, status, rank }) => {
   return (
     // Whole card is clickable via the title link's stretched ::after overlay.
     <div
+      style={{
+        '--lum-border-radius': '1rem',
+      }}
       class={{
-        'lum-card lum-grad-bg-lum-card-bg/90 relative flex-row items-center gap-2 overflow-clip p-1': true,
+        'lum-card lum-grad-bg-lum-card-bg/90 relative flex-row items-center gap-2 overflow-clip p-2': true,
         'ring-1 ring-yellow-500/40': server.featured,
       }}
     >
@@ -92,7 +95,7 @@ export default component$<ServerCardProps>(({ server, status, rank }) => {
             width={64}
             height={64}
             alt={`${server.name} icon`}
-            class="rounded-lum-1 aspect-square h-full w-full"
+            class="rounded-lum-2 aspect-square h-full w-full"
             style={{ imageRendering: 'pixelated' }}
           />
         ) : (
@@ -109,11 +112,14 @@ export default component$<ServerCardProps>(({ server, status, rank }) => {
           <div class="flex min-w-0 items-center gap-2">
             {/* Rank & Votes */}
             {rank !== undefined && (
-              <p class="text-lum-text-secondary font-mc text-sm">#{rank}</p>
+              <p class="tracking-tigher text-lum-text-secondary flex items-center font-mono text-xs">
+                <Hash size={10} />
+                {rank}
+              </p>
             )}
             <Link
               href={`/serverlist/${server.slug}`}
-              class="hover:text-lum-accent min-w-0 truncate text-lg font-bold"
+              class="hover:text-lum-accent min-w-0 flex-1 truncate text-lg font-bold after:absolute after:inset-0 after:content-['']"
             >
               {titlePreset &&
               titlePreset.colors &&
@@ -140,19 +146,19 @@ export default component$<ServerCardProps>(({ server, status, rank }) => {
               )}
             </Link>
 
-            <p class="rounded-lum-1 tracking-tigher shrink-0 text-xs text-green-400 uppercase">
-              {editionLabel[server.edition] ?? server.edition}
-            </p>
-
             {server.tags && server.tags.length > 0 && (
-              <div class="mr-1 flex gap-1">
+              <div
+                class={[
+                  'tracking-tigher font-mc relative z-10 flex shrink-0 gap-1 text-xs',
+                  '*:lum-bg-lum-card-bg/10 *:rounded-lum-2 *:flex *:items-center *:gap-0.5 *:px-2 *:py-0.5 *:backdrop-brightness-150 *:backdrop-saturate-150',
+                ]}
+              >
+                <p>{editionLabel[server.edition] ?? server.edition}</p>
                 {server.tags.map((tag) => (
                   <Link
                     key={tag}
                     href={`/serverlist?tag=${encodeURIComponent(tag)}`}
-                    class="text-lum-text-secondary lum-bg-lum-accent/20 rounded-lum-1 tracking-tigher flex cursor-pointer items-center gap-1 px-2 py-0.5 text-xs"
                   >
-                    <Tag size={10} />
                     {tag}
                   </Link>
                 ))}
@@ -184,20 +190,19 @@ export default component$<ServerCardProps>(({ server, status, rank }) => {
                     <Output
                       compact
                       value={displayIp}
-                      class="max-w-80 overflow-hidden text-ellipsis"
+                      class="lum-bg-lum-card-bg/10 rounded-lum-2 tracking-tigher relative z-10 cursor-pointer overflow-hidden px-2 py-0.5 font-mono text-xs text-ellipsis backdrop-brightness-150 backdrop-saturate-150"
                     />
                   )}
 
                   {server.verified && (
                     <span
-                      class="text-lum-text-secondary lum-bg-lum-accent/20 rounded-lum-1 tracking-tigher flex cursor-pointer items-center gap-1 px-2 py-0.5 text-xs"
+                      class="text-lum-text-secondary lum-bg-lum-accent/20 rounded-lum-2 tracking-tigher gap-1= flex cursor-pointer items-center p-1 px-1.5 text-xs"
                       title="Hosted on Birdflop"
                     >
                       <Birdflop
                         size={12}
                         fillGradient={['#54daf4', '#545eb6']}
                       />
-                      Verified
                     </span>
                   )}
 
@@ -221,7 +226,7 @@ export default component$<ServerCardProps>(({ server, status, rank }) => {
             </div>
             {/* Banner on the right next to title and description */}
             {server.bannerUrl && (
-              <div class="bg-lum-input-bg/20 rounded-lum-1 pointer-events-none relative shrink-0 overflow-hidden">
+              <div class="bg-lum-input-bg/20 rounded-lum-2 pointer-events-none relative shrink-0 overflow-hidden">
                 <img
                   src={server.bannerUrl}
                   alt={`${server.name} banner`}
@@ -237,7 +242,7 @@ export default component$<ServerCardProps>(({ server, status, rank }) => {
       </div>
 
       {server.featured && (
-        <span class="bg-lum-card-bg/80 rounded-lum-1 absolute top-2 right-2 z-10 flex items-center gap-1 px-1.5 py-0.5 text-xs font-semibold text-yellow-400 backdrop-blur-sm">
+        <span class="bg-lum-card-bg/80 rounded-lum-2 absolute top-2 right-2 z-10 flex items-center gap-1 px-1.5 py-0.5 text-xs font-semibold text-yellow-400 backdrop-blur-sm">
           <Star size={12} class="fill-yellow-400" /> Sponsored
         </span>
       )}

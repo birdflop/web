@@ -2,7 +2,6 @@ import {
   $,
   component$,
   createContextId,
-  QRL,
   useContext,
   useContextProvider,
   useSignal,
@@ -15,8 +14,7 @@ import { useSession } from '~/routes/plugin@auth';
 import { getPresets, rgbPreset } from '~/util/rgb/presets';
 import { Dropdown, SelectMenu, Toggle } from '@luminescent/ui-qwik';
 import PresetPreview from '~/components/rgbirdflop/presets/PresetPreview';
-import ChevronLeft from 'lucide-icons-qwik/icons/ChevronLeft';
-import ChevronRight from 'lucide-icons-qwik/icons/ChevronRight';
+import Pagination from '~/components/Elements/Pagination';
 import Save from 'lucide-icons-qwik/icons/Save';
 import Search from 'lucide-icons-qwik/icons/Search';
 import Send from 'lucide-icons-qwik/icons/Send';
@@ -161,107 +159,6 @@ export const useCookies = routeLoader$(({ cookie, url }) => {
   );
   return cookies;
 });
-
-const Pagination = component$(
-  ({
-    page,
-    perPage,
-    totalPages,
-    updateURL,
-    presetCount,
-    presetsLength,
-  }: {
-    page: number;
-    perPage: number;
-    totalPages: number;
-    updateURL: QRL<(params: Record<string, string | number | boolean>) => void>;
-    presetCount: number;
-    presetsLength: number;
-  }) => {
-    const t = inlineTranslate();
-
-    return (
-      <div class="relative my-2 flex flex-col items-center justify-between gap-2 p-1 sm:flex-row">
-        <p class="text-lum-text-secondary lum-btn-p-1 text-center text-xs sm:text-left">
-          {`${t('rgb.presets.totalCount@@Total presets: ')}${presetsLength}/${presetCount}`}
-          {totalPages > 1 &&
-            ` - ${t('rgb.presets.pageInfo@@Page ')}${page} ${t('rgb.presets.pageInfo.of@@of')} ${totalPages}`}
-        </p>
-        <div class="flex flex-1 items-center justify-center gap-2">
-          <button
-            class="lum-btn rounded-lum-1 p-1"
-            disabled={page === 1}
-            title={t('rgb.presets.pagination.previous@@Previous')}
-            onClick$={() => {
-              void updateURL({ page: Math.max(1, page - 1) });
-            }}
-          >
-            <ChevronLeft size={20} />
-          </button>
-          <div class="lum-card sm:lum-bg-transparent flex-row gap-1 p-1 sm:p-0">
-            {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-              let pageNum: number;
-              if (totalPages <= 5) {
-                pageNum = i + 1;
-              } else if (page <= 3) {
-                pageNum = i + 1;
-              } else if (page >= totalPages - 2) {
-                pageNum = totalPages - 4 + i;
-              } else {
-                pageNum = page - 2 + i;
-              }
-              return (
-                <button
-                  key={pageNum}
-                  class={`lum-btn lum-btn-p-1 rounded-lum-1 min-w-8 justify-center ${
-                    pageNum === page
-                      ? 'lum-grad-bg-lum-accent/20'
-                      : 'lum-bg-transparent'
-                  }`}
-                  onClick$={() => {
-                    void updateURL({ page: pageNum });
-                  }}
-                >
-                  {pageNum}
-                </button>
-              );
-            })}
-          </div>
-          <button
-            class="lum-btn rounded-lum-1 p-1"
-            disabled={page === totalPages}
-            onClick$={() => {
-              void updateURL({ page: Math.min(totalPages, page + 1) });
-            }}
-            title={t('rgb.presets.pagination.next@@Next')}
-          >
-            <ChevronRight size={20} />
-          </button>
-        </div>
-        <div class="flex items-center justify-center gap-2 sm:justify-end">
-          <p class="whitespace-nowrap">
-            {t('rgb.presets.pagination.perPage@@Per page:')}
-          </p>
-          <SelectMenu
-            class="lum-btn-p-1 rounded-lum-1 lum-bg-transparent"
-            value={perPage}
-            onChange$={(e, el) => {
-              const newPerPage = parseInt(el.value, 10);
-              void updateURL({ perPage: newPerPage, page: 1 });
-            }}
-            title="Items per page"
-            values={[
-              { name: '10', value: '10' },
-              { name: '20', value: '20' },
-              { name: '50', value: '50' },
-              { name: '100', value: '100' },
-            ]}
-          />
-        </div>
-      </div>
-    );
-  }
-);
 
 export const privatePresetsContext = createContextId<Signal<rgbPreset[]>>(
   'privatepresets-context'
@@ -542,8 +439,10 @@ export default component$(() => {
           perPage={perPage}
           totalPages={totalPages}
           updateURL={updateURL}
-          presetCount={presetCount}
-          presetsLength={publicPresets.length}
+          totalCount={presetCount}
+          rowsLength={publicPresets.length}
+          itemLabel="presets"
+          perPageOptions={[12, 24, 48, 96]}
         />
       )}
       <div class="grid gap-2 sm:grid-cols-2">
@@ -572,8 +471,10 @@ export default component$(() => {
           perPage={perPage}
           totalPages={totalPages}
           updateURL={updateURL}
-          presetCount={presetCount}
-          presetsLength={publicPresets.length}
+          totalCount={presetCount}
+          rowsLength={publicPresets.length}
+          itemLabel="presets"
+          perPageOptions={[12, 24, 48, 96]}
         />
       )}
       <MyPrivatePresets />

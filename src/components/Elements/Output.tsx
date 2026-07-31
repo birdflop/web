@@ -37,9 +37,9 @@ export default component$<{
 
   if (compact) {
     return (
-      <pre
+      <button
         class={{
-          'text-lum-text-secondary lum-bg-lum-input-bg/40 rounded-lum-1 tracking-tigher flex cursor-pointer items-center gap-1 px-2 py-0.5 text-xs': true,
+          'flex items-center gap-1': true,
           ...getClassObject(className),
         }}
         title="Copy IP"
@@ -47,7 +47,7 @@ export default component$<{
       >
         <Copy size={12} class="shrink-0" />
         {value}
-      </pre>
+      </button>
     );
   }
 
