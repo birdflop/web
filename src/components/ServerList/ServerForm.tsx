@@ -58,6 +58,7 @@ export default component$<ServerFormProps>(({ mode, initial }) => {
   >([]);
   const selectedPresetIndex = useSignal<string>('');
 
+  // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     try {
       const rawOptions: Array<{ name: string; preset: rgbPreset }> = [];

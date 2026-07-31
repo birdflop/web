@@ -4,23 +4,31 @@ import Flag from 'lucide-icons-qwik/icons/Flag';
 import Pencil from 'lucide-icons-qwik/icons/Pencil';
 import Trash2 from 'lucide-icons-qwik/icons/Trash2';
 import X from 'lucide-icons-qwik/icons/X';
+import CheckCircle from 'lucide-icons-qwik/icons/CheckCircle';
 import { Notification, NotificationContext } from '~/util/Notification';
-import { deleteServer, reportServer } from '~/util/serverlist/actions';
+import {
+  deleteServer,
+  reportServer,
+  setServerVerified,
+} from '~/util/serverlist/actions';
 
 interface ServerControlsProps {
   serverId: number;
   slug: string;
   canManage: boolean;
+  isAdmin?: boolean;
+  verified?: boolean;
 }
 
 export default component$<ServerControlsProps>(
-  ({ serverId, slug, canManage }) => {
+  ({ serverId, slug, canManage, isAdmin, verified }) => {
     const notifications = useContext(NotificationContext);
     const nav = useNavigate();
     const reporting = useSignal(false);
     const reason = useSignal('');
     const deleting = useSignal(false);
     const confirmingDelete = useSignal(false);
+    const isVerified = useSignal(verified ?? false);
 
     const submitReport = $(async () => {
       if (!reason.value.trim()) return;
@@ -53,6 +61,35 @@ export default component$<ServerControlsProps>(
           new Notification()
             .setTitle('Could not delete')
             .setDescription(result.error ?? '')
+            .setBgColor('lum-grad-bg-red/50')
+            .toJSON()
+        );
+      }
+    });
+
+    const toggleVerified = $(async () => {
+      const next = !isVerified.value;
+      const res = await setServerVerified(serverId, next);
+      if (res.success) {
+        isVerified.value = next;
+        notifications.push(
+          new Notification()
+            .setTitle(next ? 'Server Verified' : 'Server Unverified')
+            .setDescription(
+              next
+                ? 'Server is now marked as Birdflop Verified.'
+                : 'Birdflop Verified badge removed.'
+            )
+            .setBgColor('lum-grad-bg-green/50')
+            .toJSON()
+        );
+      } else {
+        notifications.push(
+          new Notification()
+            .setTitle('Error')
+            .setDescription(
+              res.error ?? 'Failed to update verification status.'
+            )
             .setBgColor('lum-grad-bg-red/50')
             .toJSON()
         );
@@ -99,6 +136,21 @@ export default component$<ServerControlsProps>(
                 </button>
               )}
             </>
+          )}
+          {isAdmin && (
+            <button
+              class={{
+                'lum-btn rounded-lum-1': true,
+                'lum-bg-sky-500/20 hover:lum-bg-sky-500/40 text-sky-400':
+                  !isVerified.value,
+                'lum-bg-gray-500/20 hover:lum-bg-gray-500/40 text-gray-400':
+                  isVerified.value,
+              }}
+              onClick$={toggleVerified}
+            >
+              <CheckCircle size={16} />{' '}
+              {isVerified.value ? 'Unverify (Birdflop)' : 'Verify (Birdflop)'}
+            </button>
           )}
           <button
             class="lum-btn lum-bg-transparent hover:lum-bg-lum-input-bg/40 rounded-lum-1 text-lum-text-secondary"

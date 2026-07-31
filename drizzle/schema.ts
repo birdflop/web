@@ -195,6 +195,8 @@ export const servers = sqliteTable(
     // Sponsored / featured placement (admin-granted in v1).
     featured: integer('featured', { mode: 'boolean' }).default(false).notNull(),
     featuredUntil: integer('featuredUntil', { mode: 'timestamp_ms' }),
+    // Verified Birdflop host placement (admin-granted).
+    verified: integer('verified', { mode: 'boolean' }).default(false).notNull(),
     plugins: text('plugins', { mode: 'json' }).$type<{
       [id: string]: PluginType;
     }>(),
@@ -208,6 +210,7 @@ export const servers = sqliteTable(
   (t) => [
     index('servers_owner_idx').on(t.ownerId),
     index('servers_featured_idx').on(t.featured),
+    index('servers_verified_idx').on(t.verified),
   ]
 );
 

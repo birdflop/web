@@ -14,10 +14,8 @@ import Clock from 'lucide-icons-qwik/icons/Clock';
 import Calendar from 'lucide-icons-qwik/icons/Calendar';
 import Trophy from 'lucide-icons-qwik/icons/Trophy';
 import User from 'lucide-icons-qwik/icons/User';
-import Tag from 'lucide-icons-qwik/icons/Tag';
 import Info from 'lucide-icons-qwik/icons/Info';
 import Palette from 'lucide-icons-qwik/icons/Palette';
-import Star from 'lucide-icons-qwik/icons/Star';
 import Laptop from 'lucide-icons-qwik/icons/Laptop';
 import Smartphone from 'lucide-icons-qwik/icons/Smartphone';
 import Blocks from 'lucide-icons-qwik/icons/Blocks';
@@ -26,14 +24,12 @@ import { generateHead } from '~/root';
 import { getDB, servers, serverVotes, users } from '~/util/db';
 import { getServerStatus } from '~/util/serverlist/status';
 import { renderBBCode, stripBBCode } from '~/util/serverlist/bbcode';
-import { formatVersionRange } from '~/util/serverlist/validation';
 import {
   DEFAULT_JAVA_PORT,
   DEFAULT_BEDROCK_PORT,
 } from '~/util/serverlist/constants';
 import { checkAdmin } from '~/routes/layout';
-import StatusBadge from '~/components/ServerList/StatusBadge';
-import ServerTitle from '~/components/ServerList/ServerTitle';
+import ServerCard from '~/components/ServerList/ServerCard';
 import VoteSection from '~/components/ServerList/VoteSection';
 import ServerControls from '~/components/ServerList/ServerControls';
 
@@ -87,14 +83,9 @@ export const useServer = routeLoader$(async (event) => {
     totalVotes: Number(totalRow?.count ?? 0),
     sitekey: event.env.get('TURNSTILE_SITEKEY') ?? '',
     canManage,
+    isAdmin,
   };
 });
-
-const editionLabel: Record<string, string> = {
-  java: 'Java Edition',
-  bedrock: 'Bedrock Edition',
-  both: 'Java & Bedrock',
-};
 
 const ConnectRow = component$<{
   label: string;
@@ -138,74 +129,15 @@ export default component$(() => {
         <ArrowLeft size={16} /> Back to server list
       </Link>
 
-      {s.bannerUrl && (
-        <img
-          src={s.bannerUrl}
-          alt={`${s.name} banner`}
-          class="rounded-lum mb-4 max-h-48 w-full object-cover"
-          width={900}
-          height={192}
-        />
-      )}
-
-      <div class="flex flex-wrap items-start gap-4">
-        {data.status?.icon && (
-          <img
-            src={data.status.icon}
-            width={72}
-            height={72}
-            alt={`${s.name} icon`}
-            class="rounded-lum-1 h-18 w-18"
-          />
-        )}
-        <div class="flex min-w-0 flex-1 flex-col gap-1">
-          <div class="flex flex-wrap items-center gap-2">
-            <h1 class="text-2xl font-extrabold">
-              <ServerTitle name={s.name} rgbPreset={s.rgbPreset} />
-            </h1>
-            {s.featured && (
-              <span class="flex items-center gap-1 text-xs font-semibold text-yellow-400">
-                <Star size={12} class="fill-yellow-400 text-yellow-400" />{' '}
-                Sponsored
-              </span>
-            )}
-          </div>
-          <div class="flex flex-wrap items-center gap-3">
-            <StatusBadge status={data.status} />
-            <span class="text-lum-text-secondary text-sm">
-              {editionLabel[s.edition] ?? s.edition}
-            </span>
-            {formatVersionRange(
-              s.minVersion,
-              s.maxVersion,
-              data.status?.version
-            ) && (
-              <span class="text-lum-text-secondary flex items-center gap-1 text-sm">
-                <Tag size={14} />{' '}
-                {formatVersionRange(
-                  s.minVersion,
-                  s.maxVersion,
-                  data.status?.version
-                )}
-              </span>
-            )}
-          </div>
-          {s.tags.length > 0 && (
-            <div class="mt-1 flex flex-wrap gap-1">
-              {s.tags.map((tag) => (
-                <Link
-                  key={tag}
-                  href={`/serverlist?tag=${encodeURIComponent(tag)}`}
-                  class="rounded-lum-1 bg-lum-accent/10 text-lum-accent hover:bg-lum-accent/20 flex items-center gap-1 px-2 py-0.5 text-xs"
-                >
-                  <Tag size={10} />
-                  {tag}
-                </Link>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
+      <ServerCard
+        server={{
+          ...s,
+          monthlyVotes: data.monthlyVotes,
+          totalVotes: data.totalVotes,
+          owner: data.owner,
+        }}
+        status={data.status}
+      />
 
       <div class="mt-4 grid gap-4 md:grid-cols-3">
         <div class="flex flex-col gap-4 md:col-span-2">
@@ -309,6 +241,8 @@ export default component$(() => {
             serverId={s.id}
             slug={s.slug}
             canManage={data.canManage}
+            isAdmin={data.isAdmin}
+            verified={s.verified}
           />
         </div>
 

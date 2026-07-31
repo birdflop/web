@@ -11,10 +11,12 @@ import Activity from 'lucide-icons-qwik/icons/Activity';
 import Frown from 'lucide-icons-qwik/icons/Frown';
 import AlertCircle from 'lucide-icons-qwik/icons/AlertCircle';
 import Settings from 'lucide-icons-qwik/icons/Settings';
+import CheckCircle from 'lucide-icons-qwik/icons/CheckCircle';
 import { generateHead } from '~/root';
 import { getDB } from '~/util/db';
 import { queryServers, type ServerListParams } from '~/util/serverlist/queries';
 import {
+  LIMITS,
   SERVER_TAGS,
   isServerSort,
   isServerTag,
@@ -54,6 +56,7 @@ export const useServers = routeLoader$(async ({ url }) => {
     sort,
     onlineOnly: sp.get('online') === 'true',
     version: sp.get('version') || '',
+    verifiedOnly: sp.get('verified') === 'true',
   };
 
   try {
@@ -309,6 +312,17 @@ export default component$(() => {
               </span>
             </Toggle>
 
+            <Toggle
+              id="verified-only"
+              checked={data.verifiedOnly}
+              onChange$={(e, el) => void updateURL({ verified: el.checked })}
+            >
+              <span class="flex items-center gap-1.5 text-sm">
+                <CheckCircle size={14} class="text-sky-400" /> Birdflop Verified
+                only
+              </span>
+            </Toggle>
+
             <Label
               for="version-filter"
               label="Version"
@@ -321,6 +335,7 @@ export default component$(() => {
                 id="version-filter"
                 class="lum-input rounded-lum-1 w-full py-1 text-sm"
                 placeholder="e.g. 1.21"
+                maxLength={LIMITS.version}
                 value={data.version}
                 onChange$={(e, el) => void updateURL({ version: el.value })}
               />

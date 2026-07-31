@@ -21,12 +21,12 @@ describe('serverlist validation', () => {
       name: 'Test Server',
       description: 'A cool test server',
       javaHost: 'play.example.com',
-      minVersion: 'a'.repeat(31),
+      minVersion: 'a'.repeat(9),
     });
 
     expect(invalidResult.valid).toBe(false);
     expect(invalidResult.errors).toContain(
-      'Minimum version must be 30 characters or fewer.'
+      'Minimum version must be 8 characters or fewer.'
     );
   });
 

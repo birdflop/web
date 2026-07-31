@@ -81,5 +81,5 @@ export const LIMITS = {
   shortDescription: 150,
   maxTags: 5,
   url: 300,
-  version: 30,
+  version: 8,
 } as const;

@@ -348,3 +348,23 @@ export const updateServerPlugins = server$(async function (
 
   return { success: true as const };
 });
+
+export const setServerVerified = server$(async function (
+  serverId: number,
+  verified: boolean
+) {
+  const session = this.sharedMap.get('session');
+  const db = getDB();
+  if (!session?.user?.id || !db)
+    return { success: false as const, error: 'Unauthorized' };
+
+  const admin = await isAdmin.call(this);
+  if (!admin) return { success: false as const, error: 'Unauthorized' };
+
+  await db
+    .update(servers)
+    .set({ verified, updatedAt: new Date() })
+    .where(eq(servers.id, serverId));
+
+  return { success: true as const };
+});

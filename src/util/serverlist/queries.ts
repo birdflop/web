@@ -28,6 +28,7 @@ export interface ServerListParams {
   sort: ServerSort;
   onlineOnly: boolean;
   version: string;
+  verifiedOnly?: boolean;
 }
 
 export interface ServerListResult {
@@ -63,6 +64,9 @@ function buildWhere(params: ServerListParams) {
         like(servers.maxVersion, `%${params.version}%`)
       )
     );
+  }
+  if (params.verifiedOnly) {
+    conditions.push(eq(servers.verified, true));
   }
   return conditions.length ? and(...conditions) : undefined;
 }
