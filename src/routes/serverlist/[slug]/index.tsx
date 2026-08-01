@@ -200,7 +200,7 @@ export default component$(() => {
                 href={s.website}
                 target="_blank"
                 rel="noopener noreferrer nofollow"
-                class="lum-btn lum-bg-lum-input-bg/40 rounded-lum-1"
+                class="lum-btn lum-bg-lum-input-bg/40"
               >
                 <Globe size={18} /> Website
               </a>
@@ -210,14 +210,14 @@ export default component$(() => {
                 href={s.discord}
                 target="_blank"
                 rel="noopener noreferrer nofollow"
-                class="lum-btn lum-bg-lum-input-bg/40 rounded-lum-1"
+                class="lum-btn lum-bg-lum-input-bg/40"
               >
-                <SiDiscord size={18} /> Discord
+                <SiDiscord class="fill-current" size={18} /> Discord
               </a>
             )}
             <Link
               href={`/resources/rgb?s=${s.slug}`}
-              class="lum-btn lum-bg-lum-input-bg/40 rounded-lum-1"
+              class="lum-btn lum-bg-lum-input-bg/40"
             >
               <Palette size={18} /> RGB Gradient
             </Link>
