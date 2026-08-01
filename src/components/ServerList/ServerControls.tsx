@@ -153,13 +153,15 @@ export default component$<ServerControlsProps>(
               {isVerified.value ? 'Unverify (Birdflop)' : 'Verify (Birdflop)'}
             </button>
           )}
-          <button
-            class="lum-btn lum-bg-transparent hover:lum-bg-lum-input-bg/40 lum-btn-p-1 text-lum-text-secondary text-xs sm:text-sm"
-            onClick$={() => modalRef.value?.showModal()}
-          >
-            <Flag size={14} />
-            Report
-          </button>
+          {!canManage && (
+            <button
+              class="lum-btn lum-bg-transparent hover:lum-bg-lum-input-bg/40 lum-btn-p-1 text-lum-text-secondary text-xs sm:text-sm"
+              onClick$={() => modalRef.value?.showModal()}
+            >
+              <Flag size={14} />
+              Report
+            </button>
+          )}
         </div>
 
         <dialog

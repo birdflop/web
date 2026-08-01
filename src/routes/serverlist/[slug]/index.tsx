@@ -34,10 +34,11 @@ import {
 } from '~/util/serverlist/birdflop';
 import MotdText from '~/components/Elements/MotdText';
 import { toPublicOwner, toPublicServer } from '~/util/serverlist/queries';
-import { checkAdmin } from '~/routes/layout';
+import { useIsAdmin } from '~/routes/layout';
 import ServerCard from '~/components/ServerList/ServerCard';
 import VoteSection from '~/components/ServerList/VoteSection';
 import ServerControls from '~/components/ServerList/ServerControls';
+import { useSession } from '~/routes/plugin@auth';
 
 export const useServer = routeLoader$(async (event) => {
   const db = getDB();
@@ -83,11 +84,6 @@ export const useServer = routeLoader$(async (event) => {
 
   const status = await getServerStatus(serverRow);
 
-  const session = event.sharedMap.get('session');
-  const isAdmin = checkAdmin(event);
-  const canManage =
-    isAdmin || (!!session?.user?.id && session.user.id === serverRow.ownerId);
-
   // Strip Votifier secrets and the owner's account details before the row
   // enters the loader payload — it is visible to every visitor.
   return {
@@ -97,8 +93,6 @@ export const useServer = routeLoader$(async (event) => {
     monthlyVotes: Number(monthlyRow?.count ?? 0),
     totalVotes: Number(totalRow?.count ?? 0),
     sitekey: event.env.get('TURNSTILE_SITEKEY') ?? '',
-    canManage,
-    isAdmin,
   };
 });
 
@@ -123,6 +117,11 @@ const ConnectRow = component$<{
 export default component$(() => {
   const data = useServer().value;
   const s = data.server;
+  const session = useSession();
+  const isAdminSig = useIsAdmin();
+  const canManage =
+    isAdminSig.value ||
+    (!!session.value?.user?.id && session.value.user.id === s.ownerId);
   const javaAddr = s.javaHost
     ? `${s.javaHost}${s.javaPort && s.javaPort !== DEFAULT_JAVA_PORT ? `:${s.javaPort}` : ''}`
     : null;
@@ -143,8 +142,8 @@ export default component$(() => {
         <ServerControls
           serverId={s.id}
           slug={s.slug}
-          canManage={data.canManage}
-          isAdmin={data.isAdmin}
+          canManage={canManage}
+          isAdmin={isAdminSig.value}
           verified={s.verified}
         />
       </div>
