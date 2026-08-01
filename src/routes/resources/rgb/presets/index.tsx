@@ -38,9 +38,10 @@ import MyPrivatePresets from '~/components/rgbirdflop/presets/MyPrivatePresets';
 import { useIsAdmin } from '~/routes/layout';
 import { donateLink } from '~/components/Elements/Nav';
 import { rgbStoreContext } from '~/components/rgbirdflop/RGBirdflop';
+import { Session } from '@auth/qwik';
 
 export const usePresets = routeLoader$(async ({ url, sharedMap }) => {
-  const session = sharedMap.get('session') as { user: { id: string } } | null;
+  const session = sharedMap.get('session') as Session | undefined;
   let publicPresets: PublicPreset[] = [];
   let presetCount = 0;
   const errors: string[] = [];

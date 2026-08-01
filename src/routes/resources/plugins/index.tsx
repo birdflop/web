@@ -48,6 +48,7 @@ import {
 } from '~/util/plugins/ServerPlugin';
 import { downloadSpigotPlugin } from '~/util/plugins/SpigotPlugin';
 import Globe from 'lucide-icons-qwik/icons/Globe';
+import { Session } from '@auth/qwik';
 
 const debug = true;
 
@@ -62,8 +63,8 @@ const serverDefaults: ServerType = {
   plugins: {},
 };
 
-export const useUserServers = routeLoader$(async (event) => {
-  const session = event.sharedMap.get('session');
+export const useUserServers = routeLoader$(async ({ sharedMap }) => {
+  const session = sharedMap.get('session') as Session;
   const db = getDB();
   if (!session?.user?.id || !db) return [];
 

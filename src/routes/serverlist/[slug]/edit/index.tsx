@@ -8,6 +8,7 @@ import { generateHead } from '~/root';
 import { getDB, servers } from '~/util/db';
 import { checkAdmin } from '~/routes/layout';
 import ServerForm from '~/components/ServerList/ServerForm';
+import { Session } from '@auth/qwik';
 
 export const useEditServer = routeLoader$(async (event) => {
   const db = getDB();
@@ -18,7 +19,7 @@ export const useEditServer = routeLoader$(async (event) => {
     .get();
   if (!server) throw event.error(404, 'Server not found');
 
-  const session = event.sharedMap.get('session');
+  const session = event.sharedMap.get('session') as Session | undefined;
   const canManage =
     checkAdmin(event) ||
     (!!session?.user?.id && session.user.id === server.ownerId);

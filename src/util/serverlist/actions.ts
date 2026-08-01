@@ -19,6 +19,7 @@ import {
   REPORT_COOLDOWN_MS,
   VOTE_COOLDOWN_MS,
 } from './constants';
+import { Session } from '@auth/qwik';
 
 function getClientIp(headers: Headers): string | null {
   return (
@@ -51,7 +52,7 @@ async function uniqueSlug(
 }
 
 export const createServer = server$(async function (input: ServerFormInput) {
-  const session = this.sharedMap.get('session');
+  const session = this.sharedMap.get('session') as Session | undefined;
   const db = getDB();
   if (!session?.user?.id || !db)
     return {
@@ -115,7 +116,7 @@ export const updateServer = server$(async function (
   id: number,
   input: ServerFormInput
 ) {
-  const session = this.sharedMap.get('session');
+  const session = this.sharedMap.get('session') as Session | undefined;
   const db = getDB();
   if (!session?.user?.id || !db)
     return { success: false as const, errors: ['You must be logged in.'] };
@@ -176,7 +177,7 @@ export const updateServer = server$(async function (
 });
 
 export const deleteServer = server$(async function (id: number) {
-  const session = this.sharedMap.get('session');
+  const session = this.sharedMap.get('session') as Session | undefined;
   const db = getDB();
   if (!session?.user?.id || !db)
     return { success: false as const, error: 'You must be logged in.' };
@@ -332,7 +333,7 @@ export const reportServer = server$(async function (
   if (cleanReason.length > 100)
     return { success: false as const, error: 'Reason is too long.' };
 
-  const session = this.sharedMap.get('session');
+  const session = this.sharedMap.get('session') as Session | undefined;
   const ip = getClientIp(this.request.headers);
 
   // One report per server per user/IP per cooldown window, to bound spam.
@@ -377,7 +378,7 @@ export const reportServer = server$(async function (
 });
 
 export const getUserServers = server$(async function () {
-  const session = this.sharedMap.get('session');
+  const session = this.sharedMap.get('session') as Session | undefined;
   const db = getDB();
   if (!session?.user?.id || !db) return [];
 
@@ -400,7 +401,7 @@ export const updateServerPlugins = server$(async function (
     [id: string]: import('~/util/plugins/ServerPlugin').PluginType;
   }
 ) {
-  const session = this.sharedMap.get('session');
+  const session = this.sharedMap.get('session') as Session | undefined;
   const db = getDB();
   if (!session?.user?.id || !db)
     return { success: false as const, error: 'Unauthorized' };
@@ -429,7 +430,7 @@ export const setServerVerified = server$(async function (
   serverId: number,
   verified: boolean
 ) {
-  const session = this.sharedMap.get('session');
+  const session = this.sharedMap.get('session') as Session | undefined;
   const db = getDB();
   if (!session?.user?.id || !db)
     return { success: false as const, error: 'Unauthorized' };

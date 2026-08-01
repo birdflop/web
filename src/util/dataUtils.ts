@@ -224,7 +224,7 @@ export const setUserData = server$(async function (data: {
   settings?: Settings;
   plugins?: PluginsStoreType;
 }) {
-  const session = this.sharedMap.get('session') as Session;
+  const session = this.sharedMap.get('session') as Session | undefined;
 
   const db = getDB();
   if (!session || !db || !session.user?.id)
@@ -247,7 +247,7 @@ export const setUserData = server$(async function (data: {
 });
 
 export const savePreset = server$(async function (presetId: number) {
-  const session = this.sharedMap.get('session') as Session;
+  const session = this.sharedMap.get('session') as Session | undefined;
   const db = getDB();
 
   if (!session?.user?.id || !db)
@@ -277,7 +277,7 @@ export const savePreset = server$(async function (presetId: number) {
 });
 
 export const unsavePreset = server$(async function (presetId: number) {
-  const session = this.sharedMap.get('session') as Session;
+  const session = this.sharedMap.get('session') as Session | undefined;
   const db = getDB();
 
   if (!session?.user?.id || !db)
@@ -311,7 +311,7 @@ export const unsavePreset = server$(async function (presetId: number) {
 export const publishPreset = server$(async function (
   submission: PublicPresetSubmission
 ) {
-  const session = this.sharedMap.get('session') as Session;
+  const session = this.sharedMap.get('session') as Session | undefined;
 
   const db = getDB();
   if (!session || !db || !session.user?.id)
@@ -359,7 +359,7 @@ export const updatePreset = server$(async function (
   presetId: number,
   presetData: Partial<PresetPartial>
 ) {
-  const session = this.sharedMap.get('session') as Session;
+  const session = this.sharedMap.get('session') as Session | undefined;
 
   const db = getDB();
   if (!session || !db || !session.user?.id)
@@ -391,7 +391,7 @@ export const updatePreset = server$(async function (
 });
 
 export const deletePreset = server$(async function (presetId: number) {
-  const session = this.sharedMap.get('session') as Session;
+  const session = this.sharedMap.get('session') as Session | undefined;
 
   const db = getDB();
   if (!session || !db || !session.user?.id)

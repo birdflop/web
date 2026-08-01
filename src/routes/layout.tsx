@@ -69,7 +69,7 @@ export type FlopbirdStore = {
 export const checkAdmin = function (props: RequestEventBase) {
   const { env, sharedMap } = props;
 
-  const session = sharedMap.get('session') as Session;
+  const session = sharedMap.get('session') as Session | undefined;
   if (!session?.user?.id) return false;
   const admins =
     env
