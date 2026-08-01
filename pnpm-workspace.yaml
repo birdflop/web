@@ -17,6 +17,7 @@ minimumReleaseAgeExclude:
   - better-sqlite3@13.0.2
   - miniflare@4.20260722.1
   - wrangler@4.115.0
+  - '@types/better-sqlite3@9.6.0'
 
 onlyBuiltDependencies:
   - better-sqlite3
