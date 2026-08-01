@@ -7,6 +7,7 @@ on:
     paths:
       - 'packages/rgbirdflop/**'
       - 'packages/analyze/**'
+      - 'packages/mc-status/**'
       - '.release-please-manifest.json'
       - 'release-please-config.json'
 
@@ -29,15 +30,15 @@ jobs:
           manifest-file: .release-please-manifest.json
 
       - name: Checkout code
-        if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] || steps.release.outputs['packages/analyze--release_created'] }}
+        if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] || steps.release.outputs['packages/analyze--release_created'] || steps.release.outputs['packages/mc-status--release_created'] }}
         uses: actions/checkout@v7
 
       - name: Setup pnpm
-        if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] || steps.release.outputs['packages/analyze--release_created'] }}
+        if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] || steps.release.outputs['packages/analyze--release_created'] || steps.release.outputs['packages/mc-status--release_created'] }}
         uses: pnpm/action-setup@v6
 
       - name: Setup Node.js
-        if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] || steps.release.outputs['packages/analyze--release_created'] }}
+        if: ${{ steps.release.outputs['packages/rgbirdflop--release_created'] || steps.release.outputs['packages/analyze--release_created'] || steps.release.outputs['packages/mc-status--release_created'] }}
         uses: actions/setup-node@v6
         with:
           node-version: 24
@@ -81,6 +82,27 @@ jobs:
       - name: Publish to npm (analyze)
         if: ${{ steps.release.outputs['packages/analyze--release_created'] }}
         working-directory: packages/analyze
+        run: npm publish --provenance --access public
+        env:
+          # it is currently imperative to set NODE_AUTH_TOKEN to an empty string for OIDC auth to work
+          # https://github.com/actions/setup-node/blob/633bb92bc0aabcae06e8ea93b85aecddd374c402/src/authutil.ts#L57
+          NODE_AUTH_TOKEN: ''
+
+      # mc-status
+
+      - name: Install dependencies (mc-status)
+        if: ${{ steps.release.outputs['packages/mc-status--release_created'] }}
+        working-directory: packages/mc-status
+        run: pnpm install
+
+      - name: Build package (mc-status)
+        if: ${{ steps.release.outputs['packages/mc-status--release_created'] }}
+        working-directory: packages/mc-status
+        run: pnpm build
+
+      - name: Publish to npm (mc-status)
+        if: ${{ steps.release.outputs['packages/mc-status--release_created'] }}
+        working-directory: packages/mc-status
         run: npm publish --provenance --access public
         env:
           # it is currently imperative to set NODE_AUTH_TOKEN to an empty string for OIDC auth to work
