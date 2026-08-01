@@ -228,6 +228,9 @@ importers:
       '@birdflop/analyze':
         specifier: workspace:*
         version: link:packages/analyze
+      '@birdflop/mc-status':
+        specifier: workspace:*
+        version: link:packages/mc-status
       '@birdflop/rgbirdflop':
         specifier: workspace:*
         version: link:packages/rgbirdflop
@@ -359,6 +362,15 @@ importers:
         version: 2.9.0
 
   packages/analyze:
+    devDependencies:
+      '@types/node':
+        specifier: ^25.0.3
+        version: 25.9.5
+      typescript:
+        specifier: 7.0.2
+        version: 7.0.2
+
+  packages/mc-status:
     devDependencies:
       '@types/node':
         specifier: ^25.0.3

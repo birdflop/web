@@ -153,6 +153,12 @@ export default component$(() => {
           <Zap size={20} /> {t('nav.resources.analyze.title@@Analyze')}
         </Link>
         <Link
+          href="/resources/status"
+          class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
+        >
+          <Server size={20} /> {t('nav.resources.status.title@@Server Status')}
+        </Link>
+        <Link
           href="/resources/flags"
           class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
         >

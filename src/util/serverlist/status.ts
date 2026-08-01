@@ -1,53 +1,49 @@
-// On-demand live status fetching via mcstatus.io, with short edge caching.
-//
-// We deliberately avoid a background cron: ranking is derived from the votes
-// table (see queries.ts) and status is only needed when a listing is actually
-// rendered. Cloudflare's fetch cache (cf.cacheTtl) keeps us well within
-// mcstatus.io rate limits even under load.
+// Live status fetching via @birdflop/mc-status (direct socket ping with in-memory caching).
 
+import {
+  pingJava,
+  pingBedrock,
+  type ServerMotd,
+  type ServerStatus,
+} from '@birdflop/mc-status';
 import type { Server } from '~/util/db';
 
-const API_BASE = 'https://api.mcstatus.io/v2/status';
-const CACHE_TTL_SECONDS = 120;
+export type { ServerMotd, ServerStatus };
 
-export interface ServerMotd {
-  raw: string;
-  clean: string;
-  html?: string | null;
+const STATUS_CACHE_TTL_MS = 2 * 60 * 1000; // 2 minutes
+
+interface CachedStatus {
+  timestamp: number;
+  status: ServerStatus;
 }
 
-export interface ServerStatus {
-  online: boolean;
-  players: { online: number; max: number };
-  version: string | null;
-  motd: ServerMotd | null;
-  icon: string | null;
-  // Which edition this status reflect (a "both" server is pinged as Java first).
-  edition: 'java' | 'bedrock';
-  host: string;
-  port: number | null;
-}
+const statusCache = new Map<string, CachedStatus>();
 
-interface McStatusResponse {
-  online: boolean;
-  host?: string;
-  port?: number;
-  players?: { online?: number; max?: number } | null;
-  version?: { name_clean?: string; name?: string } | null;
-  motd?: { clean?: string; raw?: string; html?: string } | null;
-  icon?: string | null;
-}
-
-function buildAddress(host: string, port: number | null): string {
-  return port ? `${host}:${port}` : host;
-}
-
-async function fetchStatus(
+function getCacheKey(
   edition: 'java' | 'bedrock',
   host: string,
   port: number | null
+): string {
+  const defaultPort = edition === 'java' ? 25565 : 19132;
+  return `${edition}:${host.toLowerCase()}:${port ?? defaultPort}`;
+}
+
+export function clearStatusCache(): void {
+  statusCache.clear();
+}
+
+export async function fetchStatus(
+  edition: 'java' | 'bedrock',
+  host: string,
+  port: number | null = null
 ): Promise<ServerStatus> {
-  const url = `${API_BASE}/${edition}/${encodeURIComponent(buildAddress(host, port))}`;
+  const cacheKey = getCacheKey(edition, host, port);
+  const now = Date.now();
+  const cached = statusCache.get(cacheKey);
+
+  if (cached && now - cached.timestamp < STATUS_CACHE_TTL_MS) {
+    return cached.status;
+  }
 
   const fallback: ServerStatus = {
     online: false,
@@ -61,50 +57,48 @@ async function fetchStatus(
   };
 
   try {
-    const res = await fetch(url, {
-      headers: { 'User-Agent': 'birdflop.com server list' },
-      // Cloudflare-specific edge caching so repeated views are cheap and we
-      // stay friendly to mcstatus.io rate limits.
-      cf: { cacheTtl: CACHE_TTL_SECONDS, cacheEverything: true },
-    });
+    const portNum = port ?? (edition === 'java' ? 25565 : 19132);
+    const result =
+      edition === 'java'
+        ? await pingJava(host, portNum, { timeout: 4000 })
+        : await pingBedrock(host, portNum, { timeout: 4000 });
 
-    if (!res.ok) return fallback;
+    if (!result.online) {
+      statusCache.set(cacheKey, { timestamp: now, status: fallback });
+      return fallback;
+    }
 
-    const data: McStatusResponse = await res.json();
-
-    const motdClean = data.motd?.clean ?? null;
-    const motdRaw = data.motd?.raw ?? motdClean;
-    const motdHtml = data.motd?.html ?? null;
-
-    return {
-      online: Boolean(data.online),
+    const status: ServerStatus = {
+      online: true,
       players: {
-        online: data.players?.online ?? 0,
-        max: data.players?.max ?? 0,
+        online: result.players.online,
+        max: result.players.max,
       },
-      version: data.version?.name_clean ?? data.version?.name ?? null,
-      motd:
-        (motdRaw || motdHtml) && motdClean
-          ? {
-              raw: motdRaw ?? motdClean,
-              clean: motdClean,
-              html: motdHtml,
-            }
-          : null,
-      icon: data.icon ?? null,
+      version: result.version.name || null,
+      motd: result.motd
+        ? {
+            raw: result.motd.raw,
+            clean: result.motd.clean,
+            html: result.motd.html,
+          }
+        : null,
+      icon: result.edition === 'java' ? result.favicon : null,
       edition,
       host,
       port,
     };
-  } catch (err) {
-    console.error(`Failed to fetch ${edition} status for ${host}:`, err);
+
+    statusCache.set(cacheKey, { timestamp: now, status });
+    return status;
+  } catch {
+    statusCache.set(cacheKey, { timestamp: now, status: fallback });
     return fallback;
   }
 }
 
 /**
- * Resolve the live status for a stored server. For "both" listings we prefer
- * the Java endpoint (it returns a favicon/MOTD) and fall back to Bedrock.
+ * Resolve the live status for a stored server using @birdflop/mc-status.
+ * For "both" listings we ping Java first and fall back to Bedrock.
  */
 export async function getServerStatus(
   server: Pick<

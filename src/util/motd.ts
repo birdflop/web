@@ -151,11 +151,24 @@ export function normalizeMotdText(input: string): string {
   return text;
 }
 
+const LEGACY_HEX_SET = new Set(MC_COLORS.map((c) => c.hex.toUpperCase()));
+
+export function isCustomHexColor(color: string): boolean {
+  if (!color || !color.startsWith('#')) return false;
+  const upper = color.toUpperCase();
+  return upper.length === 7 && !LEGACY_HEX_SET.has(upper);
+}
+
 // Parse a single MOTD line (using & or § codes, hex codes, or HTML) into styled runs.
-export function parseMotdLine(rawLine: string): MotdRun[] {
+export function parseMotdLine(
+  rawLine: string,
+  initialStyle: MotdStyle = baseStyle(),
+  hasExplicitColor = false
+): MotdRun[] {
   const line = normalizeMotdText(rawLine);
   const runs: MotdRun[] = [];
-  let style = baseStyle();
+  let style = { ...initialStyle };
+  let isExplicit = hasExplicitColor || isCustomHexColor(initialStyle.color);
   let buffer = '';
 
   const flush = () => {
@@ -183,7 +196,7 @@ export function parseMotdLine(rawLine: string): MotdRun[] {
     ) {
       flush();
       style = {
-        ...baseStyle(),
+        ...style,
         color:
           '#' +
           chars
@@ -191,6 +204,7 @@ export function parseMotdLine(rawLine: string): MotdRun[] {
             .join('')
             .toUpperCase(),
       };
+      isExplicit = true;
       i += 7;
       continue;
     }
@@ -211,9 +225,10 @@ export function parseMotdLine(rawLine: string): MotdRun[] {
       if (hexDigits.length === 6) {
         flush();
         style = {
-          ...baseStyle(),
+          ...style,
           color: '#' + hexDigits.join('').toUpperCase(),
         };
+        isExplicit = true;
         i = j - 1;
         continue;
       }
@@ -221,9 +236,10 @@ export function parseMotdLine(rawLine: string): MotdRun[] {
 
     const lower = next.toLowerCase();
     if (lower in COLOR_BY_CODE) {
-      // A color code resets all formatting.
       flush();
-      style = { ...baseStyle(), color: COLOR_BY_CODE[lower] };
+      if (!isExplicit) {
+        style = { ...style, color: COLOR_BY_CODE[lower] };
+      }
       i++;
       continue;
     }
