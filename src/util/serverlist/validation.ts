@@ -158,9 +158,11 @@ export function validateServerInput(input: ServerFormInput): ValidationResult {
   if (website && (!isValidUrl(website) || website.length > LIMITS.url))
     errors.push('Website must be a valid http(s) URL.');
 
+  // Rendered as a raw href, so it must be a real http(s) URL — anything else
+  // (e.g. a javascript: URI) would be an XSS vector on the listing page.
   const discord = trimOrNull(input.discord);
-  if (discord && discord.length > LIMITS.url)
-    errors.push('Discord link is too long.');
+  if (discord && (!isValidUrl(discord) || discord.length > LIMITS.url))
+    errors.push('Discord link must be a valid http(s) URL.');
 
   const bannerUrl = trimOrNull(input.bannerUrl);
   if (bannerUrl && (!isValidUrl(bannerUrl) || bannerUrl.length > LIMITS.url))

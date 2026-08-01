@@ -28,6 +28,11 @@ import {
   DEFAULT_JAVA_PORT,
   DEFAULT_BEDROCK_PORT,
 } from '~/util/serverlist/constants';
+import {
+  birdflopCheckIsStale,
+  refreshBirdflopHosted,
+} from '~/util/serverlist/birdflop';
+import { toPublicOwner, toPublicServer } from '~/util/serverlist/queries';
 import { checkAdmin } from '~/routes/layout';
 import ServerCard from '~/components/ServerList/ServerCard';
 import VoteSection from '~/components/ServerList/VoteSection';
@@ -43,6 +48,14 @@ export const useServer = routeLoader$(async (event) => {
     .get();
 
   if (!server) throw event.error(404, 'Server not found');
+
+  // Lazily re-verify the auto-detected Birdflop badge (at most once/day) so
+  // it follows servers that migrate on or off Birdflop without a cron.
+  let serverRow = server.server;
+  if (birdflopCheckIsStale(serverRow)) {
+    const hosted = await refreshBirdflopHosted(db, event.env, serverRow);
+    serverRow = { ...serverRow, birdflopHosted: hosted };
+  }
 
   const monthStart = Date.UTC(
     new Date().getUTCFullYear(),
@@ -67,17 +80,19 @@ export const useServer = routeLoader$(async (event) => {
       .get(),
   ]);
 
-  const status = await getServerStatus(server.server);
+  const status = await getServerStatus(serverRow);
 
   const session = event.sharedMap.get('session');
   const isAdmin = checkAdmin(event);
   const canManage =
     isAdmin ||
-    (!!session?.user?.id && session.user.id === server.server.ownerId);
+    (!!session?.user?.id && session.user.id === serverRow.ownerId);
 
+  // Strip Votifier secrets and the owner's account details before the row
+  // enters the loader payload — it is visible to every visitor.
   return {
-    server: server.server,
-    owner: server.owner,
+    server: toPublicServer(serverRow),
+    owner: toPublicOwner(server.owner),
     status,
     monthlyVotes: Number(monthlyRow?.count ?? 0),
     totalVotes: Number(totalRow?.count ?? 0),

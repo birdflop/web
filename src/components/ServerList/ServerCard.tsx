@@ -3,7 +3,7 @@ import { Link } from '@qwik.dev/router';
 import Star from 'lucide-icons-qwik/icons/Star';
 import Users from 'lucide-icons-qwik/icons/Users';
 import Tag from 'lucide-icons-qwik/icons/Tag';
-import type { ServerWithVotes } from '~/util/db';
+import type { PublicServerWithVotes } from '~/util/serverlist/queries';
 import type { ServerStatus } from '~/util/serverlist/status';
 import { rgbDefaults } from '@birdflop/rgbirdflop';
 import { loadPreset, type rgbPreset } from '~/util/rgb/presets';
@@ -15,7 +15,7 @@ import { getFormattingClasses } from '../rgbirdflop/preview';
 import { Birdflop } from '@luminescent/icons-qwik';
 
 interface ServerCardProps {
-  server: ServerWithVotes;
+  server: PublicServerWithVotes;
   status: ServerStatus | null;
   rank?: number;
 }
@@ -188,7 +188,7 @@ export default component$<ServerCardProps>(({ server, status, rank }) => {
                     />
                   )}
 
-                  {server.verified && (
+                  {(server.verified || server.birdflopHosted) && (
                     <span
                       class="text-lum-text-secondary lum-bg-lum-accent/20 rounded-lum-1 tracking-tigher flex cursor-pointer items-center gap-1 px-2 py-0.5 text-xs"
                       title="Hosted on Birdflop"

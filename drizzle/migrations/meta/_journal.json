@@ -85,6 +85,13 @@
       "when": 1785466146426,
       "tag": "0011_wet_stranger",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "6",
+      "when": 1785594458585,
+      "tag": "0012_black_demogoblin",
+      "breakpoints": true
     }
   ]
 }
