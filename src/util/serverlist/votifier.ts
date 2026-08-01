@@ -5,6 +5,8 @@
 // API. Delivery is best-effort: a vote is always recorded for ranking even if
 // the in-game reward packet can't be delivered.
 
+import { connect } from 'cloudflare:sockets';
+
 export interface VotifierConfig {
   host: string;
   port: number;
@@ -81,15 +83,6 @@ export async function sendVotifierV2(
     | undefined;
 
   try {
-    // Dynamically imported so this module never gets pulled into a client bundle.
-    const { connect } = (await import('cloudflare:sockets')) as {
-      connect: (addr: { hostname: string; port: number }) => {
-        readable: ReadableStream;
-        writable: WritableStream;
-        close: () => Promise<void>;
-      };
-    };
-
     socket = connect({ hostname: config.host, port: config.port });
 
     const reader = socket.readable.getReader();

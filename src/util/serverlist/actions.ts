@@ -445,3 +445,57 @@ export const setServerVerified = server$(async function (
 
   return { success: true as const };
 });
+
+/**
+ * Send a test Votifier v2 vote to the server owned by `serverId`.
+ * Only the server owner or an admin may call this.
+ */
+export const testVote = server$(async function (serverId: number) {
+  const session = this.sharedMap.get('session') as Session | undefined;
+  const db = getDB();
+  if (!session?.user?.id || !db)
+    return { success: false as const, error: 'You must be logged in.' };
+
+  const row = await db
+    .select({
+      ownerId: servers.ownerId,
+      votifierHost: servers.votifierHost,
+      votifierPort: servers.votifierPort,
+      votifierToken: servers.votifierToken,
+      javaHost: servers.javaHost,
+    })
+    .from(servers)
+    .where(eq(servers.id, serverId))
+    .get();
+
+  if (!row) return { success: false as const, error: 'Server not found.' };
+
+  const admin = await isAdmin.call(this);
+  if (!admin && row.ownerId !== session.user.id)
+    return { success: false as const, error: 'Unauthorized.' };
+
+  if (!row.votifierHost || !row.votifierToken)
+    return {
+      success: false as const,
+      error:
+        'No Votifier host or token configured. Fill in the Votifier section above and save first.',
+    };
+
+  const host = row.votifierHost;
+  const port = row.votifierPort
+    ? Number(row.votifierPort)
+    : DEFAULT_VOTIFIER_PORT;
+
+  const result = await sendVotifierV2(
+    { host, port, token: row.votifierToken },
+    {
+      username: session.user.name ?? session.user.id,
+      serviceName: 'Birdflop',
+      address: row.javaHost ?? host,
+      timestamp: Date.now(),
+    }
+  );
+
+  if (result.delivered) return { success: true as const };
+  return { success: false as const, error: result.error ?? 'Unknown error.' };
+});
