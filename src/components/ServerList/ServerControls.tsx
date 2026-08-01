@@ -5,6 +5,7 @@ import Pencil from 'lucide-icons-qwik/icons/Pencil';
 import Trash2 from 'lucide-icons-qwik/icons/Trash2';
 import X from 'lucide-icons-qwik/icons/X';
 import CheckCircle from 'lucide-icons-qwik/icons/CheckCircle';
+import { Label } from '@luminescent/ui-qwik';
 import { Notification, NotificationContext } from '~/util/Notification';
 import {
   deleteServer,
@@ -24,7 +25,7 @@ export default component$<ServerControlsProps>(
   ({ serverId, slug, canManage, isAdmin, verified }) => {
     const notifications = useContext(NotificationContext);
     const nav = useNavigate();
-    const reporting = useSignal(false);
+    const modalRef = useSignal<HTMLDialogElement>();
     const reason = useSignal('');
     const deleting = useSignal(false);
     const confirmingDelete = useSignal(false);
@@ -33,7 +34,7 @@ export default component$<ServerControlsProps>(
     const submitReport = $(async () => {
       if (!reason.value.trim()) return;
       const result = await reportServer(serverId, reason.value, '');
-      reporting.value = false;
+      modalRef.value?.close();
       reason.value = '';
       notifications.push(
         new Notification()
@@ -103,9 +104,9 @@ export default component$<ServerControlsProps>(
             <>
               <Link
                 href={`/serverlist/${slug}/edit`}
-                class="lum-btn lum-bg-lum-input-bg/40 rounded-lum-1"
+                class="lum-btn lum-btn-p-1 lum-bg-lum-input-bg/40 text-xs sm:text-sm"
               >
-                <Pencil size={16} /> Edit
+                <Pencil size={14} /> Edit
               </Link>
               {confirmingDelete.value ? (
                 <div class="flex flex-wrap items-center gap-2">
@@ -113,26 +114,26 @@ export default component$<ServerControlsProps>(
                     Delete this listing?
                   </span>
                   <button
-                    class="lum-btn lum-bg-red/40 hover:lum-bg-red/60 rounded-lum-1"
+                    class="lum-btn lum-bg-red/40 hover:lum-bg-red/60 lum-btn-p-1 text-xs sm:text-sm"
                     disabled={deleting.value}
                     onClick$={confirmDelete}
                   >
-                    <Trash2 size={16} />{' '}
+                    <Trash2 size={14} />{' '}
                     {deleting.value ? 'Deleting…' : 'Confirm'}
                   </button>
                   <button
-                    class="lum-btn lum-bg-transparent hover:lum-bg-lum-input-bg/40 rounded-lum-1"
+                    class="lum-btn lum-bg-transparent hover:lum-bg-lum-input-bg/40 lum-btn-p-1 text-xs sm:text-sm"
                     onClick$={() => (confirmingDelete.value = false)}
                   >
-                    <X size={16} /> Cancel
+                    <X size={14} /> Cancel
                   </button>
                 </div>
               ) : (
                 <button
-                  class="lum-btn lum-bg-red/30 hover:lum-bg-red/50 rounded-lum-1"
+                  class="lum-btn lum-bg-red/30 hover:lum-bg-red/50 lum-btn-p-1 text-xs sm:text-sm"
                   onClick$={() => (confirmingDelete.value = true)}
                 >
-                  <Trash2 size={16} /> Delete
+                  <Trash2 size={14} /> Delete
                 </button>
               )}
             </>
@@ -140,7 +141,7 @@ export default component$<ServerControlsProps>(
           {isAdmin && (
             <button
               class={{
-                'lum-btn rounded-lum-1': true,
+                'lum-btn lum-btn-p-1 text-xs sm:text-sm': true,
                 'lum-bg-sky-500/20 hover:lum-bg-sky-500/40 text-sky-400':
                   !isVerified.value,
                 'lum-bg-gray-500/20 hover:lum-bg-gray-500/40 text-gray-400':
@@ -148,38 +149,73 @@ export default component$<ServerControlsProps>(
               }}
               onClick$={toggleVerified}
             >
-              <CheckCircle size={16} />{' '}
+              <CheckCircle size={14} />
               {isVerified.value ? 'Unverify (Birdflop)' : 'Verify (Birdflop)'}
             </button>
           )}
           <button
-            class="lum-btn lum-bg-transparent hover:lum-bg-lum-input-bg/40 rounded-lum-1 text-lum-text-secondary"
-            onClick$={() => (reporting.value = !reporting.value)}
+            class="lum-btn lum-bg-transparent hover:lum-bg-lum-input-bg/40 lum-btn-p-1 text-lum-text-secondary text-xs sm:text-sm"
+            onClick$={() => modalRef.value?.showModal()}
           >
-            <Flag size={16} /> Report
+            <Flag size={14} />
+            Report
           </button>
         </div>
 
-        {reporting.value && (
-          <div class="lum-card gap-2">
-            <span class="flex items-center gap-1.5 text-sm font-semibold">
-              <Flag size={16} /> Report this server
-            </span>
-            <input
-              class="lum-input"
-              placeholder="Reason (e.g. offensive content, fake listing)"
-              maxLength={100}
-              value={reason.value}
-              onInput$={(e, el) => (reason.value = el.value)}
-            />
-            <button
-              class="lum-btn lum-bg-red/30 hover:lum-bg-red/50 self-start"
-              onClick$={submitReport}
+        <dialog
+          ref={modalRef}
+          class="text-lum-text lum-card lum-grad-bg-lum-card-bg/50 open:animate-in open:fade-in open:slide-in-from-top-8 animate-out fade-out slide-in-from-top-8 m-auto hidden w-full max-w-md overflow-visible drop-shadow-2xl backdrop-blur-xl duration-300 backdrop:bg-black/50 backdrop:backdrop-blur-sm open:flex open:flex-col open:duration-300"
+          onClick$={(e) => {
+            if (e.target === modalRef.value) {
+              modalRef.value?.close();
+            }
+          }}
+        >
+          <div class="flex flex-col gap-4">
+            <div class="border-lum-border/10 flex items-center justify-between border-b pb-3">
+              <h3 class="flex items-center gap-2 text-xl font-bold">
+                <Flag size={20} />
+                Report Server
+              </h3>
+              <button
+                class="lum-btn lum-bg-transparent hover:lum-bg-lum-input-bg/40 rounded-lum-1 p-1"
+                onClick$={() => modalRef.value?.close()}
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <Label
+              for="report-reason"
+              label="Reason for reporting this server"
+              class="text-lum-text-secondary text-sm"
             >
-              <Flag size={16} /> Submit report
-            </button>
+              <input
+                id="report-reason"
+                class="lum-input w-full"
+                placeholder="Reason (e.g. offensive content, fake listing)"
+                maxLength={100}
+                value={reason.value}
+                onInput$={(e, el) => (reason.value = el.value)}
+              />
+            </Label>
+
+            <div class="border-lum-border/10 flex justify-end gap-2 border-t pt-3">
+              <button
+                class="lum-btn lum-bg-transparent hover:lum-bg-lum-input-bg/40 lum-btn-p-1 text-xs sm:text-sm"
+                onClick$={() => modalRef.value?.close()}
+              >
+                Cancel
+              </button>
+              <button
+                class="lum-btn lum-bg-red/40 hover:lum-bg-red/60 lum-btn-p-1 text-xs sm:text-sm"
+                onClick$={submitReport}
+              >
+                <Flag size={14} /> Submit report
+              </button>
+            </div>
           </div>
-        )}
+        </dialog>
       </div>
     );
   }

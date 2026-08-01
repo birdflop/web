@@ -8,7 +8,7 @@ import {
 import { and, eq, gte, sql } from 'drizzle-orm';
 import Globe from 'lucide-icons-qwik/icons/Globe';
 import ServerIcon from 'lucide-icons-qwik/icons/Server';
-import Copy from 'lucide-icons-qwik/icons/Copy';
+import Output from '~/components/Elements/Output';
 import ArrowLeft from 'lucide-icons-qwik/icons/ArrowLeft';
 import Clock from 'lucide-icons-qwik/icons/Clock';
 import Calendar from 'lucide-icons-qwik/icons/Calendar';
@@ -32,6 +32,7 @@ import {
   birdflopCheckIsStale,
   refreshBirdflopHosted,
 } from '~/util/serverlist/birdflop';
+import MotdText from '~/components/Elements/MotdText';
 import { toPublicOwner, toPublicServer } from '~/util/serverlist/queries';
 import { checkAdmin } from '~/routes/layout';
 import ServerCard from '~/components/ServerList/ServerCard';
@@ -107,20 +108,15 @@ const ConnectRow = component$<{
   isBedrock?: boolean;
 }>(({ label, address, isBedrock }) => (
   <div class="flex items-center gap-2 text-sm">
-    <span class="text-lum-text-secondary flex w-20 items-center gap-1.5">
+    <span class="text-lum-text-secondary flex w-20 shrink-0 items-center gap-1.5">
       {isBedrock ? <Smartphone size={14} /> : <Laptop size={14} />}
       {label}
     </span>
-    <code class="lum-card lum-bg-lum-input-bg/40 rounded-lum-1 flex-1 px-2 py-1">
-      {address}
-    </code>
-    <button
-      class="lum-btn rounded-lum-1 lum-bg-transparent hover:lum-bg-lum-input-bg/40 p-1.5"
-      title="Copy"
-      onClick$={() => navigator.clipboard?.writeText(address)}
-    >
-      <Copy size={16} />
-    </button>
+    <Output
+      compact
+      value={address}
+      class="lum-bg-lum-input-bg/40 hover:lum-bg-lum-input-bg/60 rounded-lum-1 flex-1 cursor-pointer p-1.5 px-2 font-mono text-xs backdrop-brightness-150 backdrop-saturate-150"
+    />
   </div>
 ));
 
@@ -136,12 +132,22 @@ export default component$(() => {
 
   return (
     <section class="mx-auto flex min-h-svh max-w-6xl flex-col px-6 pt-20">
-      <Link
-        href="/serverlist"
-        class="text-lum-text-secondary hover:text-lum-accent mb-2 inline-flex items-center gap-1 text-sm"
-      >
-        <ArrowLeft size={16} /> Back to server list
-      </Link>
+      <div class="mb-2 flex items-center justify-between">
+        <Link
+          href="/serverlist"
+          class="text-lum-text-secondary hover:text-lum-accent inline-flex items-center gap-1 text-sm"
+        >
+          <ArrowLeft size={16} /> Back to server list
+        </Link>
+
+        <ServerControls
+          serverId={s.id}
+          slug={s.slug}
+          canManage={data.canManage}
+          isAdmin={data.isAdmin}
+          verified={s.verified}
+        />
+      </div>
 
       <ServerCard
         server={{
@@ -156,10 +162,11 @@ export default component$(() => {
       <div class="mt-4 grid gap-4 md:grid-cols-3">
         <div class="flex flex-col gap-4 md:col-span-2">
           {data.status?.motd && (
-            <div class="lum-card">
-              <p class="text-lum-text-secondary font-mono text-sm whitespace-pre-wrap">
-                {data.status.motd}
-              </p>
+            <div
+              class="rounded-lum-2 border border-white/10 p-3 text-base sm:text-lg"
+              style={{ background: 'rgba(0,0,0,0.45)' }}
+            >
+              <MotdText text={data.status.motd.html || data.status.motd.raw} />
             </div>
           )}
           <div class="lum-card">
@@ -250,14 +257,6 @@ export default component$(() => {
               </div>
             </div>
           )}
-
-          <ServerControls
-            serverId={s.id}
-            slug={s.slug}
-            canManage={data.canManage}
-            isAdmin={data.isAdmin}
-            verified={s.verified}
-          />
         </div>
 
         <div class="flex flex-col gap-4">

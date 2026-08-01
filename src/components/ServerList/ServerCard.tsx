@@ -190,7 +190,7 @@ export default component$<ServerCardProps>(({ server, status, rank }) => {
                     <Output
                       compact
                       value={displayIp}
-                      class="lum-bg-lum-card-bg/10 rounded-lum-2 tracking-tigher relative z-10 cursor-pointer overflow-hidden px-2 py-0.5 font-mono text-xs text-ellipsis backdrop-brightness-150 backdrop-saturate-150"
+                      class="lum-bg-lum-card-bg/10 hover:lum-bg-lum-card-bg/30 rounded-lum-2 tracking-tigher relative z-10 cursor-pointer overflow-hidden px-2 py-0.5 font-mono text-xs text-ellipsis backdrop-brightness-150 backdrop-saturate-150"
                     />
                   )}
 

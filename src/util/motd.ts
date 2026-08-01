@@ -78,9 +78,82 @@ export function shadowColor(hex: string): string {
   return '#' + [r, g, b].map((v) => v.toString(16).padStart(2, '0')).join('');
 }
 
-// Parse a single MOTD line (using & or § codes) into styled runs.
-// Supports legacy codes (&a), hex (&#RRGGBB) and the spread hex form (&x&R&R&G&G&B&B).
-export function parseMotdLine(line: string): MotdRun[] {
+// Normalize any MOTD input string (HTML, MiniMessage, spread/compact hex, ampersand hex)
+// into standard section (§) codes for parseMotdLine.
+export function normalizeMotdText(input: string): string {
+  if (!input) return '';
+
+  let text = input.replace(/\\u00a7/gi, '§');
+
+  // 1. Convert HTML tags (from mcstatus.io or general HTML) to § formatting codes
+  text = text
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(
+      /<span[^>]*style="[^"]*color:\s*#([0-9a-fA-F]{6})[^"]*"[^>]*>/gi,
+      '§#$1'
+    )
+    .replace(
+      /<span[^>]*style="[^"]*color:\s*rgb\((\d+),\s*(\d+),\s*(\d+)\)[^"]*"[^>]*>/gi,
+      (_, r, g, b) => {
+        const hex = [r, g, b]
+          .map((x) =>
+            Math.min(255, Math.max(0, parseInt(x, 10)))
+              .toString(16)
+              .padStart(2, '0')
+          )
+          .join('');
+        return `§#${hex}`;
+      }
+    )
+    .replace(
+      /<span[^>]*class="[^"]*motd-color-([0-9a-fA-F]{6})[^"]*"[^>]*>/gi,
+      '§#$1'
+    )
+    .replace(/<span[^>]*style="[^"]*font-weight:\s*bold[^"]*"[^>]*>/gi, '§l')
+    .replace(/<span[^>]*style="[^"]*font-style:\s*italic[^"]*"[^>]*>/gi, '§o')
+    .replace(/<\/span>/gi, '§r')
+    .replace(/<[^>]+>/g, (tag) => {
+      const hexMatch = tag.match(/^<(?:color:|c:)?#([0-9a-fA-F]{6})>$/i);
+      if (hexMatch) return `§#${hexMatch[1]}`;
+
+      const miniMsgTags: Record<string, string> = {
+        '</color>': '§r',
+        '<reset>': '§r',
+        '<r>': '§r',
+        '<bold>': '§l',
+        '<b>': '§l',
+        '<italic>': '§o',
+        '<i>': '§o',
+        '<underlined>': '§n',
+        '<u>': '§n',
+        '<strikethrough>': '§m',
+        '<st>': '§m',
+        '<obfuscated>': '§k',
+        '<obf>': '§k',
+      };
+      const lower = tag.toLowerCase();
+      if (lower in miniMsgTags) return miniMsgTags[lower];
+      return '';
+    });
+
+  // 2. Normalize spread hex: &x&1&2&3&4&5&6 or §x§1§2§3§4§5§6 -> §#123456
+  text = text.replace(
+    /[&§]x[&§]([0-9a-fA-F])[&§]([0-9a-fA-F])[&§]([0-9a-fA-F])[&§]([0-9a-fA-F])[&§]([0-9a-fA-F])[&§]([0-9a-fA-F])/gi,
+    '§#$1$2$3$4$5$6'
+  );
+
+  // 3. Normalize compact x hex: &x123456 or §x123456 -> §#123456
+  text = text.replace(/[&§]x([0-9a-fA-F]{6})/gi, '§#$1');
+
+  // 4. Normalize ampersand hash hex: &#123456 -> §#123456
+  text = text.replace(/&#([0-9a-fA-F]{6})/gi, '§#$1');
+
+  return text;
+}
+
+// Parse a single MOTD line (using & or § codes, hex codes, or HTML) into styled runs.
+export function parseMotdLine(rawLine: string): MotdRun[] {
+  const line = normalizeMotdText(rawLine);
   const runs: MotdRun[] = [];
   let style = baseStyle();
   let buffer = '';

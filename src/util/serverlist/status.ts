@@ -10,11 +10,17 @@ import type { Server } from '~/util/db';
 const API_BASE = 'https://api.mcstatus.io/v2/status';
 const CACHE_TTL_SECONDS = 120;
 
+export interface ServerMotd {
+  raw: string;
+  clean: string;
+  html?: string | null;
+}
+
 export interface ServerStatus {
   online: boolean;
   players: { online: number; max: number };
   version: string | null;
-  motd: string | null;
+  motd: ServerMotd | null;
   icon: string | null;
   // Which edition this status reflect (a "both" server is pinged as Java first).
   edition: 'java' | 'bedrock';
@@ -28,7 +34,7 @@ interface McStatusResponse {
   port?: number;
   players?: { online?: number; max?: number } | null;
   version?: { name_clean?: string; name?: string } | null;
-  motd?: { clean?: string } | null;
+  motd?: { clean?: string; raw?: string; html?: string } | null;
   icon?: string | null;
 }
 
@@ -66,6 +72,10 @@ async function fetchStatus(
 
     const data: McStatusResponse = await res.json();
 
+    const motdClean = data.motd?.clean ?? null;
+    const motdRaw = data.motd?.raw ?? motdClean;
+    const motdHtml = data.motd?.html ?? null;
+
     return {
       online: Boolean(data.online),
       players: {
@@ -73,7 +83,14 @@ async function fetchStatus(
         max: data.players?.max ?? 0,
       },
       version: data.version?.name_clean ?? data.version?.name ?? null,
-      motd: data.motd?.clean ?? null,
+      motd:
+        (motdRaw || motdHtml) && motdClean
+          ? {
+              raw: motdRaw ?? motdClean,
+              clean: motdClean,
+              html: motdHtml,
+            }
+          : null,
       icon: data.icon ?? null,
       edition,
       host,

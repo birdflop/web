@@ -24,6 +24,10 @@ import Plus from 'lucide-icons-qwik/icons/Plus';
 import RefreshCw from 'lucide-icons-qwik/icons/RefreshCw';
 import Trash from 'lucide-icons-qwik/icons/Trash';
 import X from 'lucide-icons-qwik/icons/X';
+import { routeLoader$ } from '@qwik.dev/router';
+import { getDB, servers } from '~/util/db';
+import { eq } from 'drizzle-orm';
+import { getServerStatus } from '~/util/serverlist/status';
 import { defaultDescription, generateHead } from '~/root';
 import { Label, SelectMenu, Tabs } from '@luminescent/ui-qwik';
 import PluginCard from '~/components/plugins/PluginCard';
@@ -35,7 +39,7 @@ import SiModrinth from 'simple-icons-qwik/icons/SiModrinth';
 import SiSpigotmc from 'simple-icons-qwik/icons/SiSpigotmc';
 import { useSession } from '~/routes/plugin@auth';
 import { setUserData } from '~/util/dataUtils';
-import { getUserServers, updateServerPlugins } from '~/util/serverlist/actions';
+import { updateServerPlugins } from '~/util/serverlist/actions';
 import { PluginsStoreType, ServerType } from '~/util/plugins/types';
 import {
   getPlugin,
@@ -58,15 +62,46 @@ const serverDefaults: ServerType = {
   plugins: {},
 };
 
-const pluginsDefaults: PluginsStoreType = {
-  servers: {
-    'My Server': {
-      software: 'paper',
-      plugins: {},
-    },
-  },
-  openServer: 'My Server',
-};
+export const useUserServers = routeLoader$(async (event) => {
+  const session = event.sharedMap.get('session');
+  const db = getDB();
+  if (!session?.user?.id || !db) return [];
+
+  const userServers = await db
+    .select({
+      id: servers.id,
+      name: servers.name,
+      slug: servers.slug,
+      edition: servers.edition,
+      javaHost: servers.javaHost,
+      javaPort: servers.javaPort,
+      bedrockHost: servers.bedrockHost,
+      bedrockPort: servers.bedrockPort,
+    })
+    .from(servers)
+    .where(eq(servers.ownerId, session.user.id))
+    .all();
+
+  const userServersWithStatus = await Promise.all(
+    userServers.map(async (s) => {
+      let icon: string | null = null;
+      try {
+        const status = await getServerStatus(s);
+        icon = status?.icon ?? null;
+      } catch {
+        icon = null;
+      }
+      return {
+        id: s.id,
+        name: s.name,
+        slug: s.slug,
+        icon,
+      };
+    })
+  );
+
+  return userServersWithStatus;
+});
 
 const pluginSourcesDescriptions = {
   modrinth: `Newer plugin platform that's gaining popularity. Many plugins are primarily releasing on Modrinth now, so check here first when adding a plugin.`,
@@ -102,9 +137,7 @@ export const pluginsStoreContext =
 export default component$(() => {
   const t = inlineTranslate();
   const session = useSession();
-  const userServers = useSignal<{ id: number; name: string; slug: string }[]>(
-    []
-  );
+  const userServers = useUserServers();
 
   const notifications = useContext(NotificationContext);
   const modalRef = useSignal<HTMLDialogElement>();
@@ -125,31 +158,65 @@ export default component$(() => {
   );
   useContextProvider(resolvedPluginContext, resolvedPlugin);
 
-  const pluginsStore = useStore<PluginsStoreType>(pluginsDefaults, {
-    deep: true,
-  });
+  // Compute initial servers on SSR
+  const dbPlugins = session.value?.user?.plugins;
+  const initialServers: Record<string, ServerType> = {};
+
+  if (
+    dbPlugins &&
+    dbPlugins.servers &&
+    Object.keys(dbPlugins.servers).length > 0
+  ) {
+    Object.assign(initialServers, dbPlugins.servers);
+  }
+
+  if (userServers.value.length > 0) {
+    for (const us of userServers.value) {
+      const existingKey = Object.keys(initialServers).find(
+        (k) =>
+          initialServers[k].serverId === us.id ||
+          k.toLowerCase() === us.name.toLowerCase()
+      );
+      if (existingKey) {
+        initialServers[existingKey].serverId = us.id;
+      } else {
+        if (
+          initialServers['My Server'] &&
+          Object.keys(initialServers['My Server'].plugins).length === 0
+        ) {
+          delete initialServers['My Server'];
+        }
+        initialServers[us.name] = {
+          ...serverDefaults,
+          serverId: us.id,
+        };
+      }
+    }
+  }
+
+  if (Object.keys(initialServers).length === 0) {
+    initialServers['My Server'] = { ...serverDefaults };
+  }
+
+  const initialOpenServer =
+    dbPlugins?.openServer && initialServers[dbPlugins.openServer]
+      ? dbPlugins.openServer
+      : Object.keys(initialServers)[0];
+
+  const pluginsStore = useStore<PluginsStoreType>(
+    {
+      servers: initialServers,
+      openServer: initialOpenServer,
+      filter: dbPlugins?.filter,
+    },
+    { deep: true }
+  );
   useContextProvider(pluginsStoreContext, pluginsStore);
 
   // oxlint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(async () => {
+  useVisibleTask$(() => {
     if (!isBrowser) return; // dont load plugins on the server
-    if (session.value?.user?.id) {
-      try {
-        userServers.value = await getUserServers();
-      } catch (e) {
-        console.error('Failed to load user servers:', e);
-      }
-    }
-    const dbPlugins = session.value?.user?.plugins;
-    if (
-      dbPlugins &&
-      dbPlugins.servers &&
-      Object.keys(dbPlugins.servers).length > 0
-    ) {
-      pluginsStore.servers = dbPlugins.servers || {};
-      pluginsStore.openServer = dbPlugins.openServer;
-      pluginsStore.filter = dbPlugins.filter;
-    } else {
+    if (!session.value?.user?.id) {
       const pluginsData = localStorage.getItem('plugins');
       if (pluginsData) {
         try {
@@ -157,10 +224,6 @@ export default component$(() => {
           pluginsStore.servers = savedPluginsStore.servers || {};
           pluginsStore.openServer = savedPluginsStore.openServer;
           pluginsStore.filter = savedPluginsStore.filter;
-
-          if (session.value?.user?.id) {
-            await setUserData({ plugins: savedPluginsStore });
-          }
         } catch (e) {
           const notification = new Notification()
             .setTitle('Error loading plugins')
@@ -178,9 +241,13 @@ export default component$(() => {
     deepTrack(track, pluginsStore);
 
     if (!isBrowser) return;
-    if (pluginsStore.openServer && CurrentServer) {
+    const currentServer = pluginsStore.openServer
+      ? pluginsStore.servers[pluginsStore.openServer]
+      : undefined;
+
+    if (pluginsStore.openServer && currentServer) {
       // check if any plugins are not fetched, and fetch them if so
-      const plugins = CurrentServer.plugins;
+      const plugins = currentServer.plugins;
       for (const pluginId in plugins) {
         const plugin = plugins[pluginId];
         if (!plugin.versions)
@@ -211,12 +278,12 @@ export default component$(() => {
       localStorage.setItem('plugins', JSON.stringify(exportedPluginsStore));
       if (session.value?.user?.id) {
         await setUserData({ plugins: exportedPluginsStore });
-        if (pluginsStore.openServer && CurrentServer?.serverId) {
+        if (pluginsStore.openServer && currentServer?.serverId) {
           const currentMappedPlugins =
             exportedPluginsStore.servers[pluginsStore.openServer]?.plugins ||
             {};
           await updateServerPlugins(
-            CurrentServer.serverId,
+            currentServer.serverId,
             currentMappedPlugins
           );
         }
@@ -290,17 +357,53 @@ export default component$(() => {
           pluginsStore.openServer = serverName.value;
         }}
         onPlus$={() => {
-          const serverName = prompt('Enter server name');
+          const unadded = userServers.value.filter(
+            (us) =>
+              !Object.values(pluginsStore.servers).some(
+                (s) => s.serverId === us.id
+              )
+          );
+          let promptMessage = 'Enter server name';
+          let defaultInput = '';
+          if (unadded.length > 0) {
+            promptMessage = `Enter server name (or pick one of your listed servers: ${unadded.map((s) => s.name).join(', ')})`;
+            defaultInput = unadded[0].name;
+          }
+          const serverName = prompt(promptMessage, defaultInput);
           if (serverName) {
             if (pluginsStore.servers[serverName]) {
               alert('A server with that name already exists.');
               return;
             }
-            pluginsStore.servers[serverName] = { ...serverDefaults };
+            const matchedUserServer = userServers.value.find(
+              (us) => us.name.toLowerCase() === serverName.trim().toLowerCase()
+            );
+            pluginsStore.servers[serverName] = {
+              ...serverDefaults,
+              serverId: matchedUserServer?.id,
+            };
             pluginsStore.openServer = serverName;
           }
         }}
-      ></Tabs>
+      >
+        {Object.keys(pluginsStore.servers).map((k, i) => {
+          const s = pluginsStore.servers[k];
+          const linked = userServers.value.find((us) => us.id === s.serverId);
+          return linked?.icon ? (
+            <img
+              key={i}
+              src={linked.icon}
+              alt={`${linked.name} icon`}
+              width={16}
+              height={16}
+              class="h-4 w-4 rounded-sm object-cover"
+              style={{ imageRendering: 'pixelated' }}
+            />
+          ) : (
+            <Globe key={i} size={14} class="shrink-0 text-sky-400" />
+          );
+        })}
+      </Tabs>
       {Object.keys(pluginsStore.servers).length < 1 && (
         <p class="text-lum-text-secondary mx-2 text-sm">
           {t(
@@ -370,35 +473,6 @@ export default component$(() => {
                 ))}
                 <CurrentSoftware.icon size={20} q:slot="dropdown-before" />
               </SelectMenu>
-
-              {session.value?.user?.id && userServers.value.length > 0 && (
-                <SelectMenu
-                  id="linkedServer"
-                  onChange$={(e, el) => {
-                    const val = el.value;
-                    if (pluginsStore.openServer) {
-                      pluginsStore.servers[pluginsStore.openServer].serverId =
-                        val === 'none' ? undefined : Number(val);
-                    }
-                  }}
-                  values={[
-                    { name: 'Link listing...', value: 'none' },
-                    ...userServers.value.map((s) => ({
-                      name: s.name,
-                      value: String(s.id),
-                    })),
-                  ]}
-                  value={
-                    CurrentServer?.serverId
-                      ? String(CurrentServer.serverId)
-                      : 'none'
-                  }
-                  class="lum-bg-transparent lum-btn-p-1 rounded-lum-1"
-                  title="Link this plugin profile to your Server List listing"
-                >
-                  <Globe size={20} q:slot="dropdown-before" />
-                </SelectMenu>
-              )}
 
               <button
                 class="lum-btn lum-btn-p-1 rounded-lum-1 flex cursor-pointer items-center justify-center gap-2 border-none transition-all duration-300"
