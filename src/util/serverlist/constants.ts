@@ -74,6 +74,9 @@ export const DEFAULT_VOTIFIER_PORT = 8192;
 // How long (ms) a username+server (and ip+server) vote stays on cooldown.
 export const VOTE_COOLDOWN_MS = 24 * 60 * 60 * 1000;
 
+// How long (ms) before the same user/IP can report the same server again.
+export const REPORT_COOLDOWN_MS = 24 * 60 * 60 * 1000;
+
 // Field length limits, enforced on submit/edit.
 export const LIMITS = {
   name: 50,
@@ -82,4 +85,6 @@ export const LIMITS = {
   maxTags: 5,
   url: 300,
   version: 8,
+  // Listings per account, to bound spam from a single login.
+  maxServersPerOwner: 10,
 } as const;

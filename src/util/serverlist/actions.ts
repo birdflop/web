@@ -11,8 +11,14 @@ import {
   type ServerFormInput,
 } from './validation';
 import { verifyTurnstile } from './turnstile';
+import { detectBirdflopHosted } from './birdflop';
 import { sendVotifierV2 } from './votifier';
-import { DEFAULT_VOTIFIER_PORT, VOTE_COOLDOWN_MS } from './constants';
+import {
+  DEFAULT_VOTIFIER_PORT,
+  LIMITS,
+  REPORT_COOLDOWN_MS,
+  VOTE_COOLDOWN_MS,
+} from './constants';
 
 function getClientIp(headers: Headers): string | null {
   return (
@@ -57,13 +63,42 @@ export const createServer = server$(async function (input: ServerFormInput) {
   if (!validation.valid || !validation.data)
     return { success: false as const, errors: validation.errors };
 
+  const owned = await db
+    .select({ count: sql<number>`COUNT(*)` })
+    .from(servers)
+    .where(eq(servers.ownerId, session.user.id))
+    .get();
+  if (Number(owned?.count ?? 0) >= LIMITS.maxServersPerOwner)
+    return {
+      success: false as const,
+      errors: [
+        `You can list at most ${LIMITS.maxServersPerOwner} servers per account.`,
+      ],
+    };
+
   const data = validation.data;
   const slug = await uniqueSlug(db, slugify(data.name));
+  // Auto-tag listings whose address resolves to a Birdflop node (null =
+  // detection unavailable, leave the column at its default).
+  const birdflopHosted = await detectBirdflopHosted(db, this.env, data);
 
   try {
+    // Timestamps are set explicitly: the column's CURRENT_TIMESTAMP default
+    // stores a text datetime in SQLite, which breaks numeric comparisons
+    // against Date bindings (text always sorts above numbers).
+    const now = new Date();
     const inserted = await db
       .insert(servers)
-      .values({ ...data, slug, ownerId: session.user.id })
+      .values({
+        ...data,
+        slug,
+        ownerId: session.user.id,
+        createdAt: now,
+        updatedAt: now,
+        ...(birdflopHosted === null
+          ? {}
+          : { birdflopHosted, birdflopCheckedAt: now }),
+      })
       .returning()
       .get();
     return { success: true as const, slug: inserted.slug, id: inserted.id };
@@ -112,10 +147,21 @@ export const updateServer = server$(async function (
       ? existing.slug
       : await uniqueSlug(db, slugify(data.name), id);
 
+  // Re-run Birdflop detection on every edit so the badge can't be kept by
+  // pointing the listing elsewhere after being tagged (null = keep existing).
+  const birdflopHosted = await detectBirdflopHosted(db, this.env, data);
+
   try {
     const updated = await db
       .update(servers)
-      .set({ ...data, slug, updatedAt: new Date() })
+      .set({
+        ...data,
+        slug,
+        updatedAt: new Date(),
+        ...(birdflopHosted === null
+          ? {}
+          : { birdflopHosted, birdflopCheckedAt: new Date() }),
+      })
       .where(eq(servers.id, id))
       .returning()
       .get();
@@ -238,6 +284,10 @@ export const voteForServer = server$(async function (
       username: cleanUsername,
       ip,
       votifierDelivered: delivered,
+      // Explicit timestamp: the CURRENT_TIMESTAMP column default stores a
+      // text datetime, which would break the numeric cooldown/monthly-window
+      // comparisons above (text always sorts above numbers in SQLite).
+      createdAt: new Date(),
     });
   } catch (err) {
     console.error('Error recording vote:', err);
@@ -285,6 +335,31 @@ export const reportServer = server$(async function (
   const session = this.sharedMap.get('session');
   const ip = getClientIp(this.request.headers);
 
+  // One report per server per user/IP per cooldown window, to bound spam.
+  const identity = [];
+  if (ip) identity.push(eq(serverReports.ip, ip));
+  if (session?.user?.id)
+    identity.push(eq(serverReports.reporterId, session.user.id));
+  if (identity.length > 0) {
+    const cutoff = new Date(Date.now() - REPORT_COOLDOWN_MS);
+    const recent = await db
+      .select({ id: serverReports.id })
+      .from(serverReports)
+      .where(
+        and(
+          eq(serverReports.serverId, serverId),
+          gte(serverReports.createdAt, cutoff),
+          or(...identity)
+        )
+      )
+      .get();
+    if (recent)
+      return {
+        success: false as const,
+        error: 'You have already reported this server recently.',
+      };
+  }
+
   try {
     await db.insert(serverReports).values({
       serverId,
@@ -292,6 +367,7 @@ export const reportServer = server$(async function (
       details: details?.trim()?.slice(0, 1000) || null,
       reporterId: session?.user?.id ?? null,
       ip,
+      createdAt: new Date(),
     });
     return { success: true as const };
   } catch (err) {

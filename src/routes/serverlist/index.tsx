@@ -27,11 +27,12 @@ import Pagination from '~/components/Elements/Pagination';
 
 export const useServers = routeLoader$(async ({ url }) => {
   const sp = url.searchParams;
-  const page = Math.max(1, parseInt(sp.get('page') || '1', 10));
-  const perPage = Math.max(
-    1,
-    Math.min(100, parseInt(sp.get('perPage') || '20', 10))
-  );
+  const pageParam = parseInt(sp.get('page') || '1', 10);
+  const page = Number.isFinite(pageParam) ? Math.max(1, pageParam) : 1;
+  const perPageParam = parseInt(sp.get('perPage') || '20', 10);
+  const perPage = Number.isFinite(perPageParam)
+    ? Math.max(1, Math.min(100, perPageParam))
+    : 20;
   const editionParam = sp.get('edition');
   const edition =
     editionParam === 'java'

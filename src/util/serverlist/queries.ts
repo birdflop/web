@@ -12,12 +12,44 @@ import {
   servers,
   serverVotes,
   users,
-  type ServerWithVotes,
+  type Server,
+  type User,
 } from '~/util/db';
 import { getServerStatus, type ServerStatus } from './status';
 import type { ServerSort, ServerTag } from './constants';
 
 const CANDIDATE_CAP = 75;
+
+// Public projection of a listing. Loader payloads are visible to every
+// visitor, so NuVotifier delivery secrets and the owner's account row (which
+// carries their email/settings) must never leave the server.
+export type PublicServer = Omit<
+  Server,
+  'votifierHost' | 'votifierPort' | 'votifierToken'
+>;
+export interface PublicOwner {
+  name: string | null;
+  image: string | null;
+}
+export interface PublicServerWithVotes extends PublicServer {
+  monthlyVotes: number;
+  totalVotes: number;
+  owner: PublicOwner | null;
+}
+
+export function toPublicServer(server: Server): PublicServer {
+  const {
+    votifierHost: _host,
+    votifierPort: _port,
+    votifierToken: _token,
+    ...pub
+  } = server;
+  return pub;
+}
+
+export function toPublicOwner(owner: User | null): PublicOwner | null {
+  return owner ? { name: owner.name, image: owner.image } : null;
+}
 
 export interface ServerListParams {
   page: number;
@@ -32,7 +64,7 @@ export interface ServerListParams {
 }
 
 export interface ServerListResult {
-  rows: ServerWithVotes[];
+  rows: PublicServerWithVotes[];
   total: number;
   statuses: Record<number, ServerStatus | null>;
   // True when results were refined using live status over a capped pool, so
@@ -66,7 +98,10 @@ function buildWhere(params: ServerListParams) {
     );
   }
   if (params.verifiedOnly) {
-    conditions.push(eq(servers.verified, true));
+    // Admin-granted OR auto-detected (see src/util/serverlist/birdflop.ts).
+    conditions.push(
+      or(eq(servers.verified, true), eq(servers.birdflopHosted, true))
+    );
   }
   return conditions.length ? and(...conditions) : undefined;
 }
@@ -91,7 +126,7 @@ async function selectRanked(
   sort: ServerSort,
   limit: number,
   offset: number
-): Promise<ServerWithVotes[]> {
+): Promise<PublicServerWithVotes[]> {
   const monthStart = startOfMonthMs();
   const rows = await db
     .select({
@@ -113,15 +148,15 @@ async function selectRanked(
     .offset(offset);
 
   return rows.map((r) => ({
-    ...r.server,
+    ...toPublicServer(r.server),
     monthlyVotes: Number(r.monthlyVotes),
     totalVotes: Number(r.totalVotes),
-    owner: r.owner,
+    owner: toPublicOwner(r.owner),
   }));
 }
 
 async function fetchStatuses(
-  rows: ServerWithVotes[]
+  rows: PublicServerWithVotes[]
 ): Promise<Record<number, ServerStatus | null>> {
   const entries = await Promise.all(
     rows.map(async (s) => [s.id, await getServerStatus(s)] as const)

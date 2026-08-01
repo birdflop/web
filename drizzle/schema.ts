@@ -200,6 +200,14 @@ export const servers = sqliteTable(
     plugins: text('plugins', { mode: 'json' }).$type<{
       [id: string]: PluginType;
     }>(),
+    // Auto-detected "hosted on Birdflop" flag. Set server-side by resolving
+    // the listing's address against panel node IPs (see
+    // src/util/serverlist/birdflop.ts) — never user-editable. Surfaces the
+    // same badge as the admin-granted `verified` flag.
+    birdflopHosted: integer('birdflopHosted', { mode: 'boolean' })
+      .default(false)
+      .notNull(),
+    birdflopCheckedAt: integer('birdflopCheckedAt', { mode: 'timestamp_ms' }),
     createdAt: integer('createdAt', { mode: 'timestamp_ms' })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
@@ -274,3 +282,16 @@ export const serverReports = sqliteTable(
 );
 
 export type ServerReport = typeof serverReports.$inferSelect;
+
+// -------------------- Birdflop node IP cache --------------------
+// Single-row cache (id = 1) of the panel's public node/allocation IPs so
+// Birdflop-hosted detection doesn't hit the panel API on every check.
+// Server-side only; never returned by any loader or endpoint.
+export const birdflopIpCache = sqliteTable('birdflopIpCache', {
+  id: integer('id').primaryKey(),
+  ips: text('ips', { mode: 'json' })
+    .$type<string[]>()
+    .notNull()
+    .default(sql`'[]'`),
+  fetchedAt: integer('fetchedAt', { mode: 'timestamp_ms' }).notNull(),
+});
