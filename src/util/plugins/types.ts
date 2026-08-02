@@ -1,5 +1,5 @@
-import { softwareOptions } from '../flags';
-import { PluginSource, PluginType } from './ServerPlugin';
+import type { softwareOptions } from '../flags';
+import type { PluginSource, PluginType } from './ServerPlugin';
 
 export interface ModrinthSearchHit {
   id?: string;

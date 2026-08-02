@@ -21,7 +21,7 @@ import {
   VOTE_COOLDOWN_MS,
 } from './constants';
 import { Session } from '@auth/qwik';
-import { PluginType } from '../plugins/ServerPlugin';
+import type { PluginType } from '../plugins/ServerPlugin';
 
 function getClientIp(headers: Headers): string | null {
   return (
