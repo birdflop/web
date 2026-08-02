@@ -232,8 +232,7 @@ export default component$(() => {
           {s.plugins && Object.keys(s.plugins).length > 0 && (
             <div class="lum-card mt-4 p-4">
               <h2 class="mb-3 flex items-center gap-2 text-lg font-bold">
-                <Blocks size={20} />
-                Plugins ({Object.keys(s.plugins).length})
+                <Blocks size={20} /> Plugins ({Object.keys(s.plugins).length})
               </h2>
               <div class="flex flex-wrap gap-2">
                 {Object.values(s.plugins).map((plugin) => (

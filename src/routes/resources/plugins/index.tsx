@@ -24,10 +24,6 @@ import Plus from 'lucide-icons-qwik/icons/Plus';
 import RefreshCw from 'lucide-icons-qwik/icons/RefreshCw';
 import Trash from 'lucide-icons-qwik/icons/Trash';
 import X from 'lucide-icons-qwik/icons/X';
-import { Link, routeLoader$ } from '@qwik.dev/router';
-import { getDB, servers } from '~/util/db';
-import { eq } from 'drizzle-orm';
-import { getServerStatus } from '~/util/serverlist/status';
 import { defaultDescription, generateHead } from '~/root';
 import { Label, SelectMenu, Tabs } from '@luminescent/ui-qwik';
 import PluginCard from '~/components/plugins/PluginCard';
@@ -37,10 +33,6 @@ import { deepTrack } from '~/util/track';
 import { softwareOptions } from '~/util/flags';
 import SiModrinth from 'simple-icons-qwik/icons/SiModrinth';
 import SiSpigotmc from 'simple-icons-qwik/icons/SiSpigotmc';
-import { useSession } from '~/routes/plugin@auth';
-import { setUserData } from '~/util/dataUtils';
-import { updateServerPlugins } from '~/util/serverlist/actions';
-import { PluginsStoreType, ServerType } from '~/util/plugins/types';
 import {
   getPlugin,
   PluginSource,
@@ -48,8 +40,6 @@ import {
 } from '~/util/plugins/ServerPlugin';
 import { downloadSpigotPlugin } from '~/util/plugins/SpigotPlugin';
 import Globe from 'lucide-icons-qwik/icons/Globe';
-import { Session } from '@auth/qwik';
-import ExternalLink from 'lucide-icons-qwik/icons/ExternalLink';
 
 const debug = true;
 
@@ -59,51 +49,33 @@ type ResolvedPluginType = {
   plugins?: PluginType[];
 };
 
+type ServerType = {
+  software: keyof typeof softwareOptions;
+  plugins: { [id: string]: PluginType };
+};
+
+type PluginsStoreType = {
+  servers: {
+    [serverName: string]: ServerType;
+  };
+  openServer?: string;
+  filter?: 'outdated' | PluginSource;
+};
+
 const serverDefaults: ServerType = {
   software: 'paper',
   plugins: {},
 };
 
-export const useUserServers = routeLoader$(async ({ sharedMap }) => {
-  const session = sharedMap.get('session') as Session;
-  const db = getDB();
-  if (!session?.user?.id || !db) return [];
-
-  const userServers = await db
-    .select({
-      id: servers.id,
-      name: servers.name,
-      slug: servers.slug,
-      edition: servers.edition,
-      javaHost: servers.javaHost,
-      javaPort: servers.javaPort,
-      bedrockHost: servers.bedrockHost,
-      bedrockPort: servers.bedrockPort,
-    })
-    .from(servers)
-    .where(eq(servers.ownerId, session.user.id))
-    .all();
-
-  const userServersWithStatus = await Promise.all(
-    userServers.map(async (s) => {
-      let icon: string | null = null;
-      try {
-        const status = await getServerStatus(s);
-        icon = status?.icon ?? null;
-      } catch {
-        icon = null;
-      }
-      return {
-        id: s.id,
-        name: s.name,
-        slug: s.slug,
-        icon,
-      };
-    })
-  );
-
-  return userServersWithStatus;
-});
+const pluginsDefaults: PluginsStoreType = {
+  servers: {
+    'My Server': {
+      software: 'paper',
+      plugins: {},
+    },
+  },
+  openServer: 'My Server',
+};
 
 const pluginSourcesDescriptions = {
   modrinth: `Newer plugin platform that's gaining popularity. Many plugins are primarily releasing on Modrinth now, so check here first when adding a plugin.`,
@@ -138,8 +110,6 @@ export const pluginsStoreContext =
   createContextId<PluginsStoreType>('plugins-store');
 export default component$(() => {
   const t = inlineTranslate();
-  const session = useSession();
-  const userServers = useUserServers();
 
   const notifications = useContext(NotificationContext);
   const modalRef = useSignal<HTMLDialogElement>();
@@ -160,59 +130,9 @@ export default component$(() => {
   );
   useContextProvider(resolvedPluginContext, resolvedPlugin);
 
-  // Compute initial servers on SSR
-  const dbPlugins = session.value?.user?.plugins;
-  const initialServers: Record<string, ServerType> = {};
-
-  if (
-    dbPlugins &&
-    dbPlugins.servers &&
-    Object.keys(dbPlugins.servers).length > 0
-  ) {
-    Object.assign(initialServers, dbPlugins.servers);
-  }
-
-  if (userServers.value.length > 0) {
-    for (const us of userServers.value) {
-      const existingKey = Object.keys(initialServers).find(
-        (k) =>
-          initialServers[k].serverId === us.id ||
-          k.toLowerCase() === us.name.toLowerCase()
-      );
-      if (existingKey) {
-        initialServers[existingKey].serverId = us.id;
-      } else {
-        if (
-          initialServers['My Server'] &&
-          Object.keys(initialServers['My Server'].plugins).length === 0
-        ) {
-          delete initialServers['My Server'];
-        }
-        initialServers[us.name] = {
-          ...serverDefaults,
-          serverId: us.id,
-        };
-      }
-    }
-  }
-
-  if (Object.keys(initialServers).length === 0) {
-    initialServers['My Server'] = { ...serverDefaults };
-  }
-
-  const initialOpenServer =
-    dbPlugins?.openServer && initialServers[dbPlugins.openServer]
-      ? dbPlugins.openServer
-      : Object.keys(initialServers)[0];
-
-  const pluginsStore = useStore<PluginsStoreType>(
-    {
-      servers: initialServers,
-      openServer: initialOpenServer,
-      filter: dbPlugins?.filter,
-    },
-    { deep: true }
-  );
+  const pluginsStore = useStore<PluginsStoreType>(pluginsDefaults, {
+    deep: true,
+  });
   useContextProvider(pluginsStoreContext, pluginsStore);
 
   const CurrentServer = pluginsStore.openServer
@@ -223,23 +143,21 @@ export default component$(() => {
   // oxlint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     if (!isBrowser) return; // dont load plugins on the server
-    if (!session.value?.user?.id) {
-      const pluginsData = localStorage.getItem('plugins');
-      if (pluginsData) {
-        try {
-          const savedPluginsStore = JSON.parse(pluginsData) as PluginsStoreType;
-          pluginsStore.servers = savedPluginsStore.servers || {};
-          pluginsStore.openServer = savedPluginsStore.openServer;
-          pluginsStore.filter = savedPluginsStore.filter;
-        } catch (e) {
-          const notification = new Notification()
-            .setTitle('Error loading plugins')
-            .setDescription(
-              `There was an error loading your saved plugins: ${e instanceof Error ? e.message : String(e)}.`
-            )
-            .setBgColor('lum-grad-bg-red/50');
-          notifications.push(notification.toJSON());
-        }
+    const pluginsData = localStorage.getItem('plugins');
+    if (pluginsData) {
+      try {
+        const savedPluginsStore = JSON.parse(pluginsData) as PluginsStoreType;
+        pluginsStore.servers = savedPluginsStore.servers || {};
+        pluginsStore.openServer = savedPluginsStore.openServer;
+        pluginsStore.filter = savedPluginsStore.filter;
+      } catch (e) {
+        const notification = new Notification()
+          .setTitle('Error loading plugins')
+          .setDescription(
+            `There was an error loading your saved plugins: ${e instanceof Error ? e.message : String(e)}.`
+          )
+          .setBgColor('lum-grad-bg-red/50');
+        notifications.push(notification.toJSON());
       }
     }
   });
@@ -257,7 +175,7 @@ export default component$(() => {
       for (const pluginId in plugins) {
         const plugin = plugins[pluginId];
         if (!plugin.versions)
-          Object.assign(plugin, (await getPlugin(plugin).fetch()).toJSON());
+          Object.assign(plugin, await getPlugin(plugin).fetch());
       }
     } else {
       pluginsStore.openServer =
@@ -282,18 +200,6 @@ export default component$(() => {
         exportedPluginsStore.servers[server].plugins = mappedPlugins;
       });
       localStorage.setItem('plugins', JSON.stringify(exportedPluginsStore));
-      if (session.value?.user?.id) {
-        await setUserData({ plugins: exportedPluginsStore });
-        if (pluginsStore.openServer && currentServer?.serverId) {
-          const currentMappedPlugins =
-            exportedPluginsStore.servers[pluginsStore.openServer]?.plugins ||
-            {};
-          await updateServerPlugins(
-            currentServer.serverId,
-            currentMappedPlugins
-          );
-        }
-      }
     } catch (e) {
       const notification = new Notification()
         .setTitle('Error saving plugins')
@@ -338,10 +244,9 @@ export default component$(() => {
       </p>
 
       <Tabs
-        values={Object.entries(pluginsStore.servers).map(([k, v]) => ({
+        values={Object.keys(pluginsStore.servers).map((k) => ({
           name: k,
           value: k,
-          permanent: !!v.serverId,
         }))}
         value={
           pluginsStore.openServer
@@ -359,74 +264,17 @@ export default component$(() => {
           pluginsStore.openServer = serverName.value;
         }}
         onPlus$={() => {
-          const unadded = userServers.value.filter(
-            (us) =>
-              !Object.values(pluginsStore.servers).some(
-                (s) => s.serverId === us.id
-              )
-          );
-          let promptMessage = 'Enter server name';
-          let defaultInput = '';
-          if (unadded.length > 0) {
-            promptMessage = `Enter server name (or pick one of your listed servers: ${unadded.map((s) => s.name).join(', ')})`;
-            defaultInput = unadded[0].name;
-          }
-          const serverName = prompt(promptMessage, defaultInput);
+          const serverName = prompt('Enter server name');
           if (serverName) {
             if (pluginsStore.servers[serverName]) {
               alert('A server with that name already exists.');
               return;
             }
-            const matchedUserServer = userServers.value.find(
-              (us) => us.name.toLowerCase() === serverName.trim().toLowerCase()
-            );
-            pluginsStore.servers[serverName] = {
-              ...serverDefaults,
-              serverId: matchedUserServer?.id,
-            };
+            pluginsStore.servers[serverName] = { ...serverDefaults };
             pluginsStore.openServer = serverName;
           }
         }}
-      >
-        {Object.keys(pluginsStore.servers).map((k, i) => {
-          const s = pluginsStore.servers[k];
-          const linked = userServers.value.find((us) => us.id === s.serverId);
-          return [
-            linked?.icon ? (
-              <img
-                key={i}
-                q:slot={`before-${k}`}
-                src={linked.icon}
-                alt={`${linked.name} icon`}
-                width={16}
-                height={16}
-                class="h-4 w-4 rounded-sm object-cover"
-                style={{ imageRendering: 'pixelated' }}
-              />
-            ) : (
-              <Globe
-                q:slot={`before-${k}`}
-                key={i}
-                size={14}
-                class="shrink-0"
-              />
-            ),
-            ...(linked
-              ? [
-                  <Link
-                    key={`link-${i}`}
-                    q:slot={`after-${k}`}
-                    href={`/dashboard/servers/${linked?.slug}`}
-                    class="lum-btn lum-bg-transparent z-10 rounded-full p-0"
-                    title={`Manage ${k} on serverlist`}
-                  >
-                    <ExternalLink size={16} />
-                  </Link>,
-                ]
-              : []),
-          ];
-        })}
-      </Tabs>
+      ></Tabs>
       {Object.keys(pluginsStore.servers).length < 1 && (
         <p class="text-lum-text-secondary mx-2 text-sm">
           {t(
@@ -498,7 +346,7 @@ export default component$(() => {
               </SelectMenu>
 
               <button
-                class="lum-btn lum-btn-p-1 rounded-lum-1 flex cursor-pointer items-center justify-center gap-2 border-none transition-all duration-300"
+                class="lum-btn lum-btn-p-2 rounded-lum-1 flex cursor-pointer items-center justify-center gap-2 border-none transition-all duration-300"
                 onClick$={() => {
                   if (!CurrentServer) return;
                   const exportedPlugins: { [id: string]: PluginType } = {};
@@ -539,8 +387,7 @@ export default component$(() => {
                 }}
                 title="Export server plugins as JSON"
               >
-                <Copy size={16} />
-                Export (Keep this safe)
+                <Copy size={16} /> Export (Keep this safe)
               </button>
 
               <input
@@ -564,7 +411,7 @@ export default component$(() => {
                         const fetchedPlugin = await getPlugin(plugin).fetch();
                         pluginsStore.servers[pluginsStore.openServer!].plugins[
                           fetchedPlugin.id
-                        ] = fetchedPlugin.toJSON();
+                        ] = fetchedPlugin;
                       })
                     );
                     el.value = '';
@@ -654,7 +501,7 @@ export default component$(() => {
                       const plugin = plugins[pluginId];
                       Object.assign(
                         plugin,
-                        (await getPlugin(plugin).fetchVersions()).toJSON()
+                        await getPlugin(plugin).fetchVersions()
                       );
                     }
                   }}
@@ -743,7 +590,7 @@ export default component$(() => {
                       try {
                         pluginsStore.servers[pluginsStore.openServer!].plugins[
                           plugin.id
-                        ] = (await getPlugin(plugin).fetch()).toJSON();
+                        ] = await getPlugin(plugin).fetch();
                       } catch (error) {
                         console.error('Error fetching plugin versions:', error);
                         const notification = new Notification()
@@ -860,8 +707,7 @@ export default component$(() => {
                   modalRef.value?.close();
                 }}
               >
-                <Plus size={20} />
-                Add
+                <Plus size={20} /> Add
               </button>
             </div>
           )}

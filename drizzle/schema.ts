@@ -9,12 +9,11 @@ import type { AdapterAccountType } from '@auth/qwik/adapters';
 import { sql } from 'drizzle-orm/sql/sql';
 import { rgbPreset } from '../src/util/rgb/presets';
 import { Settings } from '../src/routes/layout';
-import type { PluginType } from '../src/util/plugins/ServerPlugin';
-import type { PluginsStoreType } from '../src/util/plugins/types';
 import type {
   ServerEdition,
   ServerTag,
 } from '../src/util/serverlist/constants';
+import type { PluginType } from '../src/util/plugins/ServerPlugin';
 
 // -------------------- User --------------------
 export const users = sqliteTable('user', {
@@ -28,7 +27,6 @@ export const users = sqliteTable('user', {
   image: text('image'),
   privatePresets: text('privatePresets', { mode: 'json' }).$type<rgbPreset[]>(),
   settings: text('settings', { mode: 'json' }).$type<Settings>(),
-  plugins: text('plugins', { mode: 'json' }).$type<PluginsStoreType>(),
   createdAt: integer('createdAt', { mode: 'timestamp_ms' })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),

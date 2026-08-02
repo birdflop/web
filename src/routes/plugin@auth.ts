@@ -85,8 +85,7 @@ export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
           return true;
         },
         async session({ session }) {
-          const { id, name, email, image, privatePresets, plugins } =
-            session.user;
+          const { id, name, email, image, privatePresets } = session.user;
 
           // fetch saved presets for this user
           const savedFromDB = await db
@@ -107,7 +106,6 @@ export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
               email,
               image,
               privatePresets,
-              plugins,
               savedPresets: saved,
             },
           };
