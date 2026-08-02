@@ -80,6 +80,18 @@ export const REPORT_COOLDOWN_MS = 24 * 60 * 60 * 1000;
 // Minimum gap (ms) between owner-initiated Votifier test votes.
 export const TEST_VOTE_COOLDOWN_MS = 10 * 1000;
 
+// Minimum gap (ms) between owner-initiated ServersPulse link/verify calls
+// (each one hits the anonymous, IP-rate-limited ServersPulse API).
+export const SERVERSPULSE_ACTION_COOLDOWN_MS = 10 * 1000;
+
+// ServersPulse integration (see src/util/serverlist/serverspulse.ts). These
+// live here so client components can import them without pulling the
+// server-only fetch/DB module into browser bundles.
+export const SERVERSPULSE_SITE_URL = 'https://serverspulse.com';
+// Below this much telemetry coverage in the 28-day window, the hour-of-day
+// profile is statistically meaningless and must not be rendered.
+export const MIN_PROFILE_COVERAGE_DAYS = 7;
+
 // Field length limits, enforced on submit/edit.
 export const LIMITS = {
   name: 50,

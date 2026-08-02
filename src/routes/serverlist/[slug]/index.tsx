@@ -32,6 +32,8 @@ import {
   birdflopCheckIsStale,
   refreshBirdflopHosted,
 } from '~/util/serverlist/birdflop';
+import { getPublicServersPulseStats } from '~/util/serverlist/serverspulse';
+import ServersPulsePanel from '~/components/ServerList/ServersPulsePanel';
 import MotdText from '~/components/Elements/MotdText';
 import { toPublicOwner, toPublicServer } from '~/util/serverlist/queries';
 import { useIsAdmin } from '~/routes/layout';
@@ -82,7 +84,12 @@ export const useServer = routeLoader$(async (event) => {
       .get(),
   ]);
 
-  const status = await getServerStatus(serverRow);
+  const [status, serverspulse] = await Promise.all([
+    getServerStatus(serverRow),
+    // Verified ServersPulse link, lazily refreshed (at most once/min) with
+    // the last good payload cached in D1 — null when not connected.
+    getPublicServersPulseStats(db, serverRow.id),
+  ]);
 
   // Strip Votifier secrets and the owner's account details before the row
   // enters the loader payload — it is visible to every visitor.
@@ -90,6 +97,7 @@ export const useServer = routeLoader$(async (event) => {
     server: toPublicServer(serverRow),
     owner: toPublicOwner(server.owner),
     status,
+    serverspulse,
     monthlyVotes: Number(monthlyRow?.count ?? 0),
     totalVotes: Number(totalRow?.count ?? 0),
     sitekey: event.env.get('TURNSTILE_SITEKEY') ?? '',
@@ -193,6 +201,8 @@ export default component$(() => {
               </p>
             )}
           </div>
+
+          {data.serverspulse && <ServersPulsePanel stats={data.serverspulse} />}
 
           <div class="flex flex-wrap gap-2">
             {s.website && (

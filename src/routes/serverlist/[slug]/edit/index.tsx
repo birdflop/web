@@ -8,9 +8,10 @@ import SendHorizonal from 'lucide-icons-qwik/icons/SendHorizonal';
 import CheckCircle from 'lucide-icons-qwik/icons/CheckCircle';
 import CircleX from 'lucide-icons-qwik/icons/CircleX';
 import { generateHead } from '~/root';
-import { getDB, servers } from '~/util/db';
+import { getDB, servers, serverspulseLinks } from '~/util/db';
 import { checkAdmin } from '~/routes/layout';
 import ServerForm from '~/components/ServerList/ServerForm';
+import ServersPulseLinkPanel from '~/components/ServerList/ServersPulseLinkPanel';
 import { Session } from '@auth/qwik';
 import { testVote } from '~/util/serverlist/actions';
 import { Notification, NotificationContext } from '~/util/Notification';
@@ -29,17 +30,37 @@ export const useEditServer = routeLoader$(async (event) => {
     checkAdmin(event) ||
     (!!session?.user?.id && session.user.id === server.ownerId);
 
+  const spLink = canManage
+    ? await db
+        .select({
+          slug: serverspulseLinks.slug,
+          verificationToken: serverspulseLinks.verificationToken,
+          verifiedAt: serverspulseLinks.verifiedAt,
+        })
+        .from(serverspulseLinks)
+        .where(eq(serverspulseLinks.serverId, server.id))
+        .get()
+    : undefined;
+
   // Only owners/admins receive the row — it carries the Votifier token, and
   // loader payloads are readable regardless of what the page renders.
   return {
     server: canManage ? server : null,
+    serverspulse:
+      canManage && spLink
+        ? {
+            slug: spLink.slug,
+            token: spLink.verificationToken,
+            verified: !!spLink.verifiedAt,
+          }
+        : null,
     slug: event.params.slug,
     canManage,
   };
 });
 
 export default component$(() => {
-  const { server, slug, canManage } = useEditServer().value;
+  const { server, serverspulse, slug, canManage } = useEditServer().value;
   const notifications = useContext(NotificationContext);
   const testing = useSignal(false);
 
@@ -128,6 +149,11 @@ export default component$(() => {
                 )}
               </div>
             </div>
+
+            <ServersPulseLinkPanel
+              serverId={server.id}
+              initial={serverspulse}
+            />
           </>
         ) : (
           <p class="lum-card lum-bg-red/20 flex items-center gap-2">

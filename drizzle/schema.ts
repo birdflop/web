@@ -15,6 +15,7 @@ import type {
   ServerEdition,
   ServerTag,
 } from '../src/util/serverlist/constants';
+import type { ServersPulseListing } from '../src/util/serverlist/serverspulse';
 
 // -------------------- User --------------------
 export const users = sqliteTable('user', {
@@ -295,3 +296,36 @@ export const birdflopIpCache = sqliteTable('birdflopIpCache', {
     .default(sql`'[]'`),
   fetchedAt: integer('fetchedAt', { mode: 'timestamp_ms' }).notNull(),
 });
+
+// -------------------- ServersPulse links --------------------
+// A listing's opt-in link to its ServersPulse Discover entry
+// (src/util/serverlist/serverspulse.ts). Ownership is proven by reverse
+// verification: `verificationToken` must appear in the Discover listing's
+// description/website URL before `verifiedAt` is set — nothing renders
+// publicly until then. `lastPayload` caches the last good API response so a
+// ServersPulse outage degrades to slightly stale data instead of an empty
+// panel. Self-reported data: display only, never a ranking input.
+export const serverspulseLinks = sqliteTable(
+  'serverspulseLinks',
+  {
+    serverId: integer('serverId')
+      .primaryKey()
+      .references(() => servers.id, { onDelete: 'cascade' }),
+    slug: text('slug').notNull(),
+    verificationToken: text('verificationToken'),
+    verifiedAt: integer('verifiedAt', { mode: 'timestamp_ms' }),
+    // Last fetch attempt (bounds retry frequency) vs last successful payload
+    // (bounds how long stale data may keep rendering).
+    lastCheckedAt: integer('lastCheckedAt', { mode: 'timestamp_ms' }),
+    lastSuccessAt: integer('lastSuccessAt', { mode: 'timestamp_ms' }),
+    lastPayload: text('lastPayload', {
+      mode: 'json',
+    }).$type<ServersPulseListing>(),
+    lastError: text('lastError'),
+    createdAt: integer('createdAt', { mode: 'timestamp_ms' }).notNull(),
+    updatedAt: integer('updatedAt', { mode: 'timestamp_ms' }).notNull(),
+  },
+  (t) => [index('serverspulseLinks_slug_idx').on(t.slug)]
+);
+
+export type ServersPulseLink = typeof serverspulseLinks.$inferSelect;
