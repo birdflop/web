@@ -17,6 +17,7 @@ import {
   DEFAULT_VOTIFIER_PORT,
   LIMITS,
   REPORT_COOLDOWN_MS,
+  TEST_VOTE_COOLDOWN_MS,
   VOTE_COOLDOWN_MS,
 } from './constants';
 import { Session } from '@auth/qwik';
@@ -446,6 +447,10 @@ export const setServerVerified = server$(async function (
   return { success: true as const };
 });
 
+// Per-isolate cooldown; best-effort (Workers isolates don't share memory),
+// enough to keep a client from hammering arbitrary host:port pairs.
+const lastTestVote = new Map<string, number>();
+
 /**
  * Send a test Votifier v2 vote to the server owned by `serverId`.
  * Only the server owner or an admin may call this.
@@ -481,6 +486,15 @@ export const testVote = server$(async function (serverId: number) {
         'No Votifier host or token configured. Fill in the Votifier section above and save first.',
     };
 
+  const now = Date.now();
+  const last = lastTestVote.get(session.user.id) ?? 0;
+  if (now - last < TEST_VOTE_COOLDOWN_MS)
+    return {
+      success: false as const,
+      error: 'Please wait a few seconds between test votes.',
+    };
+  lastTestVote.set(session.user.id, now);
+
   const host = row.votifierHost;
   const port = row.votifierPort
     ? Number(row.votifierPort)
@@ -490,9 +504,12 @@ export const testVote = server$(async function (serverId: number) {
     { host, port, token: row.votifierToken },
     {
       username: session.user.name ?? session.user.id,
-      serviceName: 'Birdflop',
+      // Must match voteForServer: per-service token maps in NuVotifier key
+      // off this string, so a test with a different serviceName would
+      // validate against a different token than real votes.
+      serviceName: 'birdflop.com',
       address: row.javaHost ?? host,
-      timestamp: Date.now(),
+      timestamp: now,
     }
   );
 

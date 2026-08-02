@@ -77,6 +77,9 @@ export const VOTE_COOLDOWN_MS = 24 * 60 * 60 * 1000;
 // How long (ms) before the same user/IP can report the same server again.
 export const REPORT_COOLDOWN_MS = 24 * 60 * 60 * 1000;
 
+// Minimum gap (ms) between owner-initiated Votifier test votes.
+export const TEST_VOTE_COOLDOWN_MS = 10 * 1000;
+
 // Field length limits, enforced on submit/edit.
 export const LIMITS = {
   name: 50,
