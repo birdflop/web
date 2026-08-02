@@ -24,7 +24,7 @@ import Plus from 'lucide-icons-qwik/icons/Plus';
 import RefreshCw from 'lucide-icons-qwik/icons/RefreshCw';
 import Trash from 'lucide-icons-qwik/icons/Trash';
 import X from 'lucide-icons-qwik/icons/X';
-import { routeLoader$ } from '@qwik.dev/router';
+import { Link, routeLoader$ } from '@qwik.dev/router';
 import { getDB, servers } from '~/util/db';
 import { eq } from 'drizzle-orm';
 import { getServerStatus } from '~/util/serverlist/status';
@@ -49,6 +49,7 @@ import {
 import { downloadSpigotPlugin } from '~/util/plugins/SpigotPlugin';
 import Globe from 'lucide-icons-qwik/icons/Globe';
 import { Session } from '@auth/qwik';
+import ExternalLink from 'lucide-icons-qwik/icons/ExternalLink';
 
 const debug = true;
 
@@ -391,20 +392,40 @@ export default component$(() => {
         {Object.keys(pluginsStore.servers).map((k, i) => {
           const s = pluginsStore.servers[k];
           const linked = userServers.value.find((us) => us.id === s.serverId);
-          return linked?.icon ? (
-            <img
-              key={i}
-              q:slot={`before-${k}`}
-              src={linked.icon}
-              alt={`${linked.name} icon`}
-              width={16}
-              height={16}
-              class="h-4 w-4 rounded-sm object-cover"
-              style={{ imageRendering: 'pixelated' }}
-            />
-          ) : (
-            <Globe q:slot={`before-${k}`} key={i} size={14} class="shrink-0" />
-          );
+          return [
+            linked?.icon ? (
+              <img
+                key={i}
+                q:slot={`before-${k}`}
+                src={linked.icon}
+                alt={`${linked.name} icon`}
+                width={16}
+                height={16}
+                class="h-4 w-4 rounded-sm object-cover"
+                style={{ imageRendering: 'pixelated' }}
+              />
+            ) : (
+              <Globe
+                q:slot={`before-${k}`}
+                key={i}
+                size={14}
+                class="shrink-0"
+              />
+            ),
+            ...(linked
+              ? [
+                  <Link
+                    key={`link-${i}`}
+                    q:slot={`after-${k}`}
+                    href={`/dashboard/servers/${linked?.slug}`}
+                    class="lum-btn lum-bg-transparent z-10 rounded-full p-0"
+                    title={`Manage ${k} on serverlist`}
+                  >
+                    <ExternalLink size={16} />
+                  </Link>,
+                ]
+              : []),
+          ];
         })}
       </Tabs>
       {Object.keys(pluginsStore.servers).length < 1 && (
