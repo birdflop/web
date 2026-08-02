@@ -206,6 +206,8 @@ export interface VoteResult {
   delivered?: boolean;
   deliveryError?: string;
   monthlyVotes?: number;
+  /** Unix ms timestamp when the cooldown expires (only set on cooldown errors). */
+  nextVoteAt?: number;
 }
 
 export const voteForServer = server$(async function (
@@ -241,7 +243,7 @@ export const voteForServer = server$(async function (
   // 24h cooldown by username OR ip for this server.
   const cutoff = new Date(Date.now() - VOTE_COOLDOWN_MS);
   const recent = await db
-    .select({ id: serverVotes.id })
+    .select({ id: serverVotes.id, createdAt: serverVotes.createdAt })
     .from(serverVotes)
     .where(
       and(
@@ -257,6 +259,7 @@ export const voteForServer = server$(async function (
     return {
       success: false,
       error: 'You have already voted for this server in the last 24 hours.',
+      nextVoteAt: new Date(recent.createdAt).getTime() + VOTE_COOLDOWN_MS,
     };
 
   // Attempt Votifier delivery (best-effort).
