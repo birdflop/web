@@ -70,9 +70,13 @@ export function getSignificantPoints(gradient: string[], threshold: number) {
 }
 
 export function decodeLegacy(rgbtext: string) {
-  const legacyCodeRegex =
-    /(?:(?:[&§]|\\u00a7)x(?:(?:[&§]|\\u00a7)[0-9A-Fa-f]){6}|&#[0-9A-Fa-f]{6}|(?:[&§]|\\u00a7)[l-orL-ORkK])/g;
-  const matches = [...rgbtext.matchAll(legacyCodeRegex)];
+  if (!rgbtext || !rgbtext.trim()) return null;
+
+  // Universal pattern for Legacy Hex (&x&1&2...), Modern Hex (&#123456), Raw Hex (#123456), HTML spans, and Formatting (&l, &o, etc.)
+  const codeRegex =
+    /(?:(?:[&§]|\\u00a7)x(?:(?:[&§]|\\u00a7)[0-9A-Fa-f]){6}|[&#§]\b[0-9A-Fa-f]{6}\b|&#[0-9A-Fa-f]{6}|<span[^>]*style=["']([^"']*)["'][^>]*>|<\/span>|(?:[&§]|\\u00a7)[l-orL-ORkK])/gi;
+
+  const matches = [...rgbtext.matchAll(codeRegex)];
   if (matches.length === 0) return null;
 
   const colors: Array<{ hex: string; pos: number }> = [];
@@ -98,38 +102,47 @@ export function decodeLegacy(rgbtext: string) {
     const match = matches[i];
     const codeStr = match[0];
 
-    const lastChar = codeStr.charAt(codeStr.length - 1).toLowerCase();
-    if (codeStr.length === 2 || codeStr.startsWith('\\u00a7')) {
-      if (lastChar === 'r') {
-        currentColor = '#ffffff';
-        currentFmts.bold = false;
-        currentFmts.italic = false;
-        currentFmts.underline = false;
-        currentFmts.strikethrough = false;
-        currentFmts.obfuscate = false;
-      } else if (lastChar === 'l') {
-        currentFmts.bold = true;
-      } else if (lastChar === 'o') {
-        currentFmts.italic = true;
-      } else if (lastChar === 'n') {
-        currentFmts.underline = true;
-      } else if (lastChar === 'm') {
-        currentFmts.strikethrough = true;
-      } else if (lastChar === 'k') {
-        currentFmts.obfuscate = true;
-      }
+    if (codeStr.toLowerCase().startsWith('<span')) {
+      const styleAttr = match[1] || '';
+      const colorMatch = styleAttr.match(/color:\s*(#[0-9a-fA-F]{6})/i);
+      if (colorMatch) currentColor = colorMatch[1];
+      if (/font-weight:\s*bold/i.test(styleAttr)) currentFmts.bold = true;
+      if (/font-style:\s*italic/i.test(styleAttr)) currentFmts.italic = true;
+      if (/text-decoration:[^;]*underline/i.test(styleAttr)) currentFmts.underline = true;
+      if (/text-decoration:[^;]*line-through/i.test(styleAttr)) currentFmts.strikethrough = true;
+    } else if (codeStr.toLowerCase() === '</span>') {
+      // closing tag
     } else {
-      if (codeStr.startsWith('&#')) {
-        currentColor = '#' + codeStr.slice(2);
+      const lastChar = codeStr.charAt(codeStr.length - 1).toLowerCase();
+      if (codeStr.length === 2 || codeStr.startsWith('\\u00a7')) {
+        if (lastChar === 'r') {
+          currentColor = '#ffffff';
+          currentFmts.bold = false;
+          currentFmts.italic = false;
+          currentFmts.underline = false;
+          currentFmts.strikethrough = false;
+          currentFmts.obfuscate = false;
+        } else if (lastChar === 'l') {
+          currentFmts.bold = true;
+        } else if (lastChar === 'o') {
+          currentFmts.italic = true;
+        } else if (lastChar === 'n') {
+          currentFmts.underline = true;
+        } else if (lastChar === 'm') {
+          currentFmts.strikethrough = true;
+        } else if (lastChar === 'k') {
+          currentFmts.obfuscate = true;
+        }
       } else {
-        const hexDigits = codeStr.replace(/(?:[&§]|\\u00a7|x)/g, '');
-        currentColor = '#' + hexDigits;
+        if (codeStr.startsWith('&#') || codeStr.startsWith('§#')) {
+          currentColor = '#' + codeStr.slice(2);
+        } else if (codeStr.startsWith('#')) {
+          currentColor = codeStr;
+        } else {
+          const hexDigits = codeStr.replace(/(?:[&§]|\\u00a7|x)/gi, '');
+          currentColor = '#' + hexDigits;
+        }
       }
-      currentFmts.bold = false;
-      currentFmts.italic = false;
-      currentFmts.underline = false;
-      currentFmts.strikethrough = false;
-      currentFmts.obfuscate = false;
     }
 
     const startIdx = match.index + codeStr.length;
