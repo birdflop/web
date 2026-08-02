@@ -75,7 +75,6 @@ export default component$(() => {
         {canManage && server ? (
           <>
             <ServerForm mode="edit" initial={server} />
-
             <ServersPulseLinkPanel
               serverId={server.id}
               initial={serverspulse}
