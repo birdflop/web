@@ -1,8 +1,15 @@
-import { $, component$, useContext, useSignal } from '@qwik.dev/core';
+import {
+  $,
+  component$,
+  useContext,
+  useSignal,
+  useVisibleTask$,
+} from '@qwik.dev/core';
 import { Label } from '@luminescent/ui-qwik';
 import ChevronUp from 'lucide-icons-qwik/icons/ChevronUp';
 import User from 'lucide-icons-qwik/icons/User';
 import CheckCircle2 from 'lucide-icons-qwik/icons/CheckCircle2';
+import Clock from 'lucide-icons-qwik/icons/Clock';
 import { Notification, NotificationContext } from '~/util/Notification';
 import { voteForServer } from '~/util/serverlist/actions';
 import Turnstile from './Turnstile';
@@ -13,6 +20,17 @@ interface VoteSectionProps {
   monthlyVotes: number;
 }
 
+function formatCountdown(ms: number): string {
+  if (ms <= 0) return '0s';
+  const totalSeconds = Math.ceil(ms / 1000);
+  const h = Math.floor(totalSeconds / 3600);
+  const m = Math.floor((totalSeconds % 3600) / 60);
+  const s = totalSeconds % 60;
+  if (h > 0) return `${h}h ${m}m ${s}s`;
+  if (m > 0) return `${m}m ${s}s`;
+  return `${s}s`;
+}
+
 export default component$<VoteSectionProps>(
   ({ serverId, sitekey, monthlyVotes }) => {
     const notifications = useContext(NotificationContext);
@@ -21,6 +39,31 @@ export default component$<VoteSectionProps>(
     const voting = useSignal(false);
     const votes = useSignal(monthlyVotes);
     const voted = useSignal(false);
+    // Unix ms when the user can vote again (0 = not on cooldown)
+    const nextVoteAt = useSignal(0);
+    const countdown = useSignal('');
+
+    // eslint-disable-next-line qwik/no-use-visible-task
+    useVisibleTask$(({ track, cleanup }) => {
+      track(() => nextVoteAt.value);
+      if (nextVoteAt.value <= 0) {
+        countdown.value = '';
+        return;
+      }
+      const tick = () => {
+        const remaining = nextVoteAt.value - Date.now();
+        if (remaining <= 0) {
+          countdown.value = '';
+          nextVoteAt.value = 0;
+          voted.value = false;
+        } else {
+          countdown.value = formatCountdown(remaining);
+        }
+      };
+      tick();
+      const id = setInterval(tick, 1000);
+      cleanup(() => clearInterval(id));
+    });
 
     const vote = $(async () => {
       if (!username.value.trim()) {
@@ -53,6 +96,7 @@ export default component$<VoteSectionProps>(
         );
         if (result.success) {
           voted.value = true;
+          nextVoteAt.value = Date.now() + 24 * 60 * 60 * 1000;
           if (typeof result.monthlyVotes === 'number')
             votes.value = result.monthlyVotes;
           notifications.push(
@@ -67,10 +111,19 @@ export default component$<VoteSectionProps>(
               .toJSON()
           );
         } else {
+          let description = result.error ?? 'Please try again.';
+          if (result.nextVoteAt) {
+            voted.value = true;
+            nextVoteAt.value = result.nextVoteAt;
+            const remaining = result.nextVoteAt - Date.now();
+            if (remaining > 0) {
+              description += ` Come back in ${formatCountdown(remaining)}.`;
+            }
+          }
           notifications.push(
             new Notification()
               .setTitle('Could not vote')
-              .setDescription(result.error ?? 'Please try again.')
+              .setDescription(description)
               .setBgColor('lum-grad-bg-red/50')
               .setPersist(true)
               .toJSON()
@@ -85,7 +138,8 @@ export default component$<VoteSectionProps>(
       <div class="lum-card gap-3">
         <div class="flex items-center justify-between">
           <h2 class="flex items-center gap-2 text-lg font-bold">
-            <ChevronUp size={20} /> Vote
+            <ChevronUp size={20} />
+            Vote
           </h2>
           <span class="text-lum-text-secondary text-sm">
             <span class="text-lum-accent text-lg font-extrabold">
@@ -97,8 +151,19 @@ export default component$<VoteSectionProps>(
 
         {voted.value ? (
           <p class="flex items-center gap-1.5 text-green-400">
-            <CheckCircle2 size={18} /> You've voted! Come back in 24 hours to
-            vote again.
+            {countdown.value ? (
+              <>
+                <Clock size={18} />
+                Come back in{' '}
+                <span class="font-mono font-bold">{countdown.value}</span> to
+                vote again.
+              </>
+            ) : (
+              <>
+                <CheckCircle2 size={18} />
+                You've voted! Come back in 24 hours to vote again.
+              </>
+            )}
           </p>
         ) : (
           <>
@@ -119,7 +184,8 @@ export default component$<VoteSectionProps>(
               disabled={voting.value}
               onClick$={vote}
             >
-              <ChevronUp size={18} /> {voting.value ? 'Voting...' : 'Vote now'}
+              <ChevronUp size={18} />
+              {voting.value ? 'Voting...' : 'Vote now'}
             </button>
           </>
         )}

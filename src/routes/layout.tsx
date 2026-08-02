@@ -424,7 +424,8 @@ export default component$(() => {
         >
           <div>
             <h5 class="mb-2 flex items-center gap-2 text-2xl font-bold">
-              <Cookie size={24} /> {t('nav.cookies.title@@Cookies')}
+              <Cookie size={24} />
+              {t('nav.cookies.title@@Cookies')}
             </h5>
             <p>
               {t(

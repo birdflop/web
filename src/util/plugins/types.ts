@@ -1,3 +1,6 @@
+import type { softwareOptions } from '../flags';
+import type { PluginSource, PluginType } from './ServerPlugin';
+
 export interface ModrinthSearchHit {
   id?: string;
   project_id: string;
@@ -61,8 +64,8 @@ export interface SpigotVersion {
 }
 
 export type ServerType = {
-  software: keyof typeof import('../flags').softwareOptions;
-  plugins: { [id: string]: import('./ServerPlugin').PluginType };
+  software: keyof typeof softwareOptions;
+  plugins: { [id: string]: PluginType };
   serverId?: number;
 };
 
@@ -71,5 +74,5 @@ export type PluginsStoreType = {
     [serverName: string]: ServerType;
   };
   openServer?: string;
-  filter?: 'outdated' | import('./ServerPlugin').PluginSource;
+  filter?: 'outdated' | PluginSource;
 };

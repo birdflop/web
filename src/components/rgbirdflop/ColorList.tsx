@@ -118,7 +118,8 @@ export default component$<ColorListProps>((props) => {
     >
       <div class="flex items-center gap-2">
         <h3 class="flex flex-1 items-center gap-2 font-semibold">
-          <Palette /> {t('rgb.colors.title@@Colors')}
+          <Palette />
+          {t('rgb.colors.title@@Colors')}
         </h3>
 
         <NumberInput

@@ -126,10 +126,6 @@ export default defineConfig({
   // All Qwik libraries should be bundled in the server build.
   ssr: {
     noExternal: qwikDeps,
-    // cloudflare:sockets is a Cloudflare Workers built-in — leave the import
-    // as a bare specifier so the runtime resolves it, and keep it out of any
-    // client bundle entirely.
-    external: ['cloudflare:sockets'],
   },
   /**
    * This is an advanced setting. It improves the bundling of your server code. To use it, make sure you understand when your consumed packages are dependencies or dev dependencies. (otherwise things will break in production)

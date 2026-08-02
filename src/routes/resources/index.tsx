@@ -370,7 +370,8 @@ export default component$(() => {
           class="lum-btn lum-bg-lime/50 hover:lum-bg-lime"
           href="https://bin.birdflop.com/"
         >
-          <LinkIcon size={20} /> Visit
+          <LinkIcon size={20} />
+          Visit
         </a>
       </div>
 

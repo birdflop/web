@@ -31,7 +31,8 @@ export default component$(() => {
             href="/"
             class="lum-btn lum-btn-p-4 lum-grad-bg-blue/60 hover:lum-bg-blue"
           >
-            <Home size={26} /> {t('nav.404.home@@Go back home')}
+            <Home size={26} />
+            {t('nav.404.home@@Go back home')}
           </Link>
         </div>
       </div>

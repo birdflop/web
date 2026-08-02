@@ -75,6 +75,5 @@ export default component$<TurnstileProps>(({ sitekey, token }) => {
     });
   });
 
-  if (!sitekey) return null;
-  return <div ref={containerRef} class="my-2" />;
+  return <div ref={containerRef} class={sitekey ? 'my-2' : 'hidden'} />;
 });

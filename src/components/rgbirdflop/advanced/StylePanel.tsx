@@ -62,7 +62,8 @@ export default component$(() => {
         <>
           <div class="flex flex-col gap-2">
             <h4 class="text-lum-text-secondary flex items-center gap-2 text-xs font-bold tracking-wider uppercase">
-              <Palette size={15} /> {t('rgb.colors.color@@Color')}
+              <Palette size={15} />
+              {t('rgb.colors.color@@Color')}
             </h4>
             <SegmentColorEditor />
           </div>

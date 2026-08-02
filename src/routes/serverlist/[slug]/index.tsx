@@ -144,7 +144,8 @@ export default component$(() => {
           href="/serverlist"
           class="text-lum-text-secondary hover:text-lum-accent inline-flex items-center gap-1 text-sm"
         >
-          <ArrowLeft size={16} /> Back to server list
+          <ArrowLeft size={16} />
+          Back to server list
         </Link>
 
         <ServerControls
@@ -178,7 +179,8 @@ export default component$(() => {
           )}
           <div class="lum-card">
             <h2 class="flex items-center gap-2 text-lg font-bold">
-              <Info size={20} /> About
+              <Info size={20} />
+              About
             </h2>
             <div
               class="[&_a]:text-lum-accent [&_img]:rounded-lum-1 [&_blockquote]:border-lum-border/40 [&_blockquote]:text-lum-text-secondary [&_code]:bg-lum-input-bg/40 text-sm leading-relaxed break-words [&_a]:underline [&_blockquote]:border-l-2 [&_blockquote]:pl-3 [&_code]:rounded [&_code]:px-1 [&_img]:my-2 [&_ul]:list-disc [&_ul]:pl-5"
@@ -188,7 +190,8 @@ export default component$(() => {
 
           <div class="lum-card gap-2">
             <h2 class="flex items-center gap-2 text-lg font-bold">
-              <ServerIcon size={20} /> Connect
+              <ServerIcon size={20} />
+              Connect
             </h2>
             {javaAddr && <ConnectRow label="Java" address={javaAddr} />}
             {bedrockAddr && (
@@ -196,8 +199,8 @@ export default component$(() => {
             )}
             {data.status && (
               <p class="text-lum-text-secondary mt-1 flex items-center gap-1.5 text-xs">
-                <Clock size={12} class="shrink-0" /> Status cached for up to 2
-                minutes.
+                <Clock size={12} class="shrink-0" />
+                Status cached for up to 2 minutes.
               </p>
             )}
           </div>
@@ -212,7 +215,8 @@ export default component$(() => {
                 rel="noopener noreferrer nofollow"
                 class="lum-btn lum-bg-lum-input-bg/40"
               >
-                <Globe size={18} /> Website
+                <Globe size={18} />
+                Website
               </a>
             )}
             {s.discord && (
@@ -222,14 +226,16 @@ export default component$(() => {
                 rel="noopener noreferrer nofollow"
                 class="lum-btn lum-bg-lum-input-bg/40"
               >
-                <SiDiscord class="fill-current" size={18} /> Discord
+                <SiDiscord class="fill-current" size={18} />
+                Discord
               </a>
             )}
             <Link
               href={`/resources/rgb?s=${s.slug}`}
               class="lum-btn lum-bg-lum-input-bg/40"
             >
-              <Palette size={18} /> RGB Gradient
+              <Palette size={18} />
+              RGB Gradient
             </Link>
           </div>
 
@@ -277,7 +283,8 @@ export default component$(() => {
           <div class="lum-card gap-2 text-sm">
             <div class="flex items-center justify-between">
               <span class="text-lum-text-secondary flex items-center gap-1.5">
-                <Calendar size={16} /> Votes this month
+                <Calendar size={16} />
+                Votes this month
               </span>
               <span class="font-bold">
                 {data.monthlyVotes.toLocaleString()}
@@ -285,14 +292,16 @@ export default component$(() => {
             </div>
             <div class="flex items-center justify-between">
               <span class="text-lum-text-secondary flex items-center gap-1.5">
-                <Trophy size={16} /> All-time votes
+                <Trophy size={16} />
+                All-time votes
               </span>
               <span class="font-bold">{data.totalVotes.toLocaleString()}</span>
             </div>
             {data.owner?.name && (
               <div class="flex items-center justify-between">
                 <span class="text-lum-text-secondary flex items-center gap-1.5">
-                  <User size={16} /> Owner
+                  <User size={16} />
+                  Owner
                 </span>
                 <span class="ml-2 truncate font-bold">{data.owner.name}</span>
               </div>

@@ -40,7 +40,8 @@ export default component$(() => {
                 value="/serverlist/submit"
               />
               <button class="lum-btn lum-bg-blue hover:lum-bg-blue/80 flex items-center gap-2">
-                <SiDiscord size={18} /> Login with Discord
+                <SiDiscord size={18} />
+                Login with Discord
               </button>
             </Form>
           </div>

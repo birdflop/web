@@ -306,7 +306,8 @@ export default component$(() => {
           {t('nav.resources.hexGradientPresets.title@@RGBirdflop Presets')}
         </span>
         <a href="#my-presets" class="lum-btn mr-auto font-normal">
-          <Send size={20} /> {t('rgb.presets.publish@@Publish your own preset')}
+          <Send size={20} />
+          {t('rgb.presets.publish@@Publish your own preset')}
         </a>
       </h1>
       <p class="border-lum-border/10 text-lum-text-secondary mb-4 border-b pb-4">

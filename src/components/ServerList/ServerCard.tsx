@@ -243,7 +243,8 @@ export default component$<ServerCardProps>(({ server, status, rank }) => {
 
       {server.featured && (
         <span class="bg-lum-card-bg/80 rounded-lum-2 absolute top-2 right-2 z-10 flex items-center gap-1 px-1.5 py-0.5 text-xs font-semibold text-yellow-400 backdrop-blur-sm">
-          <Star size={12} class="fill-yellow-400" /> Sponsored
+          <Star size={12} class="fill-yellow-400" />
+          Sponsored
         </span>
       )}
     </div>

@@ -35,6 +35,7 @@ import {
   VOTE_COOLDOWN_MS,
 } from './constants';
 import { Session } from '@auth/qwik';
+import type { PluginType } from '../plugins/ServerPlugin';
 
 function getClientIp(headers: Headers): string | null {
   return (
@@ -220,6 +221,8 @@ export interface VoteResult {
   delivered?: boolean;
   deliveryError?: string;
   monthlyVotes?: number;
+  /** Unix ms timestamp when the cooldown expires (only set on cooldown errors). */
+  nextVoteAt?: number;
 }
 
 export const voteForServer = server$(async function (
@@ -255,7 +258,7 @@ export const voteForServer = server$(async function (
   // 24h cooldown by username OR ip for this server.
   const cutoff = new Date(Date.now() - VOTE_COOLDOWN_MS);
   const recent = await db
-    .select({ id: serverVotes.id })
+    .select({ id: serverVotes.id, createdAt: serverVotes.createdAt })
     .from(serverVotes)
     .where(
       and(
@@ -271,6 +274,7 @@ export const voteForServer = server$(async function (
     return {
       success: false,
       error: 'You have already voted for this server in the last 24 hours.',
+      nextVoteAt: new Date(recent.createdAt).getTime() + VOTE_COOLDOWN_MS,
     };
 
   // Attempt Votifier delivery (best-effort).
@@ -413,7 +417,7 @@ export const getUserServers = server$(async function () {
 export const updateServerPlugins = server$(async function (
   serverId: number,
   pluginsData: {
-    [id: string]: import('~/util/plugins/ServerPlugin').PluginType;
+    [id: string]: PluginType;
   }
 ) {
   const session = this.sharedMap.get('session') as Session | undefined;
@@ -466,38 +470,50 @@ export const setServerVerified = server$(async function (
 const lastTestVote = new Map<string, number>();
 
 /**
- * Send a test Votifier v2 vote to the server owned by `serverId`.
- * Only the server owner or an admin may call this.
+ * Send a test Votifier v2 vote using the provided configuration or saved server details.
  */
-export const testVote = server$(async function (serverId: number) {
+export const testVote = server$(async function (data: {
+  serverId?: number;
+  votifierHost?: string;
+  votifierPort?: number | string | null;
+  votifierToken?: string;
+  javaHost?: string;
+}) {
   const session = this.sharedMap.get('session') as Session | undefined;
   const db = getDB();
   if (!session?.user?.id || !db)
     return { success: false as const, error: 'You must be logged in.' };
 
-  const row = await db
-    .select({
-      ownerId: servers.ownerId,
-      votifierHost: servers.votifierHost,
-      votifierPort: servers.votifierPort,
-      votifierToken: servers.votifierToken,
-      javaHost: servers.javaHost,
-    })
-    .from(servers)
-    .where(eq(servers.id, serverId))
-    .get();
+  let ownerId: string | null | undefined;
+  let dbJavaHost: string | null | undefined;
 
-  if (!row) return { success: false as const, error: 'Server not found.' };
+  if (data?.serverId) {
+    const row = await db
+      .select({
+        ownerId: servers.ownerId,
+        javaHost: servers.javaHost,
+      })
+      .from(servers)
+      .where(eq(servers.id, data.serverId))
+      .get();
+
+    if (row) {
+      ownerId = row.ownerId;
+      dbJavaHost = row.javaHost;
+    }
+  }
 
   const admin = await isAdmin.call(this);
-  if (!admin && row.ownerId !== session.user.id)
+  if (ownerId && !admin && ownerId !== session.user.id)
     return { success: false as const, error: 'Unauthorized.' };
 
-  if (!row.votifierHost || !row.votifierToken)
+  const host = data?.votifierHost?.trim();
+  const token = data?.votifierToken?.trim();
+  if (!host || !token)
     return {
       success: false as const,
       error:
-        'No Votifier host or token configured. Fill in the Votifier section above and save first.',
+        'No Votifier host or token provided. Fill in Votifier host and token first.',
     };
 
   const now = Date.now();
@@ -509,20 +525,19 @@ export const testVote = server$(async function (serverId: number) {
     };
   lastTestVote.set(session.user.id, now);
 
-  const host = row.votifierHost;
-  const port = row.votifierPort
-    ? Number(row.votifierPort)
+  const port = data?.votifierPort
+    ? Number(data.votifierPort)
     : DEFAULT_VOTIFIER_PORT;
 
   const result = await sendVotifierV2(
-    { host, port, token: row.votifierToken },
+    { host, port, token },
     {
       username: session.user.name ?? session.user.id,
       // Must match voteForServer: per-service token maps in NuVotifier key
       // off this string, so a test with a different serviceName would
       // validate against a different token than real votes.
       serviceName: 'birdflop.com',
-      address: row.javaHost ?? host,
+      address: data?.javaHost?.trim() || dbJavaHost || host,
       timestamp: now,
     }
   );

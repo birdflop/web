@@ -132,11 +132,13 @@ export default component$(() => {
             href="/serverlist/submit"
             class="lum-btn lum-bg-blue hover:lum-bg-blue/80 font-normal"
           >
-            <Plus size={20} /> Add your server
+            <Plus size={20} />
+            Add your server
           </Link>
         ) : (
           <Link href="/serverlist/submit" class="lum-btn font-normal">
-            <Plus size={20} /> Add your server
+            <Plus size={20} />
+            Add your server
           </Link>
         )}
       </h1>
@@ -209,8 +211,8 @@ export default component$(() => {
               onChange$={(e, el) => void updateURL({ online: el.checked })}
             >
               <span class="flex items-center gap-1.5 text-sm">
-                <Activity size={14} class="text-green-400" /> Online servers
-                only
+                <Activity size={14} class="text-green-400" />
+                Online servers only
               </span>
             </Toggle>
 
@@ -220,8 +222,8 @@ export default component$(() => {
               onChange$={(e, el) => void updateURL({ verified: el.checked })}
             >
               <span class="flex items-center gap-1.5 text-sm">
-                <CheckCircle size={14} class="text-sky-400" /> Birdflop Verified
-                only
+                <CheckCircle size={14} class="text-sky-400" />
+                Birdflop Verified only
               </span>
             </Toggle>
 
@@ -231,7 +233,8 @@ export default component$(() => {
               class="flex-col items-start gap-1"
             >
               <span class="text-lum-text-secondary flex items-center gap-1.5 text-xs">
-                <Tag size={14} /> Filter by version
+                <Tag size={14} />
+                Filter by version
               </span>
               <input
                 id="version-filter"
@@ -290,7 +293,8 @@ export default component$(() => {
               href="/serverlist/submit"
               class="lum-btn lum-bg-blue hover:lum-bg-blue/80 mt-2 font-normal"
             >
-              <Plus size={18} /> Be the first to add one!
+              <Plus size={18} />
+              Be the first to add one!
             </Link>
           </div>
         )}

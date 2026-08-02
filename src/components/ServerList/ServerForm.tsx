@@ -25,13 +25,20 @@ import Braces from 'lucide-icons-qwik/icons/Braces';
 import ExternalLink from 'lucide-icons-qwik/icons/ExternalLink';
 import Wifi from 'lucide-icons-qwik/icons/Wifi';
 import Zap from 'lucide-icons-qwik/icons/Zap';
+import SendHorizonal from 'lucide-icons-qwik/icons/SendHorizonal';
+import CheckCircle from 'lucide-icons-qwik/icons/CheckCircle';
+import CircleX from 'lucide-icons-qwik/icons/CircleX';
 import { rgbDefaults } from '@birdflop/rgbirdflop';
 import RgbPreview from '~/components/rgbirdflop/RgbPreview';
 import { useSession } from '~/routes/plugin@auth';
 import { getPresets, type rgbPreset } from '~/util/rgb/presets';
 import { Notification, NotificationContext } from '~/util/Notification';
 import type { Server } from '~/util/db';
-import { createServer, updateServer } from '~/util/serverlist/actions';
+import {
+  createServer,
+  updateServer,
+  testVote,
+} from '~/util/serverlist/actions';
 import {
   SERVER_TAGS,
   LIMITS,
@@ -57,6 +64,7 @@ export default component$<ServerFormProps>(({ mode, initial }) => {
     Array<{ name: string; preset: rgbPreset }>
   >([]);
   const selectedPresetIndex = useSignal<string>('');
+  const testingVotifier = useSignal(false);
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
@@ -142,6 +150,42 @@ export default component$<ServerFormProps>(({ mode, initial }) => {
 
   const showJava = form.edition === 'java' || form.edition === 'both';
   const showBedrock = form.edition === 'bedrock' || form.edition === 'both';
+
+  const handleTestVote = $(async () => {
+    const host = form.votifierHost?.trim();
+    const token = form.votifierToken?.trim();
+    if (!host || !token) return;
+    testingVotifier.value = true;
+    const result = await testVote({
+      serverId: initial?.id,
+      votifierHost: host,
+      votifierPort: form.votifierPort,
+      votifierToken: token,
+      javaHost: form.javaHost?.trim(),
+    });
+    testingVotifier.value = false;
+
+    if (result.success) {
+      notifications.push(
+        new Notification()
+          .setTitle('Test vote delivered!')
+          .setDescription(
+            'NuVotifier accepted the packet. Check your server console for the vote event.'
+          )
+          .setBgColor('lum-grad-bg-green/50')
+          .toJSON()
+      );
+    } else {
+      notifications.push(
+        new Notification()
+          .setTitle('Test vote failed')
+          .setDescription(result.error ?? 'Unknown error.')
+          .setBgColor('lum-grad-bg-red/50')
+          .setPersist(true)
+          .toJSON()
+      );
+    }
+  });
 
   const toggleTag = $((tag: string) => {
     if (form.tags.includes(tag)) {
@@ -457,6 +501,45 @@ export default component$<ServerFormProps>(({ mode, initial }) => {
             placeholder="The token from your NuVotifier config"
           />
         </Label>
+
+        <div class="border-lum-input-bg/60 mt-2 flex flex-col gap-3 border-t pt-4">
+          <h3 class="flex items-center gap-2 text-sm font-semibold">
+            <SendHorizonal size={16} />
+            Test Votifier Connection
+          </h3>
+          <p class="text-lum-text-secondary text-xs">
+            Sends a real Votifier v2 packet to your configured host / port using
+            your token. Your in-game vote reward should trigger.
+          </p>
+          <div class="flex flex-wrap items-center gap-3">
+            <button
+              type="button"
+              id="test-vote-btn"
+              class="lum-btn lum-bg-lum-input-bg/60 hover:lum-bg-lum-input-bg lum-btn-p-1 flex items-center gap-2 text-sm disabled:opacity-50"
+              disabled={
+                testingVotifier.value ||
+                !form.votifierHost?.trim() ||
+                !form.votifierToken?.trim()
+              }
+              onClick$={handleTestVote}
+            >
+              <SendHorizonal size={14} />
+              {testingVotifier.value ? 'Sending…' : 'Send test vote'}
+            </button>
+            {(!form.votifierHost?.trim() || !form.votifierToken?.trim()) && (
+              <span class="text-lum-text-secondary flex items-center gap-1 text-xs">
+                <CircleX size={13} class="text-red-400" />
+                Fill in Votifier host and token above first
+              </span>
+            )}
+            {!!form.votifierHost?.trim() && !!form.votifierToken?.trim() && (
+              <span class="text-lum-text-secondary flex items-center gap-1 text-xs">
+                <CheckCircle size={13} class="text-green-400" />
+                Votifier configured — ready to test
+              </span>
+            )}
+          </div>
+        </div>
       </div>
 
       {/* RGBirdflop Preset */}
@@ -473,7 +556,8 @@ export default component$<ServerFormProps>(({ mode, initial }) => {
             rel="noopener noreferrer"
             class="lum-btn lum-bg-lum-input-bg/40 hover:lum-bg-lum-input-bg/60 text-sm"
           >
-            <ExternalLink size={16} /> Create a preset on RGBirdflop
+            <ExternalLink size={16} />
+            Create a preset on RGBirdflop
           </a>
         </h2>
         <p class="text-lum-text-secondary text-sm">

@@ -217,12 +217,9 @@ export function setCookies<T extends Record<string, unknown>>(
   document.cookie = `${name}=${encodedValue}; path=/; expires=${new Date(Date.now() + 1000 * 60 * 60 * 24 * 365).toUTCString()};`;
 }
 
-import { PluginsStoreType } from './plugins/types';
-
 export const setUserData = server$(async function (data: {
   privatePresets?: rgbPreset[];
   settings?: Settings;
-  plugins?: PluginsStoreType;
 }) {
   const session = this.sharedMap.get('session') as Session | undefined;
 
@@ -230,15 +227,12 @@ export const setUserData = server$(async function (data: {
   if (!session || !db || !session.user?.id)
     return console.warn('No session or database client');
 
-  const updateValues: Record<string, unknown> = {};
-  if (data.privatePresets !== undefined)
-    updateValues.privatePresets = data.privatePresets;
-  if (data.settings !== undefined) updateValues.settings = data.settings;
-  if (data.plugins !== undefined) updateValues.plugins = data.plugins;
-
   const userData = await db
     .update(users)
-    .set(updateValues)
+    .set({
+      privatePresets: data.privatePresets,
+      settings: data.settings,
+    })
     .where(eq(users.id, session.user.id))
     .returning()
     .get();

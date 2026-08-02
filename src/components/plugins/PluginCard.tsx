@@ -147,7 +147,8 @@ export default component$<PluginCardProps>(
                 }}
                 disabled={isLoading.value}
               >
-                <Download size={16} /> Download
+                <Download size={16} />
+                Download
                 <span class="text-lum-text-secondary text-xs">
                   {plugin.file?.name ?? plugin.latestVersion?.name ?? 'latest'}
                 </span>
@@ -172,7 +173,8 @@ export default component$<PluginCardProps>(
                   plugin.updateDate = new Date();
                 }}
               >
-                <Link size={16} /> View plugin
+                <Link size={16} />
+                View plugin
               </a>
             )}
 
@@ -184,7 +186,8 @@ export default component$<PluginCardProps>(
                   plugin.updateDate = new Date();
                 }}
               >
-                <Check size={16} /> Mark updated
+                <Check size={16} />
+                Mark updated
               </button>
             )}
             <div class="flex-1" />

@@ -160,7 +160,8 @@ export default component$(() => {
 
       <div class="flex">
         <Link href="/resources/rgb/presets" class="lum-btn lum-bg-transparent">
-          <ChevronLeft size={20} /> {t('rgb.presets.back@@Back to presets')}
+          <ChevronLeft size={20} />
+          {t('rgb.presets.back@@Back to presets')}
         </Link>
       </div>
 
@@ -245,7 +246,8 @@ export default component$(() => {
           class="lum-grad-bg-orange hover:bg-orange hidden gap-1 text-sm sm:flex"
         >
           <Fragment q:slot="dropdown">
-            <MousePointer2 size={20} /> {t('rgb.presets.use@@Use')}
+            <MousePointer2 size={20} />
+            {t('rgb.presets.use@@Use')}
           </Fragment>
           <Link
             href={`/resources/rgb?${searchParams.toString()}`}
@@ -316,11 +318,13 @@ export default component$(() => {
               JSON.stringify(savedPreset) === JSON.stringify(presetInfo.preset)
           ) ? (
             <>
-              <Trash size={20} /> {t('rgb.presets.remove@@Remove')}
+              <Trash size={20} />
+              {t('rgb.presets.remove@@Remove')}
             </>
           ) : (
             <>
-              <Save size={20} /> {t('rgb.presets.save@@Save')}
+              <Save size={20} />
+              {t('rgb.presets.save@@Save')}
             </>
           )}
         </button>
@@ -344,7 +348,8 @@ export default component$(() => {
             notifications.push(notification.toJSON());
           }}
         >
-          <Copy size={20} /> {t('rgb.presets.copy@@Copy')}
+          <Copy size={20} />
+          {t('rgb.presets.copy@@Copy')}
         </button>
       </div>
       <div class="mt-6 flex flex-col gap-4">
@@ -439,7 +444,8 @@ export default component$(() => {
                     );
                   }}
                 >
-                  <Check size={20} /> Approve
+                  <Check size={20} />
+                  Approve
                 </button>
               )}
               {isAdmin && !presetInfo.pending && (
@@ -452,7 +458,8 @@ export default component$(() => {
                     );
                   }}
                 >
-                  <Minus size={20} /> Unapprove
+                  <Minus size={20} />
+                  Unapprove
                 </button>
               )}
               <button
@@ -464,7 +471,8 @@ export default component$(() => {
                   );
                 }}
               >
-                <Trash size={20} /> Delete
+                <Trash size={20} />
+                Delete
               </button>
             </div>
           </div>
@@ -476,7 +484,9 @@ export default component$(() => {
         gradient creator that generates hex formatted text. RGB Birdflop is a
         public resource developed by Birdflop, a 501(c)(3) nonprofit providing
         affordable and accessible hosting and public resources. If you would
-        like to support our mission, please <a href={donateLink}>click here</a>{' '}
+        like to support our mission, please <a href={donateLink}>
+          click here
+        </a>{' '}
         to make a charitable donation, 100% tax-deductible in the US.
       </div>
     </section>

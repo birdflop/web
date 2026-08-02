@@ -1,11 +1,9 @@
 // NuVotifier (Votifier v2, token protocol) client.
 //
-// Runs only on the server (inside server$ actions) and opens a raw TCP socket
-// to the target server's Votifier port via Cloudflare's `cloudflare:sockets`
-// API. Delivery is best-effort: a vote is always recorded for ranking even if
-// the in-game reward packet can't be delivered.
+// Uses Node's `net` module (available in both Node.js dev and Cloudflare
+// Workers via the `nodejs_compat` compatibility flag).
 
-import { connect } from 'cloudflare:sockets';
+import { createConnection } from 'node:net';
 
 export interface VotifierConfig {
   host: string;
@@ -20,22 +18,6 @@ export interface VotifierResult {
 
 const MAGIC = 0x733a; // NuVotifier v2 message magic
 const SOCKET_TIMEOUT_MS = 5000;
-
-function withTimeout<T>(
-  promise: Promise<T>,
-  ms: number,
-  label: string
-): Promise<T> {
-  return Promise.race([
-    promise,
-    new Promise<T>((_, reject) =>
-      setTimeout(
-        () => reject(new Error(`${label} timed out after ${ms}ms`)),
-        ms
-      )
-    ),
-  ]);
-}
 
 function toBase64(bytes: Uint8Array): string {
   let binary = '';
@@ -74,97 +56,128 @@ export async function sendVotifierV2(
     timestamp: number;
   }
 ): Promise<VotifierResult> {
-  let socket:
-    | {
-        readable: ReadableStream;
-        writable: WritableStream;
-        close: () => Promise<void>;
-      }
-    | undefined;
-
-  try {
-    socket = connect({ hostname: config.host, port: config.port });
-
-    const reader = socket.readable.getReader();
-    const writer = socket.writable.getWriter();
-    const decoder = new TextDecoder();
-
-    // 1. Read the handshake: "VOTIFIER 2 <challenge>\n"
-    const handshake = await withTimeout(
-      reader.read(),
-      SOCKET_TIMEOUT_MS,
-      'Votifier handshake'
+  return new Promise((resolve) => {
+    const sock = createConnection(
+      { host: config.host, port: config.port },
+      () => sock.setTimeout(SOCKET_TIMEOUT_MS)
     );
-    if (handshake.done || !handshake.value) {
-      throw new Error('Server closed connection during handshake');
-    }
-    const greeting = decoder.decode(handshake.value).trim();
-    const parts = greeting.split(' ');
-    if (parts[0] !== 'VOTIFIER' || parts[1] !== '2' || !parts[2]) {
-      throw new Error(`Server does not speak Votifier v2 (got: "${greeting}")`);
-    }
-    const challenge = parts[2];
 
-    // 2. Build the signed payload.
-    const payload = JSON.stringify({
-      username: vote.username,
-      serviceName: vote.serviceName,
-      timestamp: vote.timestamp,
-      address: vote.address,
-      challenge,
-    });
-    const signature = await sign(payload, config.token);
-    const message = JSON.stringify({ payload, signature });
-    const messageBytes = new TextEncoder().encode(message);
+    let buf = Buffer.alloc(0);
+    let phase: 'handshake' | 'response' = 'handshake';
+    let settled = false;
 
-    // 3. Frame it: 2-byte magic + 2-byte length (big endian) + message.
-    const frame = new Uint8Array(4 + messageBytes.length);
-    const view = new DataView(frame.buffer);
-    view.setUint16(0, MAGIC, false);
-    view.setUint16(2, messageBytes.length, false);
-    frame.set(messageBytes, 4);
-
-    await withTimeout(writer.write(frame), SOCKET_TIMEOUT_MS, 'Votifier send');
-
-    // 4. Read the response: {"status":"ok"} or {"status":"error",...}
-    const response = await withTimeout(
-      reader.read(),
-      SOCKET_TIMEOUT_MS,
-      'Votifier response'
-    );
-    const responseText = response.value
-      ? decoder.decode(response.value).trim()
-      : '';
-
-    await writer.close().catch(() => {});
-
-    try {
-      const parsed = JSON.parse(responseText) as {
-        status?: string;
-        cause?: string;
-        error?: string;
-      };
-      if (parsed.status === 'ok') return { delivered: true };
-      return {
-        delivered: false,
-        error:
-          parsed.error ||
-          parsed.cause ||
-          `Server rejected vote: ${responseText}`,
-      };
-    } catch {
-      // Some implementations just close the socket on success.
-      return {
-        delivered: false,
-        error: `Unexpected Votifier response: "${responseText}"`,
-      };
-    }
-  } catch (err) {
-    return {
-      delivered: false,
-      error: err instanceof Error ? err.message : String(err),
+    const done = (result: VotifierResult) => {
+      if (settled) return;
+      settled = true;
+      sock.destroy();
+      resolve(result);
     };
-  } finally {
-    await socket?.close().catch(() => {});
-  }
+
+    sock.on('error', (err) => done({ delivered: false, error: err.message }));
+    sock.on('timeout', () =>
+      done({
+        delivered: false,
+        error: `Socket timed out after ${SOCKET_TIMEOUT_MS}ms`,
+      })
+    );
+
+    sock.on('data', (chunk: Buffer) => {
+      (async () => {
+        buf = Buffer.concat([buf, chunk]);
+
+        if (phase === 'handshake') {
+          const nl = buf.indexOf('\n');
+          if (nl === -1) return; // wait for more data
+
+          const greeting = buf.slice(0, nl).toString('utf8').trim();
+          buf = buf.slice(nl + 1);
+
+          const parts = greeting.split(' ');
+          if (parts[0] !== 'VOTIFIER' || parts[1] !== '2' || !parts[2]) {
+            done({
+              delivered: false,
+              error: `Server does not speak Votifier v2 (got: "${greeting}")`,
+            });
+            return;
+          }
+          const challenge = parts[2];
+
+          // Build the signed payload.
+          const payload = JSON.stringify({
+            username: vote.username,
+            serviceName: vote.serviceName,
+            timestamp: vote.timestamp,
+            address: vote.address,
+            challenge,
+          });
+          let signature: string;
+          try {
+            signature = await sign(payload, config.token);
+          } catch (err) {
+            done({
+              delivered: false,
+              error: err instanceof Error ? err.message : String(err),
+            });
+            return;
+          }
+          const message = JSON.stringify({ payload, signature });
+          const messageBytes = new TextEncoder().encode(message);
+
+          // Frame: 2-byte magic + 2-byte length (big endian) + message.
+          const frame = Buffer.allocUnsafe(4 + messageBytes.length);
+          frame.writeUInt16BE(MAGIC, 0);
+          frame.writeUInt16BE(messageBytes.length, 2);
+          frame.set(messageBytes, 4);
+
+          phase = 'response';
+          sock.write(frame, (err) => {
+            if (err) done({ delivered: false, error: err.message });
+          });
+        } else {
+          // Response: {"status":"ok"} or {"status":"error",...}
+          const text = buf.toString('utf8').trim();
+          if (!text) return;
+          try {
+            const parsed = JSON.parse(text) as {
+              status?: string;
+              cause?: string;
+              error?: string;
+            };
+            if (parsed.status === 'ok') {
+              done({ delivered: true });
+            } else {
+              done({
+                delivered: false,
+                error:
+                  parsed.error ||
+                  parsed.cause ||
+                  `Server rejected vote: ${text}`,
+              });
+            }
+          } catch {
+            // Some implementations just close the socket on success without a response.
+            done({
+              delivered: false,
+              error: `Unexpected Votifier response: "${text}"`,
+            });
+          }
+        }
+      })().catch((err: unknown) => {
+        done({
+          delivered: false,
+          error: err instanceof Error ? err.message : String(err),
+        });
+      });
+    });
+
+    sock.on('close', () => {
+      // If we sent the frame and the server just closed without a JSON response,
+      // treat it as success (common with some NuVotifier builds).
+      if (phase === 'response' && !settled) {
+        done({ delivered: true });
+      } else {
+        done({ delivered: false, error: 'Connection closed unexpectedly' });
+      }
+    });
+  });
 }

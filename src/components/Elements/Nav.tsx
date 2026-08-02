@@ -81,7 +81,8 @@ export default component$(() => {
         href="/docs"
         class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg hidden sm:flex"
       >
-        <Book size={20} /> {t('nav.docs@@Docs')}
+        <Book size={20} />
+        {t('nav.docs@@Docs')}
       </Link>
       <Dropdown
         id="nav-hosting"
@@ -93,31 +94,36 @@ export default component$(() => {
         class="lum-bg-transparent hover:lum-bg-nav-bg hidden sm:flex"
       >
         <Fragment q:slot="dropdown">
-          <Birdflop size={20} /> {t('nav.hosting.title@@Hosting')}
+          <Birdflop size={20} />
+          {t('nav.hosting.title@@Hosting')}
         </Fragment>
         <a
           class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
           href="https://panel.birdflop.com/"
         >
-          <AppWindow size={20} /> {t('nav.hosting.panel@@Panel')}
+          <AppWindow size={20} />
+          {t('nav.hosting.panel@@Panel')}
         </a>
         <Link
           href="/plans"
           class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
         >
-          <ShoppingCart size={20} /> {t('nav.hosting.plans@@Plans')}
+          <ShoppingCart size={20} />
+          {t('nav.hosting.plans@@Plans')}
         </Link>
         <a
           href="https://client.birdflop.com/"
           class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
         >
-          <DollarSign size={20} /> {t('nav.hosting.billing@@Billing')}
+          <DollarSign size={20} />
+          {t('nav.hosting.billing@@Billing')}
         </a>
         <Link
           href="/node-stats"
           class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
         >
-          <Activity size={20} /> {t('nav.hosting.nodeStats.title@@Node Stats')}
+          <Activity size={20} />
+          {t('nav.hosting.nodeStats.title@@Node Stats')}
         </Link>
       </Dropdown>
       <Dropdown
@@ -130,52 +136,57 @@ export default component$(() => {
         class="lum-bg-transparent hover:lum-bg-nav-bg hidden sm:flex"
       >
         <Fragment q:slot="dropdown">
-          <Box size={20} /> {t('nav.resources.title@@Resources')}
+          <Box size={20} />
+          {t('nav.resources.title@@Resources')}
         </Fragment>
         <Link
           href="/resources/rgb"
           class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
         >
-          <Palette size={20} />{' '}
+          <Palette size={20} />
           {t('nav.resources.hexGradient.title@@RGBirdflop')}
         </Link>
         <Link
           href="/resources/animtab"
           class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
         >
-          <Rainbow size={20} />{' '}
+          <Rainbow size={20} />
           {t('nav.resources.animatedTAB.title@@Animated TAB')}
         </Link>
         <Link
           href="/resources/analyze"
           class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
         >
-          <Zap size={20} /> {t('nav.resources.analyze.title@@Analyze')}
+          <Zap size={20} />
+          {t('nav.resources.analyze.title@@Analyze')}
         </Link>
         <Link
           href="/resources/status"
           class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
         >
-          <Server size={20} /> {t('nav.resources.status.title@@Server Status')}
+          <Server size={20} />
+          {t('nav.resources.status.title@@Server Status')}
         </Link>
         <Link
           href="/resources/flags"
           class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
         >
-          <Flag size={20} /> {t('nav.resources.flags.title@@Flags Generator')}
+          <Flag size={20} />
+          {t('nav.resources.flags.title@@Flags Generator')}
         </Link>
         <Link
           href="/resources/banner"
           class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
         >
-          <Presentation size={20} />{' '}
+          <Presentation size={20} class="shrink-0" />
           {t('nav.resources.banner.title@@Banner Generator')}
         </Link>
         <Link
           href="/resources"
           class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
         >
-          <Ellipsis size={20} /> {t('nav.resources.more@@More Resources')}
+          <Ellipsis size={20} />
+          {t('nav.resources.more@@More Resources')}
         </Link>
       </Dropdown>
       <Link
@@ -183,7 +194,7 @@ export default component$(() => {
         href="/serverlist"
         class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg"
       >
-        <Gamepad2 size={20} />{' '}
+        <Gamepad2 size={20} />
         {t('nav.resources.serverList.title@@Server List')}
       </Link>
       <SelectMenu
@@ -255,7 +266,8 @@ export default component$(() => {
             href="/profile"
             class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
           >
-            <User size={20} /> {t('nav.profile.title@@Profile')}
+            <User size={20} />
+            {t('nav.profile.title@@Profile')}
           </Link>
           <Form action={signOut}>
             <input type="hidden" name="providerId" value="discord" />
@@ -265,7 +277,8 @@ export default component$(() => {
               value={loc.url.pathname + loc.url.search}
             />
             <button class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1">
-              <LogOut size={20} /> {t('nav.profile.logout@@Logout')}
+              <LogOut size={20} />
+              {t('nav.profile.logout@@Logout')}
             </button>
           </Form>
         </Dropdown>
@@ -289,7 +302,8 @@ export default component$(() => {
         href="/docs"
         class="hover:lum-bg-nav-bg! flex-col gap-1! p-1! text-[0.65rem]!"
       >
-        <Book size={20} /> {t('nav.docs@@Docs')}
+        <Book size={20} />
+        {t('nav.docs@@Docs')}
       </Link>
       <Dropdown
         q:slot="mobile"
@@ -310,25 +324,29 @@ export default component$(() => {
           class="lum-btn lum-btn-p-1! lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-2"
           href="https://panel.birdflop.com/"
         >
-          <AppWindow size={20} /> {t('nav.hosting.panel@@Panel')}
+          <AppWindow size={20} />
+          {t('nav.hosting.panel@@Panel')}
         </a>
         <Link
           href="/plans"
           class="lum-btn lum-btn-p-1! lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-2"
         >
-          <ShoppingCart size={20} /> {t('nav.hosting.plans@@Plans')}
+          <ShoppingCart size={20} />
+          {t('nav.hosting.plans@@Plans')}
         </Link>
         <a
           href="https://client.birdflop.com/"
           class="lum-btn lum-btn-p-1! lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-2"
         >
-          <DollarSign size={20} /> {t('nav.hosting.billing@@Billing')}
+          <DollarSign size={20} />
+          {t('nav.hosting.billing@@Billing')}
         </a>
         <Link
           href="/node-stats"
           class="lum-btn lum-btn-p-1! lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-2"
         >
-          <Activity size={20} /> {t('nav.hosting.nodeStats.title@@Node Stats')}
+          <Activity size={20} />
+          {t('nav.hosting.nodeStats.title@@Node Stats')}
         </Link>
       </Dropdown>
       <Link
@@ -336,14 +354,16 @@ export default component$(() => {
         href="/resources/rgb"
         class="hover:lum-bg-nav-bg! flex-col gap-1! p-1! text-[0.65rem]!"
       >
-        <Palette size={20} /> {t('nav.resources.hexGradient.title@@RGBirdflop')}
+        <Palette size={20} />
+        {t('nav.resources.hexGradient.title@@RGBirdflop')}
       </Link>
       <Link
         q:slot="mobile"
         href="/resources/analyze"
         class="hover:lum-bg-nav-bg! flex-col gap-1! p-1! text-[0.65rem]!"
       >
-        <Zap size={20} /> {t('nav.resources.analyze.title@@Analyze')}
+        <Zap size={20} />
+        {t('nav.resources.analyze.title@@Analyze')}
       </Link>
       <Dropdown
         q:slot="mobile"
@@ -357,33 +377,36 @@ export default component$(() => {
         class="hover:lum-bg-nav-bg! lum-bg-transparent rounded-lum-1 flex-col! gap-1! p-1! text-[0.65rem]!"
       >
         <Fragment q:slot="dropdown">
-          <Box size={20} /> {t('nav.resources.title@@Resources')}
+          <Box size={20} />
+          {t('nav.resources.title@@Resources')}
         </Fragment>
         <Link
           href="/resources/animtab"
           class="lum-btn lum-btn-p-1! lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-2"
         >
-          <Rainbow size={20} />{' '}
+          <Rainbow size={20} />
           {t('nav.resources.animatedTAB.title@@Animated TAB')}
         </Link>
         <Link
           href="/resources/flags"
           class="lum-btn lum-btn-p-1! lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-2"
         >
-          <Flag size={20} /> {t('nav.resources.flags.title@@Flags Generator')}
+          <Flag size={20} />
+          {t('nav.resources.flags.title@@Flags Generator')}
         </Link>
         <Link
           href="/resources/banner"
           class="lum-btn lum-btn-p-1! lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-2"
         >
-          <Presentation size={20} />{' '}
+          <Presentation size={20} />
           {t('nav.resources.banner.title@@Banner Generator')}
         </Link>
         <Link
           href="/resources"
           class="lum-btn lum-btn-p-1! lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-2"
         >
-          <Ellipsis size={20} /> {t('nav.resources.more@@More Resources')}
+          <Ellipsis size={20} />
+          {t('nav.resources.more@@More Resources')}
         </Link>
       </Dropdown>
     </Nav>
