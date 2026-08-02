@@ -128,7 +128,7 @@ export default component$(
                   });
                   await newPlugin.fetch();
 
-                  resolvedPlugin.plugin = newPlugin;
+                  resolvedPlugin.plugin = newPlugin.toJSON();
                 } catch (error) {
                   console.error('Error fetching plugin data:', error);
                   const notification = new Notification()
@@ -167,7 +167,9 @@ export default component$(
                     return;
                   }
 
-                  resolvedPlugin.plugins = searchData;
+                  resolvedPlugin.plugins = searchData.map((plugin) =>
+                    plugin.toJSON()
+                  );
                 } catch (error) {
                   console.error('Error searching for plugins:', error);
                   const notification = new Notification()

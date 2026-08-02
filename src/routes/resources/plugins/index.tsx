@@ -215,6 +215,11 @@ export default component$(() => {
   );
   useContextProvider(pluginsStoreContext, pluginsStore);
 
+  const CurrentServer = pluginsStore.openServer
+    ? pluginsStore.servers[pluginsStore.openServer]
+    : undefined;
+  const CurrentSoftware = softwareOptions[CurrentServer?.software || 'paper'];
+
   // oxlint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
     if (!isBrowser) return; // dont load plugins on the server
@@ -246,14 +251,13 @@ export default component$(() => {
     const currentServer = pluginsStore.openServer
       ? pluginsStore.servers[pluginsStore.openServer]
       : undefined;
-
     if (pluginsStore.openServer && currentServer) {
       // check if any plugins are not fetched, and fetch them if so
       const plugins = currentServer.plugins;
       for (const pluginId in plugins) {
         const plugin = plugins[pluginId];
         if (!plugin.versions)
-          Object.assign(plugin, await getPlugin(plugin).fetch());
+          Object.assign(plugin, (await getPlugin(plugin).fetch()).toJSON());
       }
     } else {
       pluginsStore.openServer =
@@ -300,11 +304,6 @@ export default component$(() => {
       notifications.push(notification.toJSON());
     }
   });
-
-  const CurrentServer = pluginsStore.openServer
-    ? pluginsStore.servers[pluginsStore.openServer]
-    : undefined;
-  const CurrentSoftware = softwareOptions[CurrentServer?.software || 'paper'];
 
   const outdatedPlugins = useComputed$(() => {
     if (!pluginsStore.openServer || !CurrentServer?.plugins) return;
@@ -565,7 +564,7 @@ export default component$(() => {
                         const fetchedPlugin = await getPlugin(plugin).fetch();
                         pluginsStore.servers[pluginsStore.openServer!].plugins[
                           fetchedPlugin.id
-                        ] = fetchedPlugin;
+                        ] = fetchedPlugin.toJSON();
                       })
                     );
                     el.value = '';
@@ -655,7 +654,7 @@ export default component$(() => {
                       const plugin = plugins[pluginId];
                       Object.assign(
                         plugin,
-                        await getPlugin(plugin).fetchVersions()
+                        (await getPlugin(plugin).fetchVersions()).toJSON()
                       );
                     }
                   }}
@@ -744,7 +743,7 @@ export default component$(() => {
                       try {
                         pluginsStore.servers[pluginsStore.openServer!].plugins[
                           plugin.id
-                        ] = await getPlugin(plugin).fetch();
+                        ] = (await getPlugin(plugin).fetch()).toJSON();
                       } catch (error) {
                         console.error('Error fetching plugin versions:', error);
                         const notification = new Notification()
