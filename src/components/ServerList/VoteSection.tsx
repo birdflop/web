@@ -111,14 +111,19 @@ export default component$<VoteSectionProps>(
               .toJSON()
           );
         } else {
+          let description = result.error ?? 'Please try again.';
           if (result.nextVoteAt) {
             voted.value = true;
             nextVoteAt.value = result.nextVoteAt;
+            const remaining = result.nextVoteAt - Date.now();
+            if (remaining > 0) {
+              description += ` Come back in ${formatCountdown(remaining)}.`;
+            }
           }
           notifications.push(
             new Notification()
               .setTitle('Could not vote')
-              .setDescription(result.error ?? 'Please try again.')
+              .setDescription(description)
               .setBgColor('lum-grad-bg-red/50')
               .setPersist(true)
               .toJSON()
