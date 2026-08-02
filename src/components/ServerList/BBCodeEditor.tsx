@@ -332,7 +332,8 @@ export default component$<BBCodeEditorProps>(
                   )
                 }
               >
-                <Check size={16} /> Apply
+                <Check size={16} />
+                Apply
               </button>
             </div>
           )}

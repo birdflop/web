@@ -338,9 +338,10 @@ export default component$(() => {
       </p>
 
       <Tabs
-        values={Object.keys(pluginsStore.servers).map((k) => ({
+        values={Object.entries(pluginsStore.servers).map(([k, v]) => ({
           name: k,
           value: k,
+          permanent: !!v.serverId,
         }))}
         value={
           pluginsStore.openServer
@@ -393,6 +394,7 @@ export default component$(() => {
           return linked?.icon ? (
             <img
               key={i}
+              q:slot={`before-${k}`}
               src={linked.icon}
               alt={`${linked.name} icon`}
               width={16}
@@ -401,7 +403,7 @@ export default component$(() => {
               style={{ imageRendering: 'pixelated' }}
             />
           ) : (
-            <Globe key={i} size={14} class="shrink-0 text-sky-400" />
+            <Globe q:slot={`before-${k}`} key={i} size={14} class="shrink-0" />
           );
         })}
       </Tabs>
@@ -517,7 +519,8 @@ export default component$(() => {
                 }}
                 title="Export server plugins as JSON"
               >
-                <Copy size={16} /> Export (Keep this safe)
+                <Copy size={16} />
+                Export (Keep this safe)
               </button>
 
               <input
@@ -837,7 +840,8 @@ export default component$(() => {
                   modalRef.value?.close();
                 }}
               >
-                <Plus size={20} /> Add
+                <Plus size={20} />
+                Add
               </button>
             </div>
           )}

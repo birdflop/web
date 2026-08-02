@@ -47,7 +47,8 @@ export default component$(() => {
           href={`/serverlist/${slug}`}
           class="text-lum-text-secondary hover:text-lum-accent mb-4 inline-flex items-center gap-1 text-sm"
         >
-          <ArrowLeft size={16} /> Back to listing
+          <ArrowLeft size={16} />
+          Back to listing
         </Link>
 
         {canManage && server ? (

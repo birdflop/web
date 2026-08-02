@@ -21,6 +21,7 @@ import {
   VOTE_COOLDOWN_MS,
 } from './constants';
 import { Session } from '@auth/qwik';
+import { PluginType } from '../plugins/ServerPlugin';
 
 function getClientIp(headers: Headers): string | null {
   return (
@@ -402,7 +403,7 @@ export const getUserServers = server$(async function () {
 export const updateServerPlugins = server$(async function (
   serverId: number,
   pluginsData: {
-    [id: string]: import('~/util/plugins/ServerPlugin').PluginType;
+    [id: string]: PluginType;
   }
 ) {
   const session = this.sharedMap.get('session') as Session | undefined;

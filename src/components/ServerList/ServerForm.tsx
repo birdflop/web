@@ -504,7 +504,8 @@ export default component$<ServerFormProps>(({ mode, initial }) => {
 
         <div class="border-lum-input-bg/60 mt-2 flex flex-col gap-3 border-t pt-4">
           <h3 class="flex items-center gap-2 text-sm font-semibold">
-            <SendHorizonal size={16} /> Test Votifier Connection
+            <SendHorizonal size={16} />
+            Test Votifier Connection
           </h3>
           <p class="text-lum-text-secondary text-xs">
             Sends a real Votifier v2 packet to your configured host / port using
@@ -555,7 +556,8 @@ export default component$<ServerFormProps>(({ mode, initial }) => {
             rel="noopener noreferrer"
             class="lum-btn lum-bg-lum-input-bg/40 hover:lum-bg-lum-input-bg/60 text-sm"
           >
-            <ExternalLink size={16} /> Create a preset on RGBirdflop
+            <ExternalLink size={16} />
+            Create a preset on RGBirdflop
           </a>
         </h2>
         <p class="text-lum-text-secondary text-sm">

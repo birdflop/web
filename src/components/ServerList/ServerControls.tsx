@@ -106,7 +106,8 @@ export default component$<ServerControlsProps>(
                 href={`/serverlist/${slug}/edit`}
                 class="lum-btn lum-btn-p-1 lum-bg-lum-input-bg/40 text-xs sm:text-sm"
               >
-                <Pencil size={14} /> Edit
+                <Pencil size={14} />
+                Edit
               </Link>
               {confirmingDelete.value ? (
                 <div class="flex flex-wrap items-center gap-2">
@@ -125,7 +126,8 @@ export default component$<ServerControlsProps>(
                     class="lum-btn lum-bg-transparent hover:lum-bg-lum-input-bg/40 lum-btn-p-1 text-xs sm:text-sm"
                     onClick$={() => (confirmingDelete.value = false)}
                   >
-                    <X size={14} /> Cancel
+                    <X size={14} />
+                    Cancel
                   </button>
                 </div>
               ) : (
@@ -133,7 +135,8 @@ export default component$<ServerControlsProps>(
                   class="lum-btn lum-bg-red/30 hover:lum-bg-red/50 lum-btn-p-1 text-xs sm:text-sm"
                   onClick$={() => (confirmingDelete.value = true)}
                 >
-                  <Trash2 size={14} /> Delete
+                  <Trash2 size={14} />
+                  Delete
                 </button>
               )}
             </>
@@ -213,7 +216,8 @@ export default component$<ServerControlsProps>(
                 class="lum-btn lum-bg-red/40 hover:lum-bg-red/60 lum-btn-p-1 text-xs sm:text-sm"
                 onClick$={submitReport}
               >
-                <Flag size={14} /> Submit report
+                <Flag size={14} />
+                Submit report
               </button>
             </div>
           </div>

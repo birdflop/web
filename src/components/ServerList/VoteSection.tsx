@@ -138,7 +138,8 @@ export default component$<VoteSectionProps>(
       <div class="lum-card gap-3">
         <div class="flex items-center justify-between">
           <h2 class="flex items-center gap-2 text-lg font-bold">
-            <ChevronUp size={20} /> Vote
+            <ChevronUp size={20} />
+            Vote
           </h2>
           <span class="text-lum-text-secondary text-sm">
             <span class="text-lum-accent text-lg font-extrabold">
@@ -152,14 +153,15 @@ export default component$<VoteSectionProps>(
           <p class="flex items-center gap-1.5 text-green-400">
             {countdown.value ? (
               <>
-                <Clock size={18} /> Come back in{' '}
+                <Clock size={18} />
+                Come back in{' '}
                 <span class="font-mono font-bold">{countdown.value}</span> to
                 vote again.
               </>
             ) : (
               <>
-                <CheckCircle2 size={18} /> You've voted! Come back in 24 hours
-                to vote again.
+                <CheckCircle2 size={18} />
+                You've voted! Come back in 24 hours to vote again.
               </>
             )}
           </p>
@@ -182,7 +184,8 @@ export default component$<VoteSectionProps>(
               disabled={voting.value}
               onClick$={vote}
             >
-              <ChevronUp size={18} /> {voting.value ? 'Voting...' : 'Vote now'}
+              <ChevronUp size={18} />
+              {voting.value ? 'Voting...' : 'Vote now'}
             </button>
           </>
         )}

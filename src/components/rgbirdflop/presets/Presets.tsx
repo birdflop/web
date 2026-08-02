@@ -190,14 +190,16 @@ export default component$(({ hidden }: { hidden: boolean }) => {
             notifications.push(notification.toJSON());
           }}
         >
-          <Save size={20} /> {t('rgb.presets.save@@Save')}
+          <Save size={20} />
+          {t('rgb.presets.save@@Save')}
         </button>
         <Link
           class="lum-btn lum-btn-p-1 border-blue hover:border-blue text-sm"
           href="/resources/rgb/presets"
           id="findmorepresets"
         >
-          <Globe size={20} /> {t('rgb.presets.browse@@Browse')}
+          <Globe size={20} />
+          {t('rgb.presets.browse@@Browse')}
         </Link>
       </div>
 
@@ -344,7 +346,8 @@ export default component$(({ hidden }: { hidden: boolean }) => {
             notifications.push(notification.toJSON());
           }}
         >
-          <Copy size={20} /> {t('rgb.presets.copy@@Copy')}
+          <Copy size={20} />
+          {t('rgb.presets.copy@@Copy')}
         </button>
 
         <button
@@ -375,7 +378,8 @@ export default component$(({ hidden }: { hidden: boolean }) => {
             notifications.push(notification.toJSON());
           }}
         >
-          <LinkIcon size={20} /> {t('rgb.presets.url.get@@Get Url')}
+          <LinkIcon size={20} />
+          {t('rgb.presets.url.get@@Get Url')}
         </button>
       </div>
     </div>
