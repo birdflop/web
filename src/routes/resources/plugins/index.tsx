@@ -40,6 +40,10 @@ import {
 } from '~/util/plugins/ServerPlugin';
 import { downloadSpigotPlugin } from '~/util/plugins/SpigotPlugin';
 import Globe from 'lucide-icons-qwik/icons/Globe';
+import { useSession } from '~/routes/plugin@auth';
+import { setUserData } from '~/util/dataUtils';
+import { getUserServers, updateServerPlugins } from '~/util/serverlist/actions';
+import type { PluginsStoreType, ServerType } from '~/util/plugins/types';
 
 const debug = true;
 
@@ -47,19 +51,6 @@ type ResolvedPluginType = {
   type: PluginSource;
   plugin?: PluginType;
   plugins?: PluginType[];
-};
-
-type ServerType = {
-  software: keyof typeof softwareOptions;
-  plugins: { [id: string]: PluginType };
-};
-
-type PluginsStoreType = {
-  servers: {
-    [serverName: string]: ServerType;
-  };
-  openServer?: string;
-  filter?: 'outdated' | PluginSource;
 };
 
 const serverDefaults: ServerType = {
@@ -110,6 +101,15 @@ export const pluginsStoreContext =
   createContextId<PluginsStoreType>('plugins-store');
 export default component$(() => {
   const t = inlineTranslate();
+  const session = useSession();
+  const userServers = useSignal<
+    {
+      id: number;
+      name: string;
+      slug: string;
+      plugins: { [id: string]: PluginType } | null;
+    }[]
+  >([]);
 
   const notifications = useContext(NotificationContext);
   const modalRef = useSignal<HTMLDialogElement>();
@@ -141,23 +141,66 @@ export default component$(() => {
   const CurrentSoftware = softwareOptions[CurrentServer?.software || 'paper'];
 
   // oxlint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(() => {
+  useVisibleTask$(async () => {
     if (!isBrowser) return; // dont load plugins on the server
-    const pluginsData = localStorage.getItem('plugins');
-    if (pluginsData) {
+    if (session.value?.user?.id) {
       try {
-        const savedPluginsStore = JSON.parse(pluginsData) as PluginsStoreType;
-        pluginsStore.servers = savedPluginsStore.servers || {};
-        pluginsStore.openServer = savedPluginsStore.openServer;
-        pluginsStore.filter = savedPluginsStore.filter;
+        userServers.value = await getUserServers();
       } catch (e) {
-        const notification = new Notification()
-          .setTitle('Error loading plugins')
-          .setDescription(
-            `There was an error loading your saved plugins: ${e instanceof Error ? e.message : String(e)}.`
-          )
-          .setBgColor('lum-grad-bg-red/50');
-        notifications.push(notification.toJSON());
+        console.error('Failed to load user servers:', e);
+      }
+    }
+
+    const dbPlugins = session.value?.user?.plugins;
+    if (dbPlugins?.servers && Object.keys(dbPlugins.servers).length > 0) {
+      pluginsStore.servers = dbPlugins.servers;
+      pluginsStore.openServer = dbPlugins.openServer;
+      pluginsStore.filter = dbPlugins.filter;
+    } else {
+      const pluginsData = localStorage.getItem('plugins');
+      if (pluginsData) {
+        try {
+          const savedPluginsStore = JSON.parse(
+            pluginsData
+          ) as PluginsStoreType;
+          pluginsStore.servers = savedPluginsStore.servers || {};
+          pluginsStore.openServer = savedPluginsStore.openServer;
+          pluginsStore.filter = savedPluginsStore.filter;
+
+          if (session.value?.user?.id) {
+            await setUserData({ plugins: savedPluginsStore });
+          }
+        } catch (e) {
+          const notification = new Notification()
+            .setTitle('Error loading plugins')
+            .setDescription(
+              `There was an error loading your saved plugins: ${e instanceof Error ? e.message : String(e)}.`
+            )
+            .setBgColor('lum-grad-bg-red/50');
+          notifications.push(notification.toJSON());
+        }
+      }
+    }
+
+    // Add a tab for each owned Server List listing that isn't already
+    // represented, so plugin profiles for your servers show up automatically.
+    if (userServers.value.length > 0) {
+      const linkedServerIds = new Set(
+        Object.values(pluginsStore.servers)
+          .map((server) => server.serverId)
+          .filter((id): id is number => id !== undefined)
+      );
+      userServers.value.forEach((server) => {
+        if (linkedServerIds.has(server.id)) return;
+        if (pluginsStore.servers[server.name]) return;
+        pluginsStore.servers[server.name] = {
+          software: 'paper',
+          plugins: server.plugins || {},
+          serverId: server.id,
+        };
+      });
+      if (!pluginsStore.openServer) {
+        pluginsStore.openServer = Object.keys(pluginsStore.servers)[0];
       }
     }
   });
@@ -200,6 +243,19 @@ export default component$(() => {
         exportedPluginsStore.servers[server].plugins = mappedPlugins;
       });
       localStorage.setItem('plugins', JSON.stringify(exportedPluginsStore));
+
+      if (session.value?.user?.id) {
+        await setUserData({ plugins: exportedPluginsStore });
+        if (pluginsStore.openServer && currentServer?.serverId) {
+          const currentMappedPlugins =
+            exportedPluginsStore.servers[pluginsStore.openServer]?.plugins ||
+            {};
+          await updateServerPlugins(
+            currentServer.serverId,
+            currentMappedPlugins
+          );
+        }
+      }
     } catch (e) {
       const notification = new Notification()
         .setTitle('Error saving plugins')

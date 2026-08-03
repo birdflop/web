@@ -18,6 +18,7 @@ import { presetToVector } from './rgb/presets/vectorize';
 import { validatePresetSubmission } from './rgb/presets/presetValidation';
 import { isAdmin, Settings } from '~/routes/layout';
 import { Session } from '@auth/qwik';
+import type { PluginsStoreType } from './plugins/types';
 
 type names =
   | 'rgb'
@@ -220,6 +221,7 @@ export function setCookies<T extends Record<string, unknown>>(
 export const setUserData = server$(async function (data: {
   privatePresets?: rgbPreset[];
   settings?: Settings;
+  plugins?: PluginsStoreType;
 }) {
   const session = this.sharedMap.get('session') as Session | undefined;
 
@@ -232,6 +234,7 @@ export const setUserData = server$(async function (data: {
     .set({
       privatePresets: data.privatePresets,
       settings: data.settings,
+      plugins: data.plugins,
     })
     .where(eq(users.id, session.user.id))
     .returning()
