@@ -5,8 +5,22 @@ import type { RequestHandler } from '@qwik.dev/router';
 import { getDB, servers } from '~/util/db';
 import { eq } from 'drizzle-orm';
 import { getServerStatus } from '~/util/serverlist/status';
+import { getUserServers } from '~/util/serverlist/actions';
 
 export const onGet: RequestHandler = async ({ json, query }) => {
+  const ownerId = query.get('ownerId');
+  if (ownerId) {
+    const fakeThis = { sharedMap: new Map([['session', { user: { id: ownerId } }]]) };
+    let result: unknown;
+    let callError: string | null = null;
+    try {
+      result = await getUserServers.call(fakeThis as never);
+    } catch (e) {
+      callError = e instanceof Error ? `${e.name}: ${e.message}` : String(e);
+    }
+    throw json(200, { via: 'direct-call-of-getUserServers', result, callError });
+  }
+
   const id = Number(query.get('id') ?? '1');
   const db = getDB();
   const server = await db
