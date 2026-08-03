@@ -60,6 +60,12 @@ const serverDefaults: ServerType = {
   plugins: {},
 };
 
+// Guards against corrupted/empty tab names (e.g. a prompt() result of the
+// literal string "undefined") ever being used as a pluginsStore.servers key.
+function isValidServerKey(key: string | undefined | null): key is string {
+  return !!key && key.trim().length > 0 && key.trim().toLowerCase() !== 'undefined';
+}
+
 const pluginsDefaults: PluginsStoreType = {
   servers: {
     'My Server': {
@@ -156,8 +162,13 @@ export default component$(() => {
 
     const dbPlugins = session.value?.user?.plugins;
     if (dbPlugins?.servers && Object.keys(dbPlugins.servers).length > 0) {
-      pluginsStore.servers = dbPlugins.servers;
-      pluginsStore.openServer = dbPlugins.openServer;
+      pluginsStore.servers = Object.fromEntries(
+        Object.entries(dbPlugins.servers).filter(([k]) => isValidServerKey(k))
+      );
+      pluginsStore.openServer =
+        dbPlugins.openServer && pluginsStore.servers[dbPlugins.openServer]
+          ? dbPlugins.openServer
+          : Object.keys(pluginsStore.servers)[0];
       pluginsStore.filter = dbPlugins.filter;
     } else {
       const pluginsData = localStorage.getItem('plugins');
@@ -166,8 +177,16 @@ export default component$(() => {
           const savedPluginsStore = JSON.parse(
             pluginsData
           ) as PluginsStoreType;
-          pluginsStore.servers = savedPluginsStore.servers || {};
-          pluginsStore.openServer = savedPluginsStore.openServer;
+          pluginsStore.servers = Object.fromEntries(
+            Object.entries(savedPluginsStore.servers || {}).filter(([k]) =>
+              isValidServerKey(k)
+            )
+          );
+          pluginsStore.openServer =
+            savedPluginsStore.openServer &&
+            pluginsStore.servers[savedPluginsStore.openServer]
+              ? savedPluginsStore.openServer
+              : Object.keys(pluginsStore.servers)[0];
           pluginsStore.filter = savedPluginsStore.filter;
 
           if (session.value?.user?.id) {
@@ -194,6 +213,7 @@ export default component$(() => {
           .filter((id): id is number => id !== undefined)
       );
       userServers.value.forEach((server) => {
+        if (!server.id || !isValidServerKey(server.name)) return;
         if (linkedServerIds.has(server.id)) return;
         if (pluginsStore.servers[server.name]) return;
         pluginsStore.servers[server.name] = {
@@ -212,6 +232,13 @@ export default component$(() => {
     deepTrack(track, pluginsStore);
 
     if (!isBrowser) return;
+
+    // Defensive: scrub any corrupted server entry (e.g. a stray "undefined"
+    // key) before it can be read below or persisted to localStorage/DB.
+    for (const key of Object.keys(pluginsStore.servers)) {
+      if (!isValidServerKey(key)) delete pluginsStore.servers[key];
+    }
+
     const currentServer = pluginsStore.openServer
       ? pluginsStore.servers[pluginsStore.openServer]
       : undefined;
