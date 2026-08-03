@@ -102,9 +102,14 @@ export const pluginsStoreContext =
 export default component$(() => {
   const t = inlineTranslate();
   const session = useSession();
-  const userServers = useSignal<{ id: number; name: string; slug: string }[]>(
-    []
-  );
+  const userServers = useSignal<
+    {
+      id: number;
+      name: string;
+      slug: string;
+      plugins: { [id: string]: PluginType } | null;
+    }[]
+  >([]);
 
   const notifications = useContext(NotificationContext);
   const modalRef = useSignal<HTMLDialogElement>();
@@ -151,28 +156,51 @@ export default component$(() => {
       pluginsStore.servers = dbPlugins.servers;
       pluginsStore.openServer = dbPlugins.openServer;
       pluginsStore.filter = dbPlugins.filter;
-      return;
+    } else {
+      const pluginsData = localStorage.getItem('plugins');
+      if (pluginsData) {
+        try {
+          const savedPluginsStore = JSON.parse(
+            pluginsData
+          ) as PluginsStoreType;
+          pluginsStore.servers = savedPluginsStore.servers || {};
+          pluginsStore.openServer = savedPluginsStore.openServer;
+          pluginsStore.filter = savedPluginsStore.filter;
+
+          if (session.value?.user?.id) {
+            await setUserData({ plugins: savedPluginsStore });
+          }
+        } catch (e) {
+          const notification = new Notification()
+            .setTitle('Error loading plugins')
+            .setDescription(
+              `There was an error loading your saved plugins: ${e instanceof Error ? e.message : String(e)}.`
+            )
+            .setBgColor('lum-grad-bg-red/50');
+          notifications.push(notification.toJSON());
+        }
+      }
     }
 
-    const pluginsData = localStorage.getItem('plugins');
-    if (pluginsData) {
-      try {
-        const savedPluginsStore = JSON.parse(pluginsData) as PluginsStoreType;
-        pluginsStore.servers = savedPluginsStore.servers || {};
-        pluginsStore.openServer = savedPluginsStore.openServer;
-        pluginsStore.filter = savedPluginsStore.filter;
-
-        if (session.value?.user?.id) {
-          await setUserData({ plugins: savedPluginsStore });
-        }
-      } catch (e) {
-        const notification = new Notification()
-          .setTitle('Error loading plugins')
-          .setDescription(
-            `There was an error loading your saved plugins: ${e instanceof Error ? e.message : String(e)}.`
-          )
-          .setBgColor('lum-grad-bg-red/50');
-        notifications.push(notification.toJSON());
+    // Add a tab for each owned Server List listing that isn't already
+    // represented, so plugin profiles for your servers show up automatically.
+    if (userServers.value.length > 0) {
+      const linkedServerIds = new Set(
+        Object.values(pluginsStore.servers)
+          .map((server) => server.serverId)
+          .filter((id): id is number => id !== undefined)
+      );
+      userServers.value.forEach((server) => {
+        if (linkedServerIds.has(server.id)) return;
+        if (pluginsStore.servers[server.name]) return;
+        pluginsStore.servers[server.name] = {
+          software: 'paper',
+          plugins: server.plugins || {},
+          serverId: server.id,
+        };
+      });
+      if (!pluginsStore.openServer) {
+        pluginsStore.openServer = Object.keys(pluginsStore.servers)[0];
       }
     }
   });
@@ -373,37 +401,8 @@ export default component$(() => {
                 <CurrentSoftware.icon size={20} q:slot="dropdown-before" />
               </SelectMenu>
 
-              {session.value?.user?.id && userServers.value.length > 0 && (
-                <SelectMenu
-                  id="linkedServer"
-                  onChange$={(e, el) => {
-                    const val = el.value;
-                    if (pluginsStore.openServer) {
-                      pluginsStore.servers[pluginsStore.openServer].serverId =
-                        val === 'none' ? undefined : Number(val);
-                    }
-                  }}
-                  values={[
-                    { name: 'Link listing...', value: 'none' },
-                    ...userServers.value.map((s) => ({
-                      name: s.name,
-                      value: String(s.id),
-                    })),
-                  ]}
-                  value={
-                    CurrentServer?.serverId
-                      ? String(CurrentServer.serverId)
-                      : 'none'
-                  }
-                  class="lum-bg-transparent lum-btn-p-1 rounded-lum-1"
-                  title="Link this plugin profile to your Server List listing"
-                >
-                  <Globe size={20} q:slot="dropdown-before" />
-                </SelectMenu>
-              )}
-
               <button
-                class="lum-btn lum-btn-p-1 rounded-lum-1 flex cursor-pointer items-center justify-center gap-2 border-none transition-all duration-300"
+                class="lum-btn lum-btn-p-2 rounded-lum-1 flex cursor-pointer items-center justify-center gap-2 border-none transition-all duration-300"
                 onClick$={() => {
                   if (!CurrentServer) return;
                   const exportedPlugins: { [id: string]: PluginType } = {};

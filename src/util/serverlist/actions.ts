@@ -405,6 +405,7 @@ export const getUserServers = server$(async function () {
       id: servers.id,
       name: servers.name,
       slug: servers.slug,
+      plugins: servers.plugins,
     })
     .from(servers)
     .where(eq(servers.ownerId, session.user.id))
