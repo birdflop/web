@@ -246,12 +246,12 @@ export default component$(() => {
 
       if (session.value?.user?.id) {
         await setUserData({ plugins: exportedPluginsStore });
-        if (pluginsStore.openServer && CurrentServer?.serverId) {
+        if (pluginsStore.openServer && currentServer?.serverId) {
           const currentMappedPlugins =
             exportedPluginsStore.servers[pluginsStore.openServer]?.plugins ||
             {};
           await updateServerPlugins(
-            CurrentServer.serverId,
+            currentServer.serverId,
             currentMappedPlugins
           );
         }
