@@ -1,7 +1,7 @@
 // Server$ mutations for the server list feature.
 
 import { server$ } from '@qwik.dev/router';
-import { and, eq, gte, isNotNull, ne, or, sql } from 'drizzle-orm';
+import { and, eq, gte, ne, or, sql } from 'drizzle-orm';
 import {
   getDB,
   servers,
@@ -20,17 +20,16 @@ import { verifyTurnstile } from './turnstile';
 import { detectBirdflopHosted } from './birdflop';
 import { sendVotifierV2 } from './votifier';
 import {
-  fetchServersPulseListing,
-  generateVerificationToken,
-  isValidServersPulseSlug,
-  normalizeServersPulseSlug,
-  tokenAppearsInListing,
+  claimServersPulseLink,
+  isValidServersPulseLinkCode,
+  normalizeServersPulseLinkCode,
 } from './serverspulse';
 import {
   DEFAULT_VOTIFIER_PORT,
   LIMITS,
   REPORT_COOLDOWN_MS,
   SERVERSPULSE_ACTION_COOLDOWN_MS,
+  SERVERSPULSE_CONSUMER_NAME,
   TEST_VOTE_COOLDOWN_MS,
   VOTE_COOLDOWN_MS,
 } from './constants';
@@ -560,14 +559,15 @@ function serversPulseOnCooldown(userId: string): boolean {
 }
 
 /**
- * Start linking a listing to its ServersPulse Discover entry. Confirms the
- * slug resolves publicly, then stores an unverified link with a fresh
- * verification token the owner must place on their Discover listing.
- * Nothing renders publicly until verifyServersPulseLink succeeds.
+ * Link a listing to its ServersPulse Discover entry by redeeming a
+ * single-use link code the owner generated in their ServersPulse dashboard
+ * (Discovery → Connected sites). The claim response IS the ownership proof —
+ * a typed-in slug is never accepted as a claim. The secret linkToken from
+ * the response stays server-side; this action returns only display fields.
  */
 export const linkServersPulse = server$(async function (
   serverId: number,
-  slugInput: string
+  codeInput: string
 ) {
   const session = this.sharedMap.get('session') as Session | undefined;
   const db = getDB();
@@ -585,30 +585,12 @@ export const linkServersPulse = server$(async function (
   if (!admin && row.ownerId !== session.user.id)
     return { success: false as const, error: 'Unauthorized.' };
 
-  const slug = normalizeServersPulseSlug(slugInput);
-  if (!isValidServersPulseSlug(slug))
+  const code = normalizeServersPulseLinkCode(codeInput);
+  if (!isValidServersPulseLinkCode(code))
     return {
       success: false as const,
       error:
-        'That does not look like a ServersPulse slug (lowercase letters, numbers, and hyphens).',
-    };
-
-  // A ServersPulse listing can back at most one verified server here.
-  const claimed = await db
-    .select({ serverId: serverspulseLinks.serverId })
-    .from(serverspulseLinks)
-    .where(
-      and(
-        eq(serverspulseLinks.slug, slug),
-        isNotNull(serverspulseLinks.verifiedAt),
-        ne(serverspulseLinks.serverId, serverId)
-      )
-    )
-    .get();
-  if (claimed)
-    return {
-      success: false as const,
-      error: 'That ServersPulse listing is already linked to another server.',
+        'That does not look like a ServersPulse link code (splink_…). Generate one in your ServersPulse dashboard under Discovery → Connected sites.',
     };
 
   if (serversPulseOnCooldown(session.user.id))
@@ -617,38 +599,65 @@ export const linkServersPulse = server$(async function (
       error: 'Please wait a few seconds between ServersPulse requests.',
     };
 
-  const result = await fetchServersPulseListing(slug);
-  if (!result.ok)
+  const result = await claimServersPulseLink(code, SERVERSPULSE_CONSUMER_NAME);
+  if (!result.ok) return { success: false as const, error: result.error };
+  const { claim } = result;
+
+  // A ServersPulse listing can back at most one server here — the ref is
+  // the identity, so relinking the same listing under a second server is
+  // rejected even though the claim itself succeeded upstream.
+  const claimed = await db
+    .select({ serverId: serverspulseLinks.serverId })
+    .from(serverspulseLinks)
+    .where(
+      and(
+        eq(serverspulseLinks.listingRef, claim.listingRef),
+        ne(serverspulseLinks.serverId, serverId)
+      )
+    )
+    .get();
+  if (claimed)
     return {
       success: false as const,
-      error: result.notFound
-        ? 'No public ServersPulse Discover listing found for that slug. Make sure your server is published to Discover.'
-        : 'Could not reach ServersPulse right now. Please try again shortly.',
+      error:
+        'That ServersPulse listing is already linked to another server here. Unlink it there first, then generate a new code (this one has now been used).',
     };
 
-  const token = generateVerificationToken();
   const now = new Date();
   try {
-    // Relinking (same or different slug) always resets verification and the
-    // cached payload — a new claim is never trusted on the old one's back.
+    // Relinking always replaces the previous link wholesale — a new claim is
+    // never trusted on the old one's back.
     await db
       .insert(serverspulseLinks)
       .values({
         serverId,
-        slug,
-        verificationToken: token,
+        listingRef: claim.listingRef,
+        linkToken: claim.linkToken,
+        consumerName: claim.consumer || SERVERSPULSE_CONSUMER_NAME,
+        slug: claim.listing?.slug ?? null,
+        linkStatus: claim.status === 'active' ? 'active' : 'unpublished',
+        linkedAt: now,
+        // The claim response already carries the listing when active — seed
+        // the cache so stats appear without waiting for the next poll.
+        lastPayload: claim.listing ?? null,
+        lastCheckedAt: claim.listing ? now : null,
+        lastSuccessAt: claim.listing ? now : null,
         createdAt: now,
         updatedAt: now,
       })
       .onConflictDoUpdate({
         target: serverspulseLinks.serverId,
         set: {
-          slug,
-          verificationToken: token,
-          verifiedAt: null,
-          lastCheckedAt: null,
-          lastSuccessAt: null,
-          lastPayload: null,
+          listingRef: claim.listingRef,
+          linkToken: claim.linkToken,
+          consumerName: claim.consumer || SERVERSPULSE_CONSUMER_NAME,
+          slug: claim.listing?.slug ?? null,
+          linkStatus: claim.status === 'active' ? 'active' : 'unpublished',
+          linkedAt: now,
+          lastPayload: claim.listing ?? null,
+          lastCheckedAt: claim.listing ? now : null,
+          lastSuccessAt: claim.listing ? now : null,
+          lastStateCheckAt: null,
           lastError: null,
           updatedAt: now,
         },
@@ -658,113 +667,15 @@ export const linkServersPulse = server$(async function (
     return { success: false as const, error: 'Failed to store the link.' };
   }
 
-  return { success: true as const, slug, token };
-});
-
-/**
- * Reverse-verification poll: succeeds once the token from linkServersPulse
- * appears in the Discover listing's description or website URL.
- */
-export const verifyServersPulseLink = server$(async function (
-  serverId: number
-) {
-  const session = this.sharedMap.get('session') as Session | undefined;
-  const db = getDB();
-  if (!session?.user?.id || !db)
-    return { success: false as const, error: 'You must be logged in.' };
-
-  const row = await db
-    .select({ ownerId: servers.ownerId })
-    .from(servers)
-    .where(eq(servers.id, serverId))
-    .get();
-  if (!row) return { success: false as const, error: 'Server not found.' };
-
-  const admin = await isAdmin.call(this);
-  if (!admin && row.ownerId !== session.user.id)
-    return { success: false as const, error: 'Unauthorized.' };
-
-  const link = await db
-    .select()
-    .from(serverspulseLinks)
-    .where(eq(serverspulseLinks.serverId, serverId))
-    .get();
-  if (!link)
-    return {
-      success: false as const,
-      error: 'No ServersPulse link started. Enter your slug first.',
-    };
-  if (link.verifiedAt) return { success: true as const, slug: link.slug };
-  if (!link.verificationToken)
-    return {
-      success: false as const,
-      error: 'This link has no pending token. Start the link again.',
-    };
-
-  if (serversPulseOnCooldown(session.user.id))
-    return {
-      success: false as const,
-      error: 'Please wait a few seconds between ServersPulse requests.',
-    };
-
-  const result = await fetchServersPulseListing(link.slug, { activity: true });
-  if (!result.ok)
-    return {
-      success: false as const,
-      error: result.notFound
-        ? 'Your ServersPulse listing is no longer public. Republish it to Discover, then try again.'
-        : 'Could not reach ServersPulse right now. Please try again shortly.',
-    };
-
-  if (!tokenAppearsInListing(result.listing, link.verificationToken))
-    return {
-      success: false as const,
-      error:
-        'Verification token not found on your listing yet. Add it to the description or website URL on ServersPulse, wait a minute, and try again.',
-    };
-
-  // Re-check the claim at verification time too — another server may have
-  // linked and verified the same slug since linkServersPulse ran.
-  const claimed = await db
-    .select({ serverId: serverspulseLinks.serverId })
-    .from(serverspulseLinks)
-    .where(
-      and(
-        eq(serverspulseLinks.slug, link.slug),
-        isNotNull(serverspulseLinks.verifiedAt),
-        ne(serverspulseLinks.serverId, serverId)
-      )
-    )
-    .get();
-  if (claimed)
-    return {
-      success: false as const,
-      error: 'That ServersPulse listing is already linked to another server.',
-    };
-
-  const now = new Date();
-  try {
-    await db
-      .update(serverspulseLinks)
-      .set({
-        verifiedAt: now,
-        verificationToken: null,
-        lastPayload: result.listing,
-        lastCheckedAt: now,
-        lastSuccessAt: now,
-        lastError: null,
-        updatedAt: now,
-      })
-      .where(eq(serverspulseLinks.serverId, serverId));
-  } catch (err) {
-    console.error('Error persisting ServersPulse verification:', err);
-    return {
-      success: false as const,
-      error: 'Failed to save the verification.',
-    };
-  }
-
-  return { success: true as const, slug: link.slug };
+  return {
+    success: true as const,
+    status:
+      claim.status === 'active'
+        ? ('active' as const)
+        : ('unpublished' as const),
+    slug: claim.listing?.slug ?? null,
+    name: claim.listing?.name ?? null,
+  };
 });
 
 export const unlinkServersPulse = server$(async function (serverId: number) {

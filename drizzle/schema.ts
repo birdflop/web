@@ -14,7 +14,10 @@ import type {
   ServerTag,
 } from '../src/util/serverlist/constants';
 import type { PluginType } from '../src/util/plugins/ServerPlugin';
-import type { ServersPulseListing } from '../src/util/serverlist/serverspulse';
+import type {
+  ServersPulseLinkStatus,
+  ServersPulseListing,
+} from '../src/util/serverlist/serverspulse';
 
 // -------------------- User --------------------
 export const users = sqliteTable('user', {
@@ -297,10 +300,15 @@ export const birdflopIpCache = sqliteTable('birdflopIpCache', {
 
 // -------------------- ServersPulse links --------------------
 // A listing's opt-in link to its ServersPulse Discover entry
-// (src/util/serverlist/serverspulse.ts). Ownership is proven by reverse
-// verification: `verificationToken` must appear in the Discover listing's
-// description/website URL before `verifiedAt` is set — nothing renders
-// publicly until then. `lastPayload` caches the last good API response so a
+// (src/util/serverlist/serverspulse.ts). Ownership is proven on the
+// ServersPulse side: the owner generates a single-use link code in their
+// dashboard and our backend redeems it — the claim response IS the
+// verification. `listingRef` is the join key (issued once, never
+// reassigned); the slug is stored for display/deep links only, since slugs
+// are released on unpublish and can later resolve to a different server.
+// `linkToken` is the per-link secret for the /links/self state endpoint —
+// server-side only, never selected into a loader payload. `lastPayload`
+// caches the last good API response (written by the background poller) so a
 // ServersPulse outage degrades to slightly stale data instead of an empty
 // panel. Self-reported data: display only, never a ranking input.
 export const serverspulseLinks = sqliteTable(
@@ -309,13 +317,25 @@ export const serverspulseLinks = sqliteTable(
     serverId: integer('serverId')
       .primaryKey()
       .references(() => servers.id, { onDelete: 'cascade' }),
-    slug: text('slug').notNull(),
-    verificationToken: text('verificationToken'),
-    verifiedAt: integer('verifiedAt', { mode: 'timestamp_ms' }),
-    // Last fetch attempt (bounds retry frequency) vs last successful payload
-    // (bounds how long stale data may keep rendering).
+    // 32-hex ref from the claim response; one Discover listing backs at most
+    // one server here.
+    listingRef: text('listingRef').notNull().unique(),
+    // SECRET. Nulled when the owner revokes the link on their side.
+    linkToken: text('linkToken'),
+    consumerName: text('consumerName').notNull(),
+    // Display only — never a join key.
+    slug: text('slug'),
+    linkStatus: text('linkStatus')
+      .$type<ServersPulseLinkStatus>()
+      .notNull()
+      .default('active'),
+    linkedAt: integer('linkedAt', { mode: 'timestamp_ms' }).notNull(),
+    // Last poll attempt (bounds retry frequency) vs last successful payload
+    // (bounds how long stale data may keep rendering) vs last /links/self
+    // state resolution (throttled — never every poll cycle).
     lastCheckedAt: integer('lastCheckedAt', { mode: 'timestamp_ms' }),
     lastSuccessAt: integer('lastSuccessAt', { mode: 'timestamp_ms' }),
+    lastStateCheckAt: integer('lastStateCheckAt', { mode: 'timestamp_ms' }),
     lastPayload: text('lastPayload', {
       mode: 'json',
     }).$type<ServersPulseListing>(),
@@ -323,7 +343,7 @@ export const serverspulseLinks = sqliteTable(
     createdAt: integer('createdAt', { mode: 'timestamp_ms' }).notNull(),
     updatedAt: integer('updatedAt', { mode: 'timestamp_ms' }).notNull(),
   },
-  (t) => [index('serverspulseLinks_slug_idx').on(t.slug)]
+  (t) => [index('serverspulseLinks_status_idx').on(t.linkStatus)]
 );
 
 export type ServersPulseLink = typeof serverspulseLinks.$inferSelect;

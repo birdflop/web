@@ -106,6 +106,20 @@
       "when": 1785714760513,
       "tag": "0014_true_human_torch",
       "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "6",
+      "when": 1785752710379,
+      "tag": "0015_broken_black_queen",
+      "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "6",
+      "when": 1785752722504,
+      "tag": "0016_hesitant_dreadnoughts",
+      "breakpoints": true
     }
   ]
 }

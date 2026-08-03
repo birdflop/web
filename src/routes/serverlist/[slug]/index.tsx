@@ -86,8 +86,8 @@ export const useServer = routeLoader$(async (event) => {
 
   const [status, serverspulse] = await Promise.all([
     getServerStatus(serverRow),
-    // Verified ServersPulse link, lazily refreshed (at most once/min) with
-    // the last good payload cached in D1 — null when not connected.
+    // Cached ServersPulse payload written by the background poller — a pure
+    // D1 read (never fetches upstream), null when not connected.
     getPublicServersPulseStats(db, serverRow.id),
   ]);
 

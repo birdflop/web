@@ -88,6 +88,10 @@ export const SERVERSPULSE_ACTION_COOLDOWN_MS = 10 * 1000;
 // live here so client components can import them without pulling the
 // server-only fetch/DB module into browser bundles.
 export const SERVERSPULSE_SITE_URL = 'https://serverspulse.com';
+// Shown to the owner in their ServersPulse "Connected sites" panel — it is
+// what they look at when deciding whether to disconnect us, so it must be a
+// name they recognise. A label only; it grants nothing.
+export const SERVERSPULSE_CONSUMER_NAME = 'birdflop.com';
 // Below this much telemetry coverage in the 28-day window, the hour-of-day
 // profile is statistically meaningless and must not be rendered.
 export const MIN_PROFILE_COVERAGE_DAYS = 7;

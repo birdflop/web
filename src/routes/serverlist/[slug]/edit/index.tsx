@@ -25,12 +25,14 @@ export const useEditServer = routeLoader$(async (event) => {
     checkAdmin(event) ||
     (!!session?.user?.id && session.user.id === server.ownerId);
 
+  // Explicit safe columns only — the row also carries the secret linkToken,
+  // which must never enter a loader payload (hard rule: never send it to a
+  // browser).
   const spLink = canManage
     ? await db
         .select({
           slug: serverspulseLinks.slug,
-          verificationToken: serverspulseLinks.verificationToken,
-          verifiedAt: serverspulseLinks.verifiedAt,
+          linkStatus: serverspulseLinks.linkStatus,
         })
         .from(serverspulseLinks)
         .where(eq(serverspulseLinks.serverId, server.id))
@@ -45,8 +47,7 @@ export const useEditServer = routeLoader$(async (event) => {
       canManage && spLink
         ? {
             slug: spLink.slug,
-            token: spLink.verificationToken,
-            verified: !!spLink.verifiedAt,
+            status: spLink.linkStatus,
           }
         : null,
     slug: event.params.slug,

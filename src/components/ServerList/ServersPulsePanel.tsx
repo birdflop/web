@@ -64,7 +64,14 @@ export default component$<{ stats: PublicServersPulseStats }>(({ stats }) => {
   const busiest = useSignal('');
   const tzHint = useSignal('');
 
-  const status = STATUS_META[stats.status] ?? STATUS_META.offline;
+  // Enum values are validated against /discover/options upstream, so a value
+  // outside STATUS_META is a status newer than this deploy — render it
+  // neutrally instead of mislabeling it as "Not reporting".
+  const status = STATUS_META[stats.status as keyof typeof STATUS_META] ?? {
+    label: stats.status.charAt(0).toUpperCase() + stats.status.slice(1),
+    detail: 'Status reported by ServersPulse',
+    class: 'lum-bg-lum-input-bg/50 text-lum-text-secondary',
+  };
   const pot = stats.activity?.playersOverTime ?? null;
   const hasSparkline = !!pot && pot.avg.some((v) => v !== null);
   const sparklineHasGaps = !!pot && pot.avg.some((v) => v === null);
@@ -361,8 +368,10 @@ export default component$<{ stats: PublicServersPulseStats }>(({ stats }) => {
             <HeartPulse size={13} />
           ) : stats.status === 'offline' ? (
             <WifiOff size={13} />
-          ) : (
+          ) : stats.status === 'degraded' || stats.status === 'critical' ? (
             <AlertTriangle size={13} />
+          ) : (
+            <Activity size={13} />
           )}
           {status.label}
         </span>
