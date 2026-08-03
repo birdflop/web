@@ -5,20 +5,57 @@ import type { RequestHandler } from '@qwik.dev/router';
 import { getDB, servers } from '~/util/db';
 import { eq } from 'drizzle-orm';
 import { getServerStatus } from '~/util/serverlist/status';
-import { getUserServers } from '~/util/serverlist/actions';
 
 export const onGet: RequestHandler = async ({ json, query }) => {
   const ownerId = query.get('ownerId');
   if (ownerId) {
-    const fakeThis = { sharedMap: new Map([['session', { user: { id: ownerId } }]]) };
-    let result: unknown;
-    let callError: string | null = null;
-    try {
-      result = await getUserServers.call(fakeThis as never);
-    } catch (e) {
-      callError = e instanceof Error ? `${e.name}: ${e.message}` : String(e);
-    }
-    throw json(200, { via: 'direct-call-of-getUserServers', result, callError });
+    const db = getDB();
+    const userServers = await db
+      .select({
+        id: servers.id,
+        name: servers.name,
+        slug: servers.slug,
+        plugins: servers.plugins,
+        edition: servers.edition,
+        javaHost: servers.javaHost,
+        javaPort: servers.javaPort,
+        bedrockHost: servers.bedrockHost,
+        bedrockPort: servers.bedrockPort,
+      })
+      .from(servers)
+      .where(eq(servers.ownerId, ownerId))
+      .all();
+
+    const withIcons = await Promise.all(
+      userServers.map(
+        async ({
+          edition,
+          javaHost,
+          javaPort,
+          bedrockHost,
+          bedrockPort,
+          ...rest
+        }) => {
+          let icon: string | null = null;
+          let innerError: string | null = null;
+          try {
+            const status = await getServerStatus({
+              edition,
+              javaHost,
+              javaPort,
+              bedrockHost,
+              bedrockPort,
+            });
+            icon = status?.icon ?? null;
+          } catch (e) {
+            innerError = e instanceof Error ? `${e.name}: ${e.message}` : String(e);
+          }
+          return { ...rest, iconLength: icon?.length ?? 0, innerError };
+        }
+      )
+    );
+
+    throw json(200, { via: 'inline-replica-of-getUserServers', ownerId, withIcons });
   }
 
   const id = Number(query.get('id') ?? '1');
