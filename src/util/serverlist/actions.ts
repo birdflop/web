@@ -19,6 +19,7 @@ import {
 import { verifyTurnstile } from './turnstile';
 import { detectBirdflopHosted } from './birdflop';
 import { sendVotifierV2 } from './votifier';
+import { getServerStatus } from './status';
 import {
   claimServersPulseLink,
   isValidServersPulseLinkCode,
@@ -406,12 +407,43 @@ export const getUserServers = server$(async function () {
       name: servers.name,
       slug: servers.slug,
       plugins: servers.plugins,
+      edition: servers.edition,
+      javaHost: servers.javaHost,
+      javaPort: servers.javaPort,
+      bedrockHost: servers.bedrockHost,
+      bedrockPort: servers.bedrockPort,
     })
     .from(servers)
     .where(eq(servers.ownerId, session.user.id))
     .all();
 
-  return userServers;
+  return await Promise.all(
+    userServers.map(
+      async ({
+        edition,
+        javaHost,
+        javaPort,
+        bedrockHost,
+        bedrockPort,
+        ...rest
+      }) => {
+        let icon: string | null = null;
+        try {
+          const status = await getServerStatus({
+            edition,
+            javaHost,
+            javaPort,
+            bedrockHost,
+            bedrockPort,
+          });
+          icon = status?.icon ?? null;
+        } catch {
+          icon = null;
+        }
+        return { ...rest, icon };
+      }
+    )
+  );
 });
 
 export const updateServerPlugins = server$(async function (
