@@ -324,8 +324,8 @@ export default component$(() => {
           pluginsStore.openServer = serverName.value;
         }}
         onPlus$={() => {
-          const serverName = prompt('Enter server name');
-          if (serverName) {
+          const serverName = prompt('Enter server name')?.trim();
+          if (serverName && serverName.toLowerCase() !== 'undefined') {
             if (pluginsStore.servers[serverName]) {
               alert('A server with that name already exists.');
               return;
@@ -396,10 +396,11 @@ export default component$(() => {
                 onClick$={() => {
                   const newName = prompt(
                     'Enter new server name',
-                    `${pluginsStore.openServer}`
-                  );
+                    pluginsStore.openServer ?? ''
+                  )?.trim();
                   if (
                     newName &&
+                    newName.toLowerCase() !== 'undefined' &&
                     newName !== pluginsStore.openServer &&
                     pluginsStore.openServer
                   ) {
