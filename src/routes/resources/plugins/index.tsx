@@ -40,6 +40,10 @@ import {
 } from '~/util/plugins/ServerPlugin';
 import { downloadSpigotPlugin } from '~/util/plugins/SpigotPlugin';
 import Globe from 'lucide-icons-qwik/icons/Globe';
+import { useSession } from '~/routes/plugin@auth';
+import { setUserData } from '~/util/dataUtils';
+import { getUserServers, updateServerPlugins } from '~/util/serverlist/actions';
+import type { PluginsStoreType, ServerType } from '~/util/plugins/types';
 
 const debug = true;
 
@@ -47,19 +51,6 @@ type ResolvedPluginType = {
   type: PluginSource;
   plugin?: PluginType;
   plugins?: PluginType[];
-};
-
-type ServerType = {
-  software: keyof typeof softwareOptions;
-  plugins: { [id: string]: PluginType };
-};
-
-type PluginsStoreType = {
-  servers: {
-    [serverName: string]: ServerType;
-  };
-  openServer?: string;
-  filter?: 'outdated' | PluginSource;
 };
 
 const serverDefaults: ServerType = {
@@ -110,6 +101,10 @@ export const pluginsStoreContext =
   createContextId<PluginsStoreType>('plugins-store');
 export default component$(() => {
   const t = inlineTranslate();
+  const session = useSession();
+  const userServers = useSignal<{ id: number; name: string; slug: string }[]>(
+    []
+  );
 
   const notifications = useContext(NotificationContext);
   const modalRef = useSignal<HTMLDialogElement>();
@@ -141,8 +136,24 @@ export default component$(() => {
   const CurrentSoftware = softwareOptions[CurrentServer?.software || 'paper'];
 
   // oxlint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(() => {
+  useVisibleTask$(async () => {
     if (!isBrowser) return; // dont load plugins on the server
+    if (session.value?.user?.id) {
+      try {
+        userServers.value = await getUserServers();
+      } catch (e) {
+        console.error('Failed to load user servers:', e);
+      }
+    }
+
+    const dbPlugins = session.value?.user?.plugins;
+    if (dbPlugins?.servers && Object.keys(dbPlugins.servers).length > 0) {
+      pluginsStore.servers = dbPlugins.servers;
+      pluginsStore.openServer = dbPlugins.openServer;
+      pluginsStore.filter = dbPlugins.filter;
+      return;
+    }
+
     const pluginsData = localStorage.getItem('plugins');
     if (pluginsData) {
       try {
@@ -150,6 +161,10 @@ export default component$(() => {
         pluginsStore.servers = savedPluginsStore.servers || {};
         pluginsStore.openServer = savedPluginsStore.openServer;
         pluginsStore.filter = savedPluginsStore.filter;
+
+        if (session.value?.user?.id) {
+          await setUserData({ plugins: savedPluginsStore });
+        }
       } catch (e) {
         const notification = new Notification()
           .setTitle('Error loading plugins')
@@ -200,6 +215,19 @@ export default component$(() => {
         exportedPluginsStore.servers[server].plugins = mappedPlugins;
       });
       localStorage.setItem('plugins', JSON.stringify(exportedPluginsStore));
+
+      if (session.value?.user?.id) {
+        await setUserData({ plugins: exportedPluginsStore });
+        if (pluginsStore.openServer && CurrentServer?.serverId) {
+          const currentMappedPlugins =
+            exportedPluginsStore.servers[pluginsStore.openServer]?.plugins ||
+            {};
+          await updateServerPlugins(
+            CurrentServer.serverId,
+            currentMappedPlugins
+          );
+        }
+      }
     } catch (e) {
       const notification = new Notification()
         .setTitle('Error saving plugins')
@@ -345,8 +373,37 @@ export default component$(() => {
                 <CurrentSoftware.icon size={20} q:slot="dropdown-before" />
               </SelectMenu>
 
+              {session.value?.user?.id && userServers.value.length > 0 && (
+                <SelectMenu
+                  id="linkedServer"
+                  onChange$={(e, el) => {
+                    const val = el.value;
+                    if (pluginsStore.openServer) {
+                      pluginsStore.servers[pluginsStore.openServer].serverId =
+                        val === 'none' ? undefined : Number(val);
+                    }
+                  }}
+                  values={[
+                    { name: 'Link listing...', value: 'none' },
+                    ...userServers.value.map((s) => ({
+                      name: s.name,
+                      value: String(s.id),
+                    })),
+                  ]}
+                  value={
+                    CurrentServer?.serverId
+                      ? String(CurrentServer.serverId)
+                      : 'none'
+                  }
+                  class="lum-bg-transparent lum-btn-p-1 rounded-lum-1"
+                  title="Link this plugin profile to your Server List listing"
+                >
+                  <Globe size={20} q:slot="dropdown-before" />
+                </SelectMenu>
+              )}
+
               <button
-                class="lum-btn lum-btn-p-2 rounded-lum-1 flex cursor-pointer items-center justify-center gap-2 border-none transition-all duration-300"
+                class="lum-btn lum-btn-p-1 rounded-lum-1 flex cursor-pointer items-center justify-center gap-2 border-none transition-all duration-300"
                 onClick$={() => {
                   if (!CurrentServer) return;
                   const exportedPlugins: { [id: string]: PluginType } = {};

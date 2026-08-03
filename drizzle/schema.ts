@@ -14,6 +14,7 @@ import type {
   ServerTag,
 } from '../src/util/serverlist/constants';
 import type { PluginType } from '../src/util/plugins/ServerPlugin';
+import type { PluginsStoreType } from '../src/util/plugins/types';
 import type {
   ServersPulseLinkStatus,
   ServersPulseListing,
@@ -31,6 +32,7 @@ export const users = sqliteTable('user', {
   image: text('image'),
   privatePresets: text('privatePresets', { mode: 'json' }).$type<rgbPreset[]>(),
   settings: text('settings', { mode: 'json' }).$type<Settings>(),
+  plugins: text('plugins', { mode: 'json' }).$type<PluginsStoreType>(),
   createdAt: integer('createdAt', { mode: 'timestamp_ms' })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),

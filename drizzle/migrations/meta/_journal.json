@@ -120,6 +120,13 @@
       "when": 1785752722504,
       "tag": "0016_hesitant_dreadnoughts",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "6",
+      "when": 1785772654430,
+      "tag": "0017_add_user_plugins",
+      "breakpoints": true
     }
   ]
 }
