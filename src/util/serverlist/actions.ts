@@ -19,7 +19,6 @@ import {
 import { verifyTurnstile } from './turnstile';
 import { detectBirdflopHosted } from './birdflop';
 import { sendVotifierV2 } from './votifier';
-import { getServerStatus } from './status';
 import {
   claimServersPulseLink,
   isValidServersPulseLinkCode,
@@ -394,56 +393,6 @@ export const reportServer = server$(async function (
     console.error('Error filing report:', err);
     return { success: false as const, error: 'Failed to submit the report.' };
   }
-});
-
-export const getUserServers = server$(async function () {
-  const session = this.sharedMap.get('session') as Session | undefined;
-  const db = getDB();
-  if (!session?.user?.id || !db) return [];
-
-  const userServers = await db
-    .select({
-      id: servers.id,
-      name: servers.name,
-      slug: servers.slug,
-      plugins: servers.plugins,
-      edition: servers.edition,
-      javaHost: servers.javaHost,
-      javaPort: servers.javaPort,
-      bedrockHost: servers.bedrockHost,
-      bedrockPort: servers.bedrockPort,
-    })
-    .from(servers)
-    .where(eq(servers.ownerId, session.user.id))
-    .all();
-
-  return await Promise.all(
-    userServers.map(
-      async ({
-        edition,
-        javaHost,
-        javaPort,
-        bedrockHost,
-        bedrockPort,
-        ...rest
-      }) => {
-        let icon: string | null = null;
-        try {
-          const status = await getServerStatus({
-            edition,
-            javaHost,
-            javaPort,
-            bedrockHost,
-            bedrockPort,
-          });
-          icon = status?.icon ?? null;
-        } catch {
-          icon = null;
-        }
-        return { ...rest, icon };
-      }
-    )
-  );
 });
 
 export const updateServerPlugins = server$(async function (
