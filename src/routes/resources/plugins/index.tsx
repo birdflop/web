@@ -215,7 +215,14 @@ export default component$(() => {
       userServers.value.forEach((server) => {
         if (!server.id || !isValidServerKey(server.name)) return;
         if (linkedServerIds.has(server.id)) return;
-        if (pluginsStore.servers[server.name]) return;
+        const existing = pluginsStore.servers[server.name];
+        if (existing) {
+          // A tab with this exact name already exists (e.g. created by hand
+          // before linking existed) but isn't linked yet - back-fill the
+          // link instead of silently leaving it (and the tab's icon) unset.
+          if (!existing.serverId) existing.serverId = server.id;
+          return;
+        }
         pluginsStore.servers[server.name] = {
           software: 'paper',
           plugins: server.plugins || {},
