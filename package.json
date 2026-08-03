@@ -21,7 +21,7 @@
   "devEngines": {
     "packageManager": {
       "name": "pnpm",
-      "version": "11.13.0"
+      "version": "11.18.0"
     }
   },
   "private": true,
