@@ -24,6 +24,8 @@ import Plus from 'lucide-icons-qwik/icons/Plus';
 import RefreshCw from 'lucide-icons-qwik/icons/RefreshCw';
 import Trash from 'lucide-icons-qwik/icons/Trash';
 import X from 'lucide-icons-qwik/icons/X';
+import { Link } from '@qwik.dev/router';
+import ExternalLink from 'lucide-icons-qwik/icons/ExternalLink';
 import { defaultDescription, generateHead } from '~/root';
 import { Label, SelectMenu, Tabs } from '@luminescent/ui-qwik';
 import PluginCard from '~/components/plugins/PluginCard';
@@ -108,6 +110,7 @@ export default component$(() => {
       name: string;
       slug: string;
       plugins: { [id: string]: PluginType } | null;
+      icon: string | null;
     }[]
   >([]);
 
@@ -300,9 +303,10 @@ export default component$(() => {
       </p>
 
       <Tabs
-        values={Object.keys(pluginsStore.servers).map((k) => ({
+        values={Object.entries(pluginsStore.servers).map(([k, v]) => ({
           name: k,
           value: k,
+          permanent: !!v.serverId,
         }))}
         value={
           pluginsStore.openServer
@@ -330,7 +334,41 @@ export default component$(() => {
             pluginsStore.openServer = serverName;
           }
         }}
-      ></Tabs>
+      >
+        {Object.keys(pluginsStore.servers).map((k, i) => {
+          const s = pluginsStore.servers[k];
+          const linked = userServers.value.find((us) => us.id === s.serverId);
+          return [
+            linked?.icon ? (
+              <img
+                key={i}
+                q:slot={`before-${k}`}
+                src={linked.icon}
+                alt={`${linked.name} icon`}
+                width={16}
+                height={16}
+                class="h-4 w-4 rounded-sm object-cover"
+                style={{ imageRendering: 'pixelated' }}
+              />
+            ) : (
+              <Globe q:slot={`before-${k}`} key={i} size={14} class="shrink-0" />
+            ),
+            ...(linked
+              ? [
+                  <Link
+                    key={`link-${i}`}
+                    q:slot={`after-${k}`}
+                    href={`/serverlist/${linked.slug}/edit`}
+                    class="lum-btn lum-bg-transparent z-10 rounded-full p-0"
+                    title={`Manage ${k} on serverlist`}
+                  >
+                    <ExternalLink size={16} />
+                  </Link>,
+                ]
+              : []),
+          ];
+        })}
+      </Tabs>
       {Object.keys(pluginsStore.servers).length < 1 && (
         <p class="text-lum-text-secondary mx-2 text-sm">
           {t(
@@ -402,7 +440,7 @@ export default component$(() => {
               </SelectMenu>
 
               <button
-                class="lum-btn lum-btn-p-2 rounded-lum-1 flex cursor-pointer items-center justify-center gap-2 border-none transition-all duration-300"
+                class="lum-btn lum-btn-p-1 rounded-lum-1 flex cursor-pointer items-center justify-center gap-2 border-none transition-all duration-300"
                 onClick$={() => {
                   if (!CurrentServer) return;
                   const exportedPlugins: { [id: string]: PluginType } = {};
