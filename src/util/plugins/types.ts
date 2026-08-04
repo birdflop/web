@@ -63,16 +63,20 @@ export interface SpigotVersion {
   releaseDate: number;
 }
 
+export type PluginsType = { [id: string]: PluginType };
+
 export type ServerType = {
   software: keyof typeof softwareOptions;
-  plugins: { [id: string]: PluginType };
-  serverId?: number;
+  plugins: PluginsType;
+  slug?: string;
+};
+
+export type ServersType = {
+  [serverName: string]: ServerType;
 };
 
 export type PluginsStoreType = {
-  servers: {
-    [serverName: string]: ServerType;
-  };
+  servers: ServersType;
   openServer?: string;
   filter?: 'outdated' | PluginSource;
 };

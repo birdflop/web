@@ -7,7 +7,6 @@
 // away from actions.ts's client chunk - it would drag @birdflop/mc-status into the browser
 // and crash on load with "ReferenceError: Buffer is not defined".
 
-import { server$ } from '@qwik.dev/router';
 import { eq } from 'drizzle-orm';
 import { getDB, servers } from '~/util/db';
 import { getServerStatus } from './status';
@@ -15,9 +14,9 @@ import { Session } from '@auth/qwik';
 import type { RequestEventBase } from '@qwik.dev/router';
 
 export async function getUserServersData(
-  props: Pick<RequestEventBase, 'sharedMap'>
+  sharedMap: RequestEventBase['sharedMap']
 ) {
-  const session = props.sharedMap.get('session') as Session | undefined;
+  const session = sharedMap.get('session') as Session | undefined;
   const db = getDB();
   if (!session?.user?.id || !db) return [];
 
@@ -65,7 +64,3 @@ export async function getUserServersData(
     )
   );
 }
-
-export const getUserServers = server$(function () {
-  return getUserServersData(this);
-});

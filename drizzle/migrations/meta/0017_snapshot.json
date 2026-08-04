@@ -91,22 +91,15 @@
           "name": "account_userId_user_id_fk",
           "tableFrom": "account",
           "tableTo": "user",
-          "columnsFrom": [
-            "userId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["userId"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
         "account_provider_providerAccountId_pk": {
-          "columns": [
-            "provider",
-            "providerAccountId"
-          ],
+          "columns": ["provider", "providerAccountId"],
           "name": "account_provider_providerAccountId_pk"
         }
       },
@@ -225,9 +218,7 @@
       "indexes": {
         "presets_preset_unique": {
           "name": "presets_preset_unique",
-          "columns": [
-            "preset"
-          ],
+          "columns": ["preset"],
           "isUnique": true
         }
       },
@@ -236,12 +227,8 @@
           "name": "presets_userId_user_id_fk",
           "tableFrom": "presets",
           "tableTo": "user",
-          "columnsFrom": [
-            "userId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["userId"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -282,12 +269,8 @@
           "name": "savedPresets_userId_user_id_fk",
           "tableFrom": "savedPresets",
           "tableTo": "user",
-          "columnsFrom": [
-            "userId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["userId"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -295,22 +278,15 @@
           "name": "savedPresets_presetId_presets_id_fk",
           "tableFrom": "savedPresets",
           "tableTo": "presets",
-          "columnsFrom": [
-            "presetId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["presetId"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
         "savedPresets_userId_presetId_pk": {
-          "columns": [
-            "userId",
-            "presetId"
-          ],
+          "columns": ["userId", "presetId"],
           "name": "savedPresets_userId_presetId_pk"
         }
       },
@@ -382,16 +358,12 @@
       "indexes": {
         "serverReports_server_idx": {
           "name": "serverReports_server_idx",
-          "columns": [
-            "serverId"
-          ],
+          "columns": ["serverId"],
           "isUnique": false
         },
         "serverReports_resolved_idx": {
           "name": "serverReports_resolved_idx",
-          "columns": [
-            "resolved"
-          ],
+          "columns": ["resolved"],
           "isUnique": false
         }
       },
@@ -400,12 +372,8 @@
           "name": "serverReports_serverId_servers_id_fk",
           "tableFrom": "serverReports",
           "tableTo": "servers",
-          "columnsFrom": [
-            "serverId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["serverId"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -413,12 +381,8 @@
           "name": "serverReports_reporterId_user_id_fk",
           "tableFrom": "serverReports",
           "tableTo": "user",
-          "columnsFrom": [
-            "reporterId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["reporterId"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -478,17 +442,12 @@
       "indexes": {
         "serverVotes_server_created_idx": {
           "name": "serverVotes_server_created_idx",
-          "columns": [
-            "serverId",
-            "createdAt"
-          ],
+          "columns": ["serverId", "createdAt"],
           "isUnique": false
         },
         "serverVotes_username_idx": {
           "name": "serverVotes_username_idx",
-          "columns": [
-            "username"
-          ],
+          "columns": ["username"],
           "isUnique": false
         }
       },
@@ -497,12 +456,8 @@
           "name": "serverVotes_serverId_servers_id_fk",
           "tableFrom": "serverVotes",
           "tableTo": "servers",
-          "columnsFrom": [
-            "serverId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["serverId"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -728,30 +683,22 @@
       "indexes": {
         "servers_slug_unique": {
           "name": "servers_slug_unique",
-          "columns": [
-            "slug"
-          ],
+          "columns": ["slug"],
           "isUnique": true
         },
         "servers_owner_idx": {
           "name": "servers_owner_idx",
-          "columns": [
-            "ownerId"
-          ],
+          "columns": ["ownerId"],
           "isUnique": false
         },
         "servers_featured_idx": {
           "name": "servers_featured_idx",
-          "columns": [
-            "featured"
-          ],
+          "columns": ["featured"],
           "isUnique": false
         },
         "servers_verified_idx": {
           "name": "servers_verified_idx",
-          "columns": [
-            "verified"
-          ],
+          "columns": ["verified"],
           "isUnique": false
         }
       },
@@ -760,12 +707,8 @@
           "name": "servers_ownerId_user_id_fk",
           "tableFrom": "servers",
           "tableTo": "user",
-          "columnsFrom": [
-            "ownerId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["ownerId"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -880,16 +823,12 @@
       "indexes": {
         "serverspulseLinks_listingRef_unique": {
           "name": "serverspulseLinks_listingRef_unique",
-          "columns": [
-            "listingRef"
-          ],
+          "columns": ["listingRef"],
           "isUnique": true
         },
         "serverspulseLinks_status_idx": {
           "name": "serverspulseLinks_status_idx",
-          "columns": [
-            "linkStatus"
-          ],
+          "columns": ["linkStatus"],
           "isUnique": false
         }
       },
@@ -898,12 +837,8 @@
           "name": "serverspulseLinks_serverId_servers_id_fk",
           "tableFrom": "serverspulseLinks",
           "tableTo": "servers",
-          "columnsFrom": [
-            "serverId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["serverId"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -943,12 +878,8 @@
           "name": "session_userId_user_id_fk",
           "tableFrom": "session",
           "tableTo": "user",
-          "columnsFrom": [
-            "userId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["userId"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1043,16 +974,12 @@
       "indexes": {
         "user_username_unique": {
           "name": "user_username_unique",
-          "columns": [
-            "username"
-          ],
+          "columns": ["username"],
           "isUnique": true
         },
         "user_email_unique": {
           "name": "user_email_unique",
-          "columns": [
-            "email"
-          ],
+          "columns": ["email"],
           "isUnique": true
         }
       },
@@ -1090,10 +1017,7 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {
         "verificationToken_identifier_token_pk": {
-          "columns": [
-            "identifier",
-            "token"
-          ],
+          "columns": ["identifier", "token"],
           "name": "verificationToken_identifier_token_pk"
         }
       },

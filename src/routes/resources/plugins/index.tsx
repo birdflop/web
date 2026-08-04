@@ -42,7 +42,13 @@ import { downloadSpigotPlugin } from '~/util/plugins/SpigotPlugin';
 import Globe from 'lucide-icons-qwik/icons/Globe';
 import { useSession } from '~/routes/plugin@auth';
 import { setUserData } from '~/util/dataUtils';
-import type { PluginsStoreType, ServerType } from '~/util/plugins/types';
+import type {
+  PluginsStoreType,
+  ServersType,
+  ServerType,
+} from '~/util/plugins/types';
+import { routeLoader$ } from '@qwik.dev/router';
+import { getUserServersData } from '~/util/serverlist/userServers';
 
 const debug = true;
 
@@ -55,16 +61,6 @@ type ResolvedPluginType = {
 const serverDefaults: ServerType = {
   software: 'paper',
   plugins: {},
-};
-
-const pluginsDefaults: PluginsStoreType = {
-  servers: {
-    'My Server': {
-      software: 'paper',
-      plugins: {},
-    },
-  },
-  openServer: 'My Server',
 };
 
 function pickDefaultOpenServer(
@@ -117,6 +113,11 @@ const pluginSourcesIcons = {
   misc: Ellipsis,
 };
 
+export const useUserServers = routeLoader$(async ({ sharedMap }) => {
+  const userServers = await getUserServersData(sharedMap);
+  return userServers;
+});
+
 export const resolvedPluginContext =
   createContextId<ResolvedPluginType>('resolve-plugin');
 export default component$(() => {
@@ -142,21 +143,26 @@ export default component$(() => {
   );
   useContextProvider(resolvedPluginContext, resolvedPlugin);
 
+  const userServers = useUserServers();
   const dbPlugins = session.value?.user?.plugins;
   const hasDbServers =
     !!dbPlugins?.servers && Object.keys(dbPlugins.servers).length > 0;
 
   const pluginsStore = useStore<PluginsStoreType>(
-    hasDbServers
-      ? {
-          ...structuredClone(pluginsDefaults),
-          ...dbPlugins,
-          openServer: pickDefaultOpenServer(
-            dbPlugins.servers,
-            dbPlugins.openServer
-          ),
-        }
-      : structuredClone(pluginsDefaults),
+    {
+      servers: {
+        ...dbPlugins?.servers,
+        ...userServers.value.reduce((acc: ServersType, server) => {
+          acc[server.name] = {
+            software: 'paper',
+            plugins: server.plugins ?? {},
+            slug: server.slug,
+          };
+          return acc;
+        }, {}),
+      },
+      openServer: dbPlugins?.openServer,
+    },
     { deep: true }
   );
 
@@ -171,28 +177,27 @@ export default component$(() => {
     if (hasDbServers) return; // already loaded from the DB into the store
 
     const pluginsData = localStorage.getItem('plugins');
-    if (pluginsData) {
-      try {
-        const savedPluginsStore = JSON.parse(pluginsData) as PluginsStoreType;
-        pluginsStore.servers = savedPluginsStore.servers || {};
-        pluginsStore.openServer = pickDefaultOpenServer(
-          pluginsStore.servers,
-          savedPluginsStore.openServer
-        );
-        pluginsStore.filter = savedPluginsStore.filter;
+    if (!pluginsData) return;
+    try {
+      const savedPluginsStore = JSON.parse(pluginsData) as PluginsStoreType;
+      pluginsStore.servers = savedPluginsStore.servers || {};
+      pluginsStore.openServer = pickDefaultOpenServer(
+        pluginsStore.servers,
+        savedPluginsStore.openServer
+      );
+      pluginsStore.filter = savedPluginsStore.filter;
 
-        if (session.value?.user?.id) {
-          await setUserData({ plugins: savedPluginsStore });
-        }
-      } catch (e) {
-        const notification = new Notification()
-          .setTitle('Error loading plugins')
-          .setDescription(
-            `There was an error loading your saved plugins: ${e instanceof Error ? e.message : String(e)}.`
-          )
-          .setBgColor('lum-grad-bg-red/50');
-        notifications.push(notification.toJSON());
+      if (session.value?.user?.id) {
+        await setUserData({ plugins: savedPluginsStore });
       }
+    } catch (e) {
+      const notification = new Notification()
+        .setTitle('Error loading plugins')
+        .setDescription(
+          `There was an error loading your saved plugins: ${e instanceof Error ? e.message : String(e)}.`
+        )
+        .setBgColor('lum-grad-bg-red/50');
+      notifications.push(notification.toJSON());
     }
   });
 
@@ -201,12 +206,9 @@ export default component$(() => {
 
     if (!isBrowser) return;
 
-    const currentServer = pluginsStore.openServer
-      ? pluginsStore.servers[pluginsStore.openServer]
-      : undefined;
-    if (pluginsStore.openServer && currentServer) {
+    if (pluginsStore.openServer && CurrentServer) {
       // check if any plugins are not fetched, and fetch them if so
-      const plugins = currentServer.plugins;
+      const plugins = CurrentServer.plugins;
       for (const pluginId in plugins) {
         const plugin = plugins[pluginId];
         if (!plugin.versions)
@@ -229,10 +231,21 @@ export default component$(() => {
         openServer: pluginsStore.openServer,
         filter: pluginsStore.filter,
       };
-      localStorage.setItem('plugins', JSON.stringify(exportedPluginsStore));
-
       if (session.value?.user?.id) {
-        await setUserData({ plugins: exportedPluginsStore });
+        // servers linked to a serverlist slug are already persisted there, so don't duplicate them here
+        const serversWithoutSlug: PluginsStoreType['servers'] = {};
+        Object.keys(exportedServers).forEach((name) => {
+          if (!exportedServers[name].slug)
+            serversWithoutSlug[name] = exportedServers[name];
+        });
+        await setUserData({
+          plugins: {
+            ...exportedPluginsStore,
+            servers: serversWithoutSlug,
+          },
+        });
+      } else {
+        localStorage.setItem('plugins', JSON.stringify(exportedPluginsStore));
       }
     } catch (e) {
       const notification = new Notification()
