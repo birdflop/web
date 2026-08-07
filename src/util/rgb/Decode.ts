@@ -113,7 +113,8 @@ export function decodeLegacy(rgbtext: string) {
       // closing tag
     } else {
       const lastChar = codeStr.charAt(codeStr.length - 1).toLowerCase();
-      if (codeStr.length === 2 || codeStr.startsWith('\\u00a7')) {
+      const isFormatCode = /^(?:[&§]|\\u00a7)[l-orL-ORkK]$/i.test(codeStr);
+      if (isFormatCode) {
         if (lastChar === 'r') {
           currentColor = '#ffffff';
           currentFmts.bold = false;
