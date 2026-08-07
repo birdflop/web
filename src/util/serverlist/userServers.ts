@@ -2,7 +2,7 @@
 //
 // Kept out of actions.ts on purpose: this pulls in getServerStatus -> @birdflop/mc-status,
 // whose bedrock protocol module references Node's Buffer at module scope. actions.ts is
-// imported directly by client-side closures (e.g. updateServerPlugins in useTask$), and since
+// imported directly by client-side closures (e.g. updateServerListData in useTask$), and since
 // getUserServersData isn't itself a $()-wrapped boundary, Qwik's optimizer can't segment it
 // away from actions.ts's client chunk - it would drag @birdflop/mc-status into the browser
 // and crash on load with "ReferenceError: Buffer is not defined".
@@ -37,30 +37,25 @@ export async function getUserServersData(
     .all();
 
   return await Promise.all(
-    userServers.map(
-      async ({
-        edition,
-        javaHost,
-        javaPort,
-        bedrockHost,
-        bedrockPort,
-        ...rest
-      }) => {
-        let icon: string | null = null;
-        try {
-          const status = await getServerStatus({
-            edition,
-            javaHost,
-            javaPort,
-            bedrockHost,
-            bedrockPort,
-          });
-          icon = status?.icon ?? null;
-        } catch {
-          icon = null;
-        }
-        return { ...rest, icon };
+    userServers.map(async (server) => {
+      const srv = { ...server };
+      const { edition, javaHost, javaPort, bedrockHost, bedrockPort } = srv;
+
+      let icon: string | null = null;
+      try {
+        const status = await getServerStatus({
+          edition,
+          javaHost,
+          javaPort,
+          bedrockHost,
+          bedrockPort,
+        });
+        icon = status?.icon ?? null;
+      } catch {
+        icon = null;
       }
-    )
+
+      return { ...srv, icon };
+    })
   );
 }

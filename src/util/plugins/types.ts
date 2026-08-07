@@ -68,7 +68,9 @@ export type PluginsType = { [id: string]: PluginType };
 export type ServerType = {
   software: keyof typeof softwareOptions;
   plugins: PluginsType;
+  id?: number;
   slug?: string;
+  icon?: string;
 };
 
 export type ServersType = {

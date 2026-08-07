@@ -34,7 +34,6 @@ import {
   VOTE_COOLDOWN_MS,
 } from './constants';
 import { Session } from '@auth/qwik';
-import type { PluginType } from '../plugins/ServerPlugin';
 
 function getClientIp(headers: Headers): string | null {
   return (
@@ -395,11 +394,12 @@ export const reportServer = server$(async function (
   }
 });
 
-export const updateServerPlugins = server$(async function (
+// Mirrors setUserData's shape (a bag of optional fields on a single call) so
+// callers can update whichever server-list columns they have on hand without
+// a dedicated action per field.
+export const updateServerListData = server$(async function (
   serverId: number,
-  pluginsData: {
-    [id: string]: PluginType;
-  }
+  data: Partial<typeof servers.$inferInsert>
 ) {
   const session = this.sharedMap.get('session') as Session | undefined;
   const db = getDB();
@@ -418,12 +418,14 @@ export const updateServerPlugins = server$(async function (
   if (!admin && existing.ownerId !== session.user.id)
     return { success: false as const, error: 'Unauthorized' };
 
-  await db
+  const updated = await db
     .update(servers)
-    .set({ plugins: pluginsData, updatedAt: new Date() })
-    .where(eq(servers.id, serverId));
+    .set({ ...data, updatedAt: new Date() })
+    .where(eq(servers.id, serverId))
+    .returning()
+    .get();
 
-  return { success: true as const };
+  return { success: true as const, slug: updated.slug, id: updated.id };
 });
 
 export const setServerVerified = server$(async function (

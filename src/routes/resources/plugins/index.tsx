@@ -42,6 +42,7 @@ import { downloadSpigotPlugin } from '~/util/plugins/SpigotPlugin';
 import Globe from 'lucide-icons-qwik/icons/Globe';
 import { useSession } from '~/routes/plugin@auth';
 import { setUserData } from '~/util/dataUtils';
+import { updateServerListData } from '~/util/serverlist/actions';
 import type {
   PluginsStoreType,
   ServersType,
@@ -156,7 +157,9 @@ export default component$(() => {
           acc[server.name] = {
             software: 'paper',
             plugins: server.plugins ?? {},
+            id: server.id,
             slug: server.slug,
+            icon: server.icon ?? undefined,
           };
           return acc;
         }, {}),
@@ -226,27 +229,45 @@ export default component$(() => {
           plugins: mapPluginsForExport(pluginsStore.servers[name].plugins),
         };
       });
+
       const exportedPluginsStore: PluginsStoreType = {
         servers: exportedServers,
         openServer: pluginsStore.openServer,
         filter: pluginsStore.filter,
       };
+
       if (session.value?.user?.id) {
-        // servers linked to a serverlist slug are already persisted there, so don't duplicate them here
-        const serversWithoutSlug: PluginsStoreType['servers'] = {};
+        // servers linked to a serverlist id persist to their listing's own
+        // row instead of the user's plugins blob, so they don't get duplicated
+        const serversWithoutId: PluginsStoreType['servers'] = {};
+        const serversWithId: PluginsStoreType['servers'] = {};
         Object.keys(exportedServers).forEach((name) => {
-          if (!exportedServers[name].slug)
-            serversWithoutSlug[name] = exportedServers[name];
+          if (exportedServers[name].id) {
+            serversWithId[name] = exportedServers[name];
+          } else {
+            serversWithoutId[name] = exportedServers[name];
+          }
         });
+
+        // persist to the database for logged in users for the servers that don't have an id
         await setUserData({
           plugins: {
             ...exportedPluginsStore,
-            servers: serversWithoutSlug,
+            servers: serversWithoutId,
           },
         });
-      } else {
-        localStorage.setItem('plugins', JSON.stringify(exportedPluginsStore));
+
+        // persist id-linked servers to their own serverlist row
+        await Promise.all(
+          Object.values(serversWithId).map((server) =>
+            updateServerListData(server.id!, { plugins: server.plugins })
+          )
+        );
+        return;
       }
+
+      // persist to localStorage for non-logged in users
+      localStorage.setItem('plugins', JSON.stringify(exportedPluginsStore));
     } catch (e) {
       const notification = new Notification()
         .setTitle('Error saving plugins')
@@ -291,9 +312,10 @@ export default component$(() => {
       </p>
 
       <Tabs
-        values={Object.keys(pluginsStore.servers).map((k) => ({
+        values={Object.entries(pluginsStore.servers).map(([k, v]) => ({
           name: k,
           value: k,
+          permanent: !!v.id,
         }))}
         value={
           pluginsStore.openServer
@@ -323,9 +345,21 @@ export default component$(() => {
           }
         }}
       >
-        {Object.keys(pluginsStore.servers).map((k, i) => (
-          <Globe q:slot={`before-${k}`} key={i} size={14} class="shrink-0" />
-        ))}
+        {Object.entries(pluginsStore.servers).map(([k, V], i) =>
+          V.icon ? (
+            <img
+              q:slot={`before-${k}`}
+              key={i}
+              width={16}
+              height={16}
+              src={V.icon}
+              alt={`${k} icon`}
+              class="rounded-lum-1 shrink-0"
+            />
+          ) : (
+            <Globe q:slot={`before-${k}`} key={i} size={14} class="shrink-0" />
+          )
+        )}
       </Tabs>
       {Object.keys(pluginsStore.servers).length < 1 && (
         <p class="text-lum-text-secondary mx-2 text-sm">
