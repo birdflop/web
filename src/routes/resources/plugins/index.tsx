@@ -49,7 +49,10 @@ import type {
   ServerType,
 } from '~/util/plugins/types';
 import { routeLoader$ } from '@qwik.dev/router';
-import { getUserServersData } from '~/util/serverlist/userServers';
+import { getDB, servers } from '~/util/db';
+import { Session } from '@auth/qwik';
+import { eq } from 'drizzle-orm';
+import { getServerStatus } from '~/util/serverlist/status';
 
 const debug = true;
 
@@ -115,8 +118,61 @@ const pluginSourcesIcons = {
 };
 
 export const useUserServers = routeLoader$(async ({ sharedMap }) => {
-  const userServers = await getUserServersData(sharedMap);
-  return userServers;
+  const session = sharedMap.get('session') as Session | undefined;
+  if (!session?.user?.id) return { serverListServers: {}, errors: [] };
+  const db = getDB();
+
+  const userServers = await db
+    .select({
+      id: servers.id,
+      name: servers.name,
+      slug: servers.slug,
+      plugins: servers.plugins,
+      edition: servers.edition,
+      javaHost: servers.javaHost,
+      javaPort: servers.javaPort,
+      bedrockHost: servers.bedrockHost,
+      bedrockPort: servers.bedrockPort,
+    })
+    .from(servers)
+    .where(eq(servers.ownerId, session.user.id))
+    .all();
+
+  const serversWithIcons = await Promise.all(
+    userServers.map(async (server) => {
+      const srv = { ...server };
+      const { edition, javaHost, javaPort, bedrockHost, bedrockPort } = srv;
+
+      let icon: string | null = null;
+      try {
+        const status = await getServerStatus({
+          edition,
+          javaHost,
+          javaPort,
+          bedrockHost,
+          bedrockPort,
+        });
+        icon = status?.icon ?? null;
+      } catch {
+        icon = null;
+      }
+
+      return { ...srv, icon };
+    })
+  );
+
+  return {
+    serverListServers: serversWithIcons.reduce((acc: ServersType, server) => {
+      acc[server.name] = {
+        software: 'paper',
+        plugins: server.plugins ?? {},
+        id: server.id,
+        slug: server.slug,
+        icon: server.icon ?? undefined,
+      };
+      return acc;
+    }, {}),
+  };
 });
 
 export const resolvedPluginContext =
@@ -144,25 +200,16 @@ export default component$(() => {
   );
   useContextProvider(resolvedPluginContext, resolvedPlugin);
 
-  const userServers = useUserServers();
+  const userServersValue = useUserServers().value;
+  const { serverListServers: userServers } = userServersValue;
+
   const dbPlugins = session.value?.user?.plugins;
-  const hasDbServers =
-    !!dbPlugins?.servers && Object.keys(dbPlugins.servers).length > 0;
 
   const pluginsStore = useStore<PluginsStoreType>(
     {
       servers: {
         ...dbPlugins?.servers,
-        ...userServers.value.reduce((acc: ServersType, server) => {
-          acc[server.name] = {
-            software: 'paper',
-            plugins: server.plugins ?? {},
-            id: server.id,
-            slug: server.slug,
-            icon: server.icon ?? undefined,
-          };
-          return acc;
-        }, {}),
+        ...userServers,
       },
       openServer: dbPlugins?.openServer,
     },
@@ -176,38 +223,32 @@ export default component$(() => {
 
   // oxlint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(async () => {
-    if (!isBrowser) return; // dont load plugins on the server
-    if (hasDbServers) return; // already loaded from the DB into the store
+    if (!isBrowser) return; // do not load from localstorage if logged in
 
     const pluginsData = localStorage.getItem('plugins');
     if (!pluginsData) return;
-    try {
-      const savedPluginsStore = JSON.parse(pluginsData) as PluginsStoreType;
-      pluginsStore.servers = savedPluginsStore.servers || {};
-      pluginsStore.openServer = pickDefaultOpenServer(
-        pluginsStore.servers,
-        savedPluginsStore.openServer
-      );
-      pluginsStore.filter = savedPluginsStore.filter;
 
-      if (session.value?.user?.id) {
-        await setUserData({ plugins: savedPluginsStore });
-      }
-    } catch (e) {
-      const notification = new Notification()
-        .setTitle('Error loading plugins')
-        .setDescription(
-          `There was an error loading your saved plugins: ${e instanceof Error ? e.message : String(e)}.`
-        )
-        .setBgColor('lum-grad-bg-red/50');
-      notifications.push(notification.toJSON());
+    const savedPluginsStore = JSON.parse(pluginsData) as PluginsStoreType;
+    // have current pluginsStore take precedence over savedPluginsStore, so that any new servers added since last save are not lost
+    pluginsStore.servers = {
+      ...savedPluginsStore.servers,
+      ...pluginsStore.servers,
+    };
+    pluginsStore.openServer = pickDefaultOpenServer(
+      pluginsStore.servers,
+      savedPluginsStore.openServer
+    );
+    pluginsStore.filter = savedPluginsStore.filter;
+
+    // if logged in, persist the saved plugins to the database and delete localstorage data
+    if (session.value?.user?.id) {
+      await setUserData({ plugins: savedPluginsStore });
+      localStorage.removeItem('plugins');
     }
   });
 
   useTask$(async ({ track }) => {
     deepTrack(track, pluginsStore);
-
-    if (!isBrowser) return;
 
     if (pluginsStore.openServer && CurrentServer) {
       // check if any plugins are not fetched, and fetch them if so
@@ -235,20 +276,19 @@ export default component$(() => {
         openServer: pluginsStore.openServer,
         filter: pluginsStore.filter,
       };
+      // servers linked to a serverlist id persist to their listing's own
+      // row instead of the user's plugins blob, so they don't get duplicated
+      const serversWithoutId: PluginsStoreType['servers'] = {};
+      const serversWithId: PluginsStoreType['servers'] = {};
+      Object.keys(exportedServers).forEach((name) => {
+        if (exportedServers[name].id) {
+          serversWithId[name] = exportedServers[name];
+        } else {
+          serversWithoutId[name] = exportedServers[name];
+        }
+      });
 
       if (session.value?.user?.id) {
-        // servers linked to a serverlist id persist to their listing's own
-        // row instead of the user's plugins blob, so they don't get duplicated
-        const serversWithoutId: PluginsStoreType['servers'] = {};
-        const serversWithId: PluginsStoreType['servers'] = {};
-        Object.keys(exportedServers).forEach((name) => {
-          if (exportedServers[name].id) {
-            serversWithId[name] = exportedServers[name];
-          } else {
-            serversWithoutId[name] = exportedServers[name];
-          }
-        });
-
         // persist to the database for logged in users for the servers that don't have an id
         await setUserData({
           plugins: {
@@ -266,8 +306,16 @@ export default component$(() => {
         return;
       }
 
+      if (!isBrowser) return; // ssr doesn't have localStorage, so don't try to save to it
       // persist to localStorage for non-logged in users
-      localStorage.setItem('plugins', JSON.stringify(exportedPluginsStore));
+      // sometimes when a user is logged out, data can be saved in memory and then saved here, so make sure to save servers without id
+      localStorage.setItem(
+        'plugins',
+        JSON.stringify({
+          ...exportedPluginsStore,
+          servers: serversWithoutId,
+        })
+      );
     } catch (e) {
       const notification = new Notification()
         .setTitle('Error saving plugins')
