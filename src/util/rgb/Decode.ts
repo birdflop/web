@@ -69,7 +69,7 @@ export function getSignificantPoints(gradient: string[], threshold: number) {
 export function decodeLegacy(rgbtext: string) {
   if (!rgbtext || !rgbtext.trim()) return null;
   const codeRegex =
-    /(?:(?:[&§]|\\u00a7)x(?:(?:[&§]|\\u00a7)[0-9A-Fa-f]){6}|[&#§]\b[0-9A-Fa-f]{6}\b|&#[0-9A-Fa-f]{6}|<span[^>]*style=["']([^"']*)["'][^>]*>|<\/span>|(?:[&§]|\\u00a7)[l-orL-ORkK])/gi;
+    /(?:(?:[&§]|\\u00a7)x(?:(?:[&§]|\\u00a7)[0-9A-Fa-f]){6}|(?:&|§)#[0-9A-Fa-f]{6}|[&#§][0-9A-Fa-f]{6}|<span[^>]*style=["']([^"']*)["'][^>]*>|<\/span>|(?:[&§]|\\u00a7)[l-orL-ORkK])/gi;
 
   const matches = [...rgbtext.matchAll(codeRegex)];
   if (matches.length === 0) return null;
