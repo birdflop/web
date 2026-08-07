@@ -165,8 +165,8 @@ export default component$<ServerCardProps>(({ server, status, rank }) => {
               </div>
             )}
           </div>
-          <div class="flex items-center gap-2">
-            <div>
+          <div class="flex gap-2">
+            <div class="flex flex-col justify-between">
               {/* Description under title */}
               {preview && (
                 <p class="text-lum-text-secondary mb-1 line-clamp-2 text-sm">
