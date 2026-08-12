@@ -18,7 +18,12 @@ import Trash from 'lucide-icons-qwik/icons/Trash';
 import ExternalLink from 'lucide-icons-qwik/icons/ExternalLink';
 
 import { inlineTranslate } from 'qwik-speak';
-import { getPresets, loadPreset, rgbPreset } from '~/util/rgb/presets';
+import {
+  getPresets,
+  loadPreset,
+  rgbPreset,
+  stripPresetDefaults,
+} from '~/util/rgb/presets';
 import { Notification, NotificationContext } from '~/util/Notification';
 import { combinedDefaults, rgbDefaults } from '@birdflop/rgbirdflop';
 import { discordLink } from '~/components/Elements/Nav';
@@ -154,17 +159,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
           class="lum-btn lum-btn-p-1 text-sm"
           id="save"
           onClick$={async () => {
-            const preset: rgbPreset = { ...rgbStore };
-            (
-              Object.keys(preset) as Array<keyof typeof combinedDefaults>
-            ).forEach((key) => {
-              if (
-                key != 'version' &&
-                JSON.stringify(preset[key]) ===
-                  JSON.stringify(combinedDefaults[key])
-              )
-                delete preset[key];
-            });
+            const preset = stripPresetDefaults({ ...rgbStore });
             if (
               !privatePresets.value.find(
                 (p) => JSON.stringify(p) === JSON.stringify(preset)
@@ -319,17 +314,7 @@ export default component$(({ hidden }: { hidden: boolean }) => {
           class="lum-btn flex-1 rounded-r-sm"
           id="copy"
           onClick$={() => {
-            const preset: rgbPreset = { ...rgbStore };
-            (
-              Object.keys(preset) as Array<keyof typeof combinedDefaults>
-            ).forEach((key) => {
-              if (
-                key != 'version' &&
-                JSON.stringify(preset[key]) ===
-                  JSON.stringify(combinedDefaults[key])
-              )
-                delete preset[key];
-            });
+            const preset = stripPresetDefaults({ ...rgbStore });
             const notification = new Notification()
               .setTitle(presetCopiedTitle)
               .setDescription(presetCopiedDescription)

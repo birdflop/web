@@ -222,7 +222,7 @@ export default component$(() => {
   const CurrentSoftware = softwareOptions[CurrentServer?.software || 'paper'];
 
   // oxlint-disable-next-line qwik/no-use-visible-task
-  useVisibleTask$(async () => {
+  useVisibleTask$(() => {
     if (!isBrowser) return; // do not load from localstorage if logged in
 
     const pluginsData = localStorage.getItem('plugins');
@@ -240,11 +240,10 @@ export default component$(() => {
     );
     pluginsStore.filter = savedPluginsStore.filter;
 
-    // if logged in, persist the saved plugins to the database and delete localstorage data
-    if (session.value?.user?.id) {
-      await setUserData({ plugins: savedPluginsStore });
-      localStorage.removeItem('plugins');
-    }
+    // The mutations above retrigger the persistence task below, which writes the
+    // merged store to the right place per server. Saving savedPluginsStore here
+    // too would race that write and clobber servers only present in the DB.
+    if (session.value?.user?.id) localStorage.removeItem('plugins');
   });
 
   useTask$(async ({ track }) => {
@@ -261,6 +260,10 @@ export default component$(() => {
     } else {
       pluginsStore.openServer = pickDefaultOpenServer(pluginsStore.servers);
     }
+
+    // Persist only from the browser: on SSR this task fires on every page load,
+    // which would re-save the store before the user has changed anything.
+    if (!isBrowser) return;
 
     try {
       const exportedServers: PluginsStoreType['servers'] = {};
@@ -306,7 +309,6 @@ export default component$(() => {
         return;
       }
 
-      if (!isBrowser) return; // ssr doesn't have localStorage, so don't try to save to it
       // persist to localStorage for non-logged in users
       // sometimes when a user is logged out, data can be saved in memory and then saved here, so make sure to save servers without id
       localStorage.setItem(

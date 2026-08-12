@@ -394,12 +394,22 @@ export const reportServer = server$(async function (
   }
 });
 
+// Columns an owner may write through this generic action. Everything else on
+// the row is either identity (id/ownerId/slug), admin-granted (verified,
+// featured), or server-derived (birdflopHosted) — allowing those here would
+// let any logged-in client grant itself a badge, since server$ endpoints are
+// callable directly from the browser. Form-driven fields (name, hosts, tags,
+// rgbPreset, ...) go through updateServer instead, which validates them.
+type OwnerWritableServerData = Partial<
+  Pick<typeof servers.$inferInsert, 'plugins'>
+>;
+
 // Mirrors setUserData's shape (a bag of optional fields on a single call) so
 // callers can update whichever server-list columns they have on hand without
 // a dedicated action per field.
 export const updateServerListData = server$(async function (
   serverId: number,
-  data: Partial<typeof servers.$inferInsert>
+  data: OwnerWritableServerData
 ) {
   const session = this.sharedMap.get('session') as Session | undefined;
   const db = getDB();
@@ -418,9 +428,15 @@ export const updateServerListData = server$(async function (
   if (!admin && existing.ownerId !== session.user.id)
     return { success: false as const, error: 'Unauthorized' };
 
+  // Types don't survive the network boundary, so re-pick at runtime.
+  const set: OwnerWritableServerData = {};
+  if ('plugins' in data) set.plugins = data.plugins;
+  if (Object.keys(set).length === 0)
+    return { success: false as const, error: 'Nothing to update' };
+
   const updated = await db
     .update(servers)
-    .set({ ...data, updatedAt: new Date() })
+    .set({ ...set, updatedAt: new Date() })
     .where(eq(servers.id, serverId))
     .returning()
     .get();
