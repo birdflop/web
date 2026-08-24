@@ -1,14 +1,16 @@
 import { getClassObject } from '@luminescent/ui-qwik';
 import { ClassList, component$, Slot, useContext } from '@qwik.dev/core';
 import Clipboard from 'lucide-icons-qwik/icons/Clipboard';
+import Copy from 'lucide-icons-qwik/icons/Copy';
 import { inlineTranslate } from 'qwik-speak';
 import { Notification, NotificationContext } from '~/util/Notification';
 
 export default component$<{
   hidden?: boolean;
   value: string;
+  compact?: boolean;
   class?: ClassList;
-}>(({ hidden, value, class: className }) => {
+}>(({ hidden, value, compact, class: className }) => {
   const t = inlineTranslate();
   const copiedTitle = t('nav.copied.title@@Copied to clipboard!');
   const copiedDescription = t(
@@ -17,6 +19,37 @@ export default component$<{
   const copyFailedTitle = t('nav.copyFailed@@Failed to copy to clipboard!');
 
   const notifications = useContext(NotificationContext);
+
+  const onClick = () => {
+    const notification = new Notification()
+      .setTitle(copiedTitle)
+      .setDescription(copiedDescription)
+      .setBgColor('lum-grad-bg-green/50');
+    navigator.clipboard.writeText(value).catch((err: unknown) => {
+      notification
+        .setTitle(copyFailedTitle)
+        .setDescription(err instanceof Error ? err.message : String(err))
+        .setBgColor('lum-grad-bg-red/50')
+        .setPersist(true);
+    });
+    notifications.push(notification.toJSON());
+  };
+
+  if (compact) {
+    return (
+      <button
+        class={{
+          'flex items-center gap-1': true,
+          ...getClassObject(className),
+        }}
+        title="Copy IP"
+        onClick$={onClick}
+      >
+        <Copy size={12} class="shrink-0" />
+        {value}
+      </button>
+    );
+  }
 
   return (
     <div
@@ -45,20 +78,7 @@ export default component$<{
           ...getClassObject(className),
         }}
         value={value}
-        onClick$={() => {
-          const notification = new Notification()
-            .setTitle(copiedTitle)
-            .setDescription(copiedDescription)
-            .setBgColor('lum-grad-bg-green/50');
-          navigator.clipboard.writeText(value).catch((err: unknown) => {
-            notification
-              .setTitle(copyFailedTitle)
-              .setDescription(err instanceof Error ? err.message : String(err))
-              .setBgColor('lum-grad-bg-red/50')
-              .setPersist(true);
-          });
-          notifications.push(notification.toJSON());
-        }}
+        onClick$={onClick}
       />
     </div>
   );

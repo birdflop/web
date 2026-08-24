@@ -43,6 +43,90 @@
       "when": 1770347052461,
       "tag": "0005_exotic_iron_patriot",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1780222656777,
+      "tag": "0006_reflective_tarantula",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1785353982476,
+      "tag": "0007_burly_madame_web",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1785354404711,
+      "tag": "0008_safe_nightshade",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "6",
+      "when": 1785359329246,
+      "tag": "0009_soft_krista_starr",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "6",
+      "when": 1785359537181,
+      "tag": "0010_stale_sumo",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "6",
+      "when": 1785466146426,
+      "tag": "0011_wet_stranger",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "6",
+      "when": 1785594458585,
+      "tag": "0012_black_demogoblin",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "6",
+      "when": 1785712919949,
+      "tag": "0013_empty_thena",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "6",
+      "when": 1785714760513,
+      "tag": "0014_true_human_torch",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "6",
+      "when": 1785752710379,
+      "tag": "0015_broken_black_queen",
+      "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "6",
+      "when": 1785752722504,
+      "tag": "0016_hesitant_dreadnoughts",
+      "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "6",
+      "when": 1785772654430,
+      "tag": "0017_add_user_plugins",
+      "breakpoints": true
     }
   ]
 }

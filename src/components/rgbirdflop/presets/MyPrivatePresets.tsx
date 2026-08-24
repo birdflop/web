@@ -64,7 +64,8 @@ export default component$(() => {
           {t('rgb.presets.myPrivate@@My Private RGBirdflop Presets')}
         </span>
         <Link href="/resources/rgb" class="lum-btn lum-bg-transparent">
-          <Plus size={20} /> {t('rgb.presets.createNew@@Create a new preset')}
+          <Plus size={20} />
+          {t('rgb.presets.createNew@@Create a new preset')}
         </Link>
       </h2>
 
@@ -129,9 +130,9 @@ export default component$(() => {
               '#publish-preset-preset'
             ) as HTMLSelectElement | HTMLInputElement | null;
 
-            const presetJsonElem = form.querySelector(
+            const presetJsonElem = form.querySelector<HTMLInputElement>(
               '#publish-preset-json'
-            ) as HTMLTextAreaElement | null;
+            );
 
             let preset: rgbPreset | undefined;
             if (presetJsonElem && presetJsonElem.value.trim()) {
@@ -397,7 +398,8 @@ export default component$(() => {
               similarPresets.value = [];
             }}
           >
-            <X size={20} /> Cancel
+            <X size={20} />
+            Cancel
           </button>
           <button
             form="publish-preset-form"
@@ -405,8 +407,8 @@ export default component$(() => {
             id="publish-preset"
             disabled={isSubmitting.value}
           >
-            <Save size={20} /> Publish{' '}
-            {isSubmitting.value ? 'Validating...' : 'Publish'}
+            <Save size={20} />
+            Publish {isSubmitting.value ? 'Validating...' : 'Publish'}
           </button>
         </div>
       </dialog>

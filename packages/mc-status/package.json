@@ -1,0 +1,33 @@
+{
+  "name": "@birdflop/mc-status",
+  "version": "1.0.0",
+  "description": "Minecraft Server Status client for Java & Bedrock with full 1.16+ RGB hex color and MOTD component support.",
+  "main": "./lib/index.js",
+  "types": "./lib-types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./lib/index.js",
+      "require": "./lib/index.js",
+      "types": "./lib-types/index.d.ts"
+    }
+  },
+  "files": [
+    "lib",
+    "lib-types"
+  ],
+  "engines": {
+    "node": ">=24.13.0"
+  },
+  "license": "MIT",
+  "private": false,
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@types/node": "^25.0.3",
+    "typescript": "7.0.2"
+  }
+}

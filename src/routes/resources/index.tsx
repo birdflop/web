@@ -143,6 +143,25 @@ export default component$(() => {
           </p>
         </Link>
         <Link
+          class="lum-card lum-grad-bg-lum-card-bg/30 hover:lum-bg-cyan relative transition-all duration-200!"
+          onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
+          onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
+          href="/resources/status"
+        >
+          <div class="rounded-lum absolute inset-0 -z-10 h-full w-full overflow-clip object-cover saturate-200">
+            <div class="bg-cyan/30 absolute top-0 h-full w-full -translate-y-1/2 scale-75 rounded-full blur-2xl" />
+          </div>
+          <h3 class="mb-2 flex items-center gap-2 text-2xl font-bold">
+            <Server size={30} />
+            {t('nav.resources.status.title@@Server Status Checker')}
+          </h3>
+          <p class="text-lum-text-secondary">
+            {t(
+              'nav.resources.status.description@@Ping any Java or Bedrock server to view live status, version, players, and 1.16+ RGB hex MOTDs.'
+            )}
+          </p>
+        </Link>
+        <Link
           class="lum-card lum-grad-bg-lum-card-bg/30 hover:lum-bg-orange relative transition-all duration-200!"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
@@ -351,7 +370,8 @@ export default component$(() => {
           class="lum-btn lum-bg-lime/50 hover:lum-bg-lime"
           href="https://bin.birdflop.com/"
         >
-          <LinkIcon size={20} /> Visit
+          <LinkIcon size={20} />
+          Visit
         </a>
       </div>
 

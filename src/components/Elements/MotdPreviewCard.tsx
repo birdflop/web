@@ -6,6 +6,7 @@ const ImgMcPing5 = '/minecraft/ping_5.png';
 export interface MotdPreviewCardProps {
   icon?: string;
   label?: string;
+  version?: string | null;
   playersOnline?: number;
   playersMax?: number;
   class?: string;
@@ -15,6 +16,7 @@ export const MotdPreviewCard = component$<MotdPreviewCardProps>(
   ({
     icon,
     label = 'Minecraft Server',
+    version,
     playersOnline = 42,
     playersMax = 100,
     class: className = '',
@@ -40,7 +42,15 @@ export const MotdPreviewCard = component$<MotdPreviewCardProps>(
             >
               {label}
             </span>
-            <div class="font-mc flex shrink-0 items-center gap-1 text-sm leading-none sm:text-base">
+            <div class="font-mc flex shrink-0 items-center gap-2 text-sm leading-none sm:text-base">
+              {version && (
+                <span
+                  style={{ color: '#8E8E8E', textShadow: '2px 2px 0 #2a2a2a' }}
+                  class="font-mono text-xs sm:text-sm"
+                >
+                  {version}
+                </span>
+              )}
               <span
                 style={{ color: '#AAAAAA', textShadow: '2px 2px 0 #2a2a2a' }}
               >
