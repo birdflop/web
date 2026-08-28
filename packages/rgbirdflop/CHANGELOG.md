@@ -1,5 +1,79 @@
 # Changelog
 
+## [0.5.0](https://github.com/birdflop/web/compare/rgbirdflop-v0.4.1...rgbirdflop-v0.5.0) (2026-07-29)
+
+
+### Features
+
+* add configurable newline sequence to color formats and UI ([e567b79](https://github.com/birdflop/web/commit/e567b79c25dc825491fa6c0185e50ed51aaa6d2d))
+* add invertRgbColor function ([1e25f81](https://github.com/birdflop/web/commit/1e25f8171b93af2a94938ad0de2e6e5dc582f102))
+* add newline handling support to UI rendering and string processing utilities ([a88250a](https://github.com/birdflop/web/commit/a88250a0c31f512e249b791a3927d87cb5eae14e))
+* enhance formatting capabilities in AnimTAB and share formatting utils properly ([c4296bf](https://github.com/birdflop/web/commit/c4296bf8cdba32628702e7655f0cef9aa2a1f111))
+* enhance shadow color handling by adding opacity support and updating related components ([b1d9b23](https://github.com/birdflop/web/commit/b1d9b2339536328cd472c0bd692ac39f81a69b2f))
+* enhance shadow segment handling by adding opacity support in buildShadowSegments and buildShadowContent ([d34e65a](https://github.com/birdflop/web/commit/d34e65af36b1eeb9b5d822ee05569e739dc884ca))
+* Fonts for RGB tool ([0cfff23](https://github.com/birdflop/web/commit/0cfff23da711066b9a5f34e37a85c6b2b584333f)), closes [#224](https://github.com/birdflop/web/issues/224)
+* implement selective character-level formatting for templates, MiniMessage, and JSON outputs ([14ced97](https://github.com/birdflop/web/commit/14ced97cdf3fd415519e72e9da4ae3dc2fbaf21d))
+* implement small text font transformation ([86b1b91](https://github.com/birdflop/web/commit/86b1b91d65d906f41247c845132c98f0832917f4))
+* new color list with more compact ui and drag-and-drop handles ([63a1763](https://github.com/birdflop/web/commit/63a1763b845cac33d0e4083537966dabadc0251d))
+* refactor color handling to use RGBColorStop type and improve opacity management in gradients ([0bdbf24](https://github.com/birdflop/web/commit/0bdbf24e21620eab8bb987addd1ee7d0d3658818))
+* rename defaultFormatting to baseFormatting ([1933580](https://github.com/birdflop/web/commit/1933580aeb5bd80341be1006ce6dcbd67192dc69))
+* **rgbirdflop:** add functions for color position calculation and dispersion checks ([d9d4ac2](https://github.com/birdflop/web/commit/d9d4ac2fe06dca73ec156943c586a52d01410efd))
+* smarter hex code generation with check for if same color per letter ([30d52e6](https://github.com/birdflop/web/commit/30d52e65966b910e75b55309bb603a3466934d8b))
+* translate untranslated keys and clean up code formatting ig ([31003fd](https://github.com/birdflop/web/commit/31003fd70b7b53ed2670714dba4c2249eeee0c82))
+* update formatting to work on selection ([32afe89](https://github.com/birdflop/web/commit/32afe890e36e2f18617abfc959bf7939b861245f))
+* version bump ([0e871b8](https://github.com/birdflop/web/commit/0e871b8482baf43cfcd192c9f8c8ea4cc15679a7))
+* version bump? ([f3a131e](https://github.com/birdflop/web/commit/f3a131e492fb9f4370b94014cd1c03c3157d5991))
+
+
+### Bug Fixes
+
+* add repository field to package.json ([bd95fff](https://github.com/birdflop/web/commit/bd95fff9b644ecafff1d6c9eda0e8c149c63bd0d))
+* bruh why do you hate me npm ([2caf92e](https://github.com/birdflop/web/commit/2caf92e3b73bcd9f0612d2e38f606e96dfe4e870))
+* handle null segment colors in AnimTAB previews and update type definitions to support nullable color frames ([a679eb0](https://github.com/birdflop/web/commit/a679eb0c4cc8ab171cfeea01c435f902507fc303))
+* handle potential undefined rgb values in BaseGradient class ([f259f0e](https://github.com/birdflop/web/commit/f259f0e37de7fca1bc533126fab1a693651d30f4))
+* i hate you npm ([715c42b](https://github.com/birdflop/web/commit/715c42bcc9a5b3bffd484aaee95d9a505ce455de))
+* improve color position calculation for disperseColors and getOutput functions ([b1feab6](https://github.com/birdflop/web/commit/b1feab641ef70d1d750c2bf554bcd3e6b0b9deee))
+* improve isDispersed precision with epsilon comparison and add validation tests ([5198b9c](https://github.com/birdflop/web/commit/5198b9c7e6881d1f1b332fecd13ec3df8fc2f2af))
+* make typescript shut up ([f31d300](https://github.com/birdflop/web/commit/f31d300297e96b5c53642a8c058d803ca08a5a6a))
+* pls work ([9e44336](https://github.com/birdflop/web/commit/9e44336a7769a5e5d578e735e3d6a16f2b483806))
+* test publish ([dbf3257](https://github.com/birdflop/web/commit/dbf325770bd5608074db5060ba873732e08418b0))
+* totally a typo ([a26e77c](https://github.com/birdflop/web/commit/a26e77cfdee47c74979d42db47772bc38140ae7e))
+* trigger ci ([fac5159](https://github.com/birdflop/web/commit/fac5159ab8d2076bd90cd82460bc7e606754d0a1))
+* trigger ci attempt [#7](https://github.com/birdflop/web/issues/7) ([e8f7559](https://github.com/birdflop/web/commit/e8f7559723d1252a83c49363802fe7e78093995e))
+* update README and documentation for RGBirdflop NPM package usage examples and formatting ([ca5d3d3](https://github.com/birdflop/web/commit/ca5d3d3e87c7b794abb85d7d506ec5bf692705ae))
+* update usage example in README ([d403b13](https://github.com/birdflop/web/commit/d403b13374c9636d5a59134152fc19165c93ce1f))
+* update usage example in README with valid RGB values ([8da36ad](https://github.com/birdflop/web/commit/8da36adbae7022d747ec53ad7f9ce8cdbc5471aa))
+* update usage example in README.md ([3c847f7](https://github.com/birdflop/web/commit/3c847f78d768f03687a0ddb624c35a5825435026))
+* wasnt a typo ([d4e3a61](https://github.com/birdflop/web/commit/d4e3a61c63f6e8494e8329d0e5ce2c8a0825bdfb))
+
+
+### Code Refactoring
+
+* abstract gradient preview rendering and clean up AnimTAB frame generation logic, fix cookie issues ([4827f1a](https://github.com/birdflop/web/commit/4827f1a5257f3a5662bac9be4e9ad254491733a5))
+* add safety checks for empty colors array ([0055aac](https://github.com/birdflop/web/commit/0055aac9941d01d3fa60a887d95a53153e56b65d))
+* consolidate segment color editing logic into the reusable ColorList component ([15319b6](https://github.com/birdflop/web/commit/15319b6261119abf83bba6802e9f4edff4bc7ffd))
+* decompose RGBirdflop component and centralize state management via RGBirdflopBase ([89aff16](https://github.com/birdflop/web/commit/89aff167b8ddebf358956a1adf3dad5f8cecedeb))
+* decouple advanced segments and rgb options state across the advanced RGB editor component suite. ([ea02f8a](https://github.com/birdflop/web/commit/ea02f8a2a7c40a485158f094f8ba0efdbbe8d49e))
+* enhance documentation for RGBColorStop type to clarify properties ([152bf1b](https://github.com/birdflop/web/commit/152bf1b2e6bda44687af978b18c88c412e99b544))
+* extract JSON generation logic into reusable helper functions in RGBUtils ([3a88375](https://github.com/birdflop/web/commit/3a88375683f7bca843d37ac3a8ccf46bffcdb963))
+* improve type safety across utility functions and flag generation logic by replacing implicit any types with explicit interfaces. ([89ddd17](https://github.com/birdflop/web/commit/89ddd17519433a3eb08980a3df8fbf0ee4bdf026))
+* introduce BasePlugin class, modularize ESLint ignores, and extract JVM flag analysis logic ([186e2e7](https://github.com/birdflop/web/commit/186e2e75c670e99bead01dd2b3b84e2d39357d2c))
+* modularize banner utilities and improve codebase type safety and maintenance ([309c6e1](https://github.com/birdflop/web/commit/309c6e1ccc4c5069c1b64ed4de68a9bbb20d352c))
+* move some elements to luminescent ui ([e4f2e72](https://github.com/birdflop/web/commit/e4f2e727a2ff9750d5be302c448c658de0357072))
+* prettier and eslint ([2a0239b](https://github.com/birdflop/web/commit/2a0239bff1983ebe897be07fb2d10b7b2da8026a))
+* remove registry URL from package.json and update release workflow ([5d0a59a](https://github.com/birdflop/web/commit/5d0a59abfc5c4e51f7213c5bbee0860bbe902bd9))
+* update gradient color handling to ensure RGB values are correctly sliced ([686e99b](https://github.com/birdflop/web/commit/686e99be2e1770c852004e1c0aacfa29c9c78af9))
+* update release workflow and improve README for RGBirdflop package ([14158e8](https://github.com/birdflop/web/commit/14158e83e38bd37005662fa8a51759a713212ab6))
+* update styles and structure in various components ([af39b7e](https://github.com/birdflop/web/commit/af39b7eca0cad2c3fc654a9b6d3957fe89bf1073))
+
+
+### Documentation
+
+* update import statement in usage example for RGBirdflop package ([fa41541](https://github.com/birdflop/web/commit/fa415418bf1d6971cc0c05bd7b5a871178457d3b))
+* update package.json author and bugs fields, add homepage ([39ca181](https://github.com/birdflop/web/commit/39ca181e774f68758ba7ff4d00e873f954c9b7e4))
+* Update README title for RGBirdflop package ([be57c8b](https://github.com/birdflop/web/commit/be57c8b1c146d40f4957004d68dde750280cc985))
+* update usage example in README for RGBirdflop package ([ef0f9e8](https://github.com/birdflop/web/commit/ef0f9e8657ab6955762c7dad13126e1601879248))
+
 ## [0.4.1](https://github.com/birdflop/web/compare/v0.4.0...v0.4.1) (2026-07-16)
 
 ### Bug Fixes
