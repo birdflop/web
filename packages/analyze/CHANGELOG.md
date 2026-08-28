@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.1](https://github.com/birdflop/web/compare/analyze-v0.4.0...analyze-v0.4.1) (2026-07-29)
+
+
+### Code Refactoring
+
+* move some elements to luminescent ui ([e4f2e72](https://github.com/birdflop/web/commit/e4f2e727a2ff9750d5be302c448c658de0357072))
+
 ## [0.4.0](https://github.com/birdflop/web/compare/analyze-v0.3.0...analyze-v0.4.0) (2026-07-24)
 
 
