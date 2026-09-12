@@ -12,11 +12,12 @@ minimumReleaseAgeExclude:
   - '@luminescent/ui-qwik@7.0.0-25'
   - '@luminescent/ui@7.0.2 || 7.1.0 || 7.2.0-1'
   - lucide-icons-qwik@1.24.0-qwik-v2 || 1.25.0-qwik-v2
-  - happy-dom@20.11.1
+  - happy-dom@20.11.1 || 20.14.5
   - simple-icons-qwik@16.27.0-qwik-v2
   - better-sqlite3@13.0.2
   - miniflare@4.20260722.1
   - wrangler@4.115.0
+  - yaml@2.9.1
 
 onlyBuiltDependencies:
   - better-sqlite3

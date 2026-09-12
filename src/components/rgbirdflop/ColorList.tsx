@@ -2,6 +2,7 @@ import {
   $,
   component$,
   Slot,
+  useComputed$,
   useContext,
   useOnDocument,
   useSignal,
@@ -80,6 +81,16 @@ export default component$<ColorListProps>((props) => {
   const showAllGradients = useContext(showAllGradientsContext);
 
   const colors = props.colors ?? getColors(rgbStore, id);
+  // The optimizer turns an inline `colors.length` prop into a signal bound to the
+  // array instance that existed at render time, so it goes stale as soon as the
+  // store swaps in a new array. A computed signal stays subscribed to the store.
+  const colorAmount = useComputed$(
+    () => (props.colors ?? getColors(rgbStore, id)).length
+  );
+  const openedPos = useComputed$(() => {
+    const stop = (props.colors ?? getColors(rgbStore, id))[opened.value];
+    return stop ? Math.round(stop.pos) : 0;
+  });
   const resolvedGradientType = props.gradientType ?? rgbStore.gradientType;
   const resolvedTextLength = props.textLength ?? rgbStore.text.length;
 
@@ -93,6 +104,54 @@ export default component$<ColorListProps>((props) => {
 
   const draggedIndex = useSignal<number | null>(null);
   const dragOverIndex = useSignal<number | null>(null);
+
+  // Drag tracking lives only for the duration of a drag: listeners are attached
+  // on pointerdown and torn down on release, so there is no page-wide
+  // pointermove handler when nothing is being dragged.
+  const beginDrag = $((index: number) => {
+    draggedIndex.value = index;
+    dragOverIndex.value = index;
+
+    const container = document.getElementById(`colorlistcolors${id}`);
+
+    const onMove = (e: PointerEvent) => {
+      const rows =
+        container?.querySelectorAll<HTMLElement>('[data-color-index]');
+      if (!rows?.length) return;
+      let target = rows.length - 1;
+      for (const row of rows) {
+        if (e.clientY <= row.getBoundingClientRect().bottom) {
+          target = Number(row.dataset.colorIndex);
+          break;
+        }
+      }
+      dragOverIndex.value = target;
+    };
+
+    const finish = async (commit: boolean) => {
+      document.removeEventListener('pointermove', onMove);
+      document.removeEventListener('pointerup', onUp);
+      document.removeEventListener('pointercancel', onCancel);
+      const from = draggedIndex.value;
+      const to = dragOverIndex.value;
+      draggedIndex.value = null;
+      dragOverIndex.value = null;
+      if (!commit || from === null || to === null || from === to) return;
+      const currentColors = props.colors ?? getColors(rgbStore, id);
+      await setColors(moveItem(currentColors, from, to));
+    };
+
+    function onUp() {
+      void finish(true);
+    }
+    function onCancel() {
+      void finish(false);
+    }
+
+    document.addEventListener('pointermove', onMove);
+    document.addEventListener('pointerup', onUp);
+    document.addEventListener('pointercancel', onCancel);
+  });
 
   useOnDocument(
     'click',
@@ -126,16 +185,15 @@ export default component$<ColorListProps>((props) => {
           id={`colorlist${id}-amount`}
           min={1}
           max={resolvedTextLength}
-          value={colors.length}
+          value={colorAmount.value}
           btnProps={{ class: 'p-1!' }}
           class={{ 'lum-input-p-1 w-full text-sm': true }}
           onInput$={(e, el) => {
-            let colorAmount = Number(el.value);
-            if (colorAmount > resolvedTextLength)
-              colorAmount = resolvedTextLength;
+            let amount = Number(el.value);
+            if (amount > resolvedTextLength) amount = resolvedTextLength;
             const currentColors = props.colors ?? getColors(rgbStore, id);
             const newColors = [];
-            for (let i = 0; i < colorAmount; i++) {
+            for (let i = 0; i < amount; i++) {
               if (currentColors[i]) newColors.push(currentColors[i]);
               else
                 newColors.push({
@@ -289,51 +347,36 @@ export default component$<ColorListProps>((props) => {
         </div>
       </ButtonContainer>
 
-      <div class="relative flex flex-col" id={`colorlistcolors${id}`}>
+      <div
+        class={{
+          'relative flex flex-col': true,
+          'select-none': draggedIndex.value !== null,
+        }}
+        id={`colorlistcolors${id}`}
+      >
         {colors.map((color, i) => (
           <div
             key={`${i}/${colors.length}`}
             id={`colorlist${id}-color-${i + 1}`}
+            data-color-index={i}
             class={{
               'relative flex items-center gap-1 py-1 transition-all duration-200': true,
               'scale-[0.98] opacity-40': draggedIndex.value === i,
-              '*:pointer-events-none': draggedIndex.value !== null,
-            }}
-            onDragOver$={(e) => {
-              e.preventDefault();
-            }}
-            onDragEnter$={() => {
-              dragOverIndex.value = i;
-            }}
-            onDragLeave$={() => {
-              if (dragOverIndex.value === i) {
-                dragOverIndex.value = null;
-              }
-            }}
-            onDrop$={() => {
-              if (draggedIndex.value === null || draggedIndex.value === i)
-                return;
-              const currentColors = props.colors ?? getColors(rgbStore, id);
-              const newColors = moveItem(currentColors, draggedIndex.value, i);
-              void setColors(newColors);
-              draggedIndex.value = null;
-              dragOverIndex.value = null;
             }}
           >
-            {dragOverIndex.value === i &&
-              draggedIndex.value !== null &&
-              draggedIndex.value >= i && (
-                <div class="bg-lum-accent pointer-events-none absolute -top-0.5 right-0 left-0 z-10 h-0.75 rounded-full shadow-[0_0_8px_var(--color-lum-accent)]">
-                  <div class="bg-lum-accent absolute -top-1 -left-1 h-2.75 w-2.75 rounded-full shadow-[0_0_10px_var(--color-lum-accent)]" />
-                </div>
-              )}
-            {dragOverIndex.value === i &&
-              draggedIndex.value !== null &&
-              draggedIndex.value < i && (
-                <div class="bg-lum-accent pointer-events-none absolute right-0 -bottom-0.5 left-0 z-10 h-0.75 rounded-full shadow-[0_0_8px_var(--color-lum-accent)]">
-                  <div class="bg-lum-accent absolute -top-1 -left-1 h-2.75 w-2.75 rounded-full shadow-[0_0_10px_var(--color-lum-accent)]" />
-                </div>
-              )}
+            <div
+              class={{
+                'bg-lum-accent pointer-events-none absolute right-0 left-0 z-10 h-0.75 rounded-full shadow-[0_0_8px_var(--color-lum-accent)]': true,
+                hidden:
+                  draggedIndex.value === null || dragOverIndex.value !== i,
+                '-top-0.5':
+                  draggedIndex.value !== null && draggedIndex.value >= i,
+                '-bottom-0.5':
+                  draggedIndex.value === null || draggedIndex.value < i,
+              }}
+            >
+              <div class="bg-lum-accent absolute -top-1 -left-1 h-2.75 w-2.75 rounded-full shadow-[0_0_10px_var(--color-lum-accent)]" />
+            </div>
             <label
               for={`colorlist${id}-color-${i + 1}-input`}
               class="text-lum-text-secondary w-6 text-center font-mono"
@@ -342,26 +385,17 @@ export default component$<ColorListProps>((props) => {
             </label>
             <button
               type="button"
-              class="lum-btn cursor-grab rounded-r-sm p-1.5 active:cursor-grabbing"
-              draggable
-              onDragStart$={(e) => {
-                draggedIndex.value = i;
-                const row = document.getElementById(
-                  `colorlist${id}-color-${i + 1}`
-                );
-                if (row && e.dataTransfer) {
-                  e.dataTransfer.setDragImage(row, 20, 20);
-                }
-              }}
-              onDragEnd$={() => {
-                draggedIndex.value = null;
-                dragOverIndex.value = null;
+              class="lum-btn cursor-grab touch-none rounded-r-sm p-1.5 active:cursor-grabbing"
+              preventdefault:pointerdown
+              onPointerDown$={(e, el) => {
+                if (e.pointerType === 'mouse' && e.button !== 0) return;
+                el.setPointerCapture(e.pointerId);
+                void beginDrag(i);
               }}
             >
               <GripVertical size={20} />
             </button>
             <input
-              key={`colorlist${id}-color-${i + 1}`}
               id={`colorlist${id}-color-${i + 1}-input`}
               class={{
                 'text-gray-400 hover:text-gray-400':
@@ -474,7 +508,7 @@ export default component$<ColorListProps>((props) => {
                 id={`colorlist${id}-color-pos`}
                 min={0}
                 max={100}
-                value={Math.round(colors[opened.value]?.pos)}
+                value={openedPos.value}
                 onInput$={(e, el) => {
                   const currentColors = props.colors ?? getColors(rgbStore, id);
                   const newColors = currentColors.slice(0);
