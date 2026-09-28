@@ -43,6 +43,12 @@ import Globe from 'lucide-icons-qwik/icons/Globe';
 import { useSession } from '~/routes/plugin@auth';
 import { setUserData } from '~/util/dataUtils';
 import { updateServerListData } from '~/util/serverlist/actions';
+// updateServerListData is only called after the `!isBrowser` guard in the
+// persistence task, so the server build strips that call and the named import
+// with it. server$ functions are resolved from a registry that fills as their
+// module loads, so without this side-effect import the POST fails with Q6
+// unless some other page already loaded the actions module.
+import '~/util/serverlist/actions';
 import type {
   PluginsStoreType,
   ServersType,

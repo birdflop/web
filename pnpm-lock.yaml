@@ -244,8 +244,8 @@ importers:
         specifier: ^7.2.0
         version: 7.2.0
       '@luminescent/ui-qwik':
-        specifier: 7.0.0-25
-        version: 7.0.0-25(@luminescent/ui@7.2.0)
+        specifier: 7.0.0-31
+        version: 7.0.0-31(@luminescent/ui@7.2.0)
       '@qwik.dev/core':
         specifier: ^2.0.0-beta.45
         version: 2.0.0-beta.45(@oxc-project/types@0.144.0)(@voidzero-dev/vite-plus-core@1.0.0(@types/node@26.6.3)(esbuild@0.28.1)(jiti@2.7.0)(less@4.8.1(supports-color@10.2.2))(sass@1.102.0)(stylus@0.62.0(supports-color@10.2.2))(tsx@4.23.9)(typescript@7.0.2)(yaml@2.9.1))(esbuild@0.28.1)(rollup@4.62.4)(vitest@5.0.1)
@@ -1291,9 +1291,9 @@ packages:
     resolution: {integrity: sha512-W69uzPt9qAhqShl74bma9yzRqXv8FNJLz3R/R6vC4Z5rXYaZJ4W2fcITOUX33WBmKIlq6YNPrm6rWWY6tfMikw==}
     engines: {node: ^18.17.0 || ^20.3.0 || >=21.0.0}
 
-  '@luminescent/ui-qwik@7.0.0-25':
-    resolution: {integrity: sha512-2zXT7+2Ep4eswyRs9kQqYbt+g5ZE0yrwtt9AKD612bv2M9mUEolevkilOWY6M10RGxLGKJCfiDsxososUHQhMA==}
-    engines: {node: ^18.17.0 || ^20.3.0 || >=21.0.0}
+  '@luminescent/ui-qwik@7.0.0-31':
+    resolution: {integrity: sha512-2Tsjzql2pMenFLySmiodzTyi1g914LnqmLn0t7GSq/JiEJqvibMX27bAgp1pYdehW11XFluzuTF+VJNgAa9GjQ==}
+    engines: {node: ^22.18.0 || ^24.11.0 || >=26.0.0}
     peerDependencies:
       '@luminescent/ui': 7.2.0-1
 
@@ -5093,7 +5093,7 @@ snapshots:
 
   '@luminescent/icons-qwik@0.1.1': {}
 
-  '@luminescent/ui-qwik@7.0.0-25(@luminescent/ui@7.2.0)':
+  '@luminescent/ui-qwik@7.0.0-31(@luminescent/ui@7.2.0)':
     dependencies:
       '@luminescent/ui': 7.2.0
 
