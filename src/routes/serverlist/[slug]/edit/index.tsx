@@ -10,6 +10,7 @@ import { checkAdmin } from '~/routes/layout';
 import ServerForm from '~/components/ServerList/ServerForm';
 import ServersPulseLinkPanel from '~/components/ServerList/ServersPulseLinkPanel';
 import { Session } from '@auth/qwik';
+import { getPluginDetails } from '~/util/plugins/details';
 
 export const useEditServer = routeLoader$(async (event) => {
   const db = getDB();
@@ -39,6 +40,9 @@ export const useEditServer = routeLoader$(async (event) => {
         .get()
     : undefined;
 
+  // All plugins, hidden ones included, so the owner can toggle each one.
+  const plugins = canManage ? await getPluginDetails(server.plugins) : [];
+
   // Only owners/admins receive the row — it carries the Votifier token, and
   // loader payloads are readable regardless of what the page renders.
   return {
@@ -50,13 +54,15 @@ export const useEditServer = routeLoader$(async (event) => {
             status: spLink.linkStatus,
           }
         : null,
+    plugins,
     slug: event.params.slug,
     canManage,
   };
 });
 
 export default component$(() => {
-  const { server, serverspulse, slug, canManage } = useEditServer().value;
+  const { server, serverspulse, plugins, slug, canManage } =
+    useEditServer().value;
 
   return (
     <section class="relative mx-auto flex min-h-svh w-full justify-center gap-8 px-6 pt-20">
@@ -74,13 +80,12 @@ export default component$(() => {
         </Link>
 
         {canManage && server ? (
-          <>
-            <ServerForm mode="edit" initial={server} />
+          <ServerForm mode="edit" initial={server} plugins={plugins}>
             <ServersPulseLinkPanel
               serverId={server.id}
               initial={serverspulse}
             />
-          </>
+          </ServerForm>
         ) : (
           <p class="lum-card lum-bg-red/20 flex items-center gap-2">
             <ShieldAlert size={20} class="text-red-400" />

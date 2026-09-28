@@ -23,9 +23,11 @@ const CANDIDATE_CAP = 75;
 // Public projection of a listing. Loader payloads are visible to every
 // visitor, so NuVotifier delivery secrets and the owner's account row (which
 // carries their email/settings) must never leave the server.
+// Plugins are dropped when the owner made them private; the hidden list is
+// owner-only too, so `plugins` arrives here already filtered (or null).
 export type PublicServer = Omit<
   Server,
-  'votifierHost' | 'votifierPort' | 'votifierToken'
+  'votifierHost' | 'votifierPort' | 'votifierToken' | 'hiddenPlugins'
 >;
 export interface PublicOwner {
   name: string | null;
@@ -37,14 +39,34 @@ export interface PublicServerWithVotes extends PublicServer {
   owner: PublicOwner | null;
 }
 
+function publicPlugins(
+  plugins: Server['plugins'],
+  isPublic: boolean,
+  hidden: string[] | null | undefined
+): Server['plugins'] {
+  if (!isPublic || !plugins) return null;
+  const hiddenIds = new Set(hidden ?? []);
+  return Object.fromEntries(
+    Object.entries(plugins).filter(
+      ([key, plugin]) =>
+        !hiddenIds.has(key) && !hiddenIds.has(String(plugin.id))
+    )
+  );
+}
+
 export function toPublicServer(server: Server): PublicServer {
   const {
     votifierHost: _host,
     votifierPort: _port,
     votifierToken: _token,
+    hiddenPlugins,
+    plugins,
     ...pub
   } = server;
-  return pub;
+  return {
+    ...pub,
+    plugins: publicPlugins(plugins, pub.pluginsPublic, hiddenPlugins),
+  };
 }
 
 export function toPublicOwner(owner: User | null): PublicOwner | null {

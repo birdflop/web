@@ -204,6 +204,16 @@ export const servers = sqliteTable(
     plugins: text('plugins', { mode: 'json' }).$type<{
       [id: string]: PluginType;
     }>(),
+    // Plugins show on the public listing unless the owner turns them off,
+    // and individual plugins (by id) can be left out. Kept apart from
+    // `plugins` because the plugin updater rewrites that column wholesale.
+    pluginsPublic: integer('pluginsPublic', { mode: 'boolean' })
+      .default(true)
+      .notNull(),
+    hiddenPlugins: text('hiddenPlugins', { mode: 'json' })
+      .$type<string[]>()
+      .notNull()
+      .default(sql`'[]'`),
     // Auto-detected "hosted on Birdflop" flag. Set server-side by resolving
     // the listing's address against panel node IPs (see
     // src/util/serverlist/birdflop.ts) — never user-editable. Surfaces the

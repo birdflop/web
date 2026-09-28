@@ -15,6 +15,7 @@ export interface PluginCardProps extends LinkProps {
   plugin: PluginType;
   updateAvailable?: boolean;
   noActions?: boolean;
+  noDescription?: boolean;
   spigotRateLimit?: { downloadCount: number; resetTime: number };
 }
 
@@ -22,6 +23,7 @@ export default component$<PluginCardProps>(
   ({
     plugin,
     noActions,
+    noDescription,
     updateAvailable,
     spigotRateLimit,
     class: cardClass,
@@ -83,50 +85,54 @@ export default component$<PluginCardProps>(
               )}
             </p>
 
-            {plugin.type !== 'misc' && (
+            {plugin.type !== 'misc' && !noDescription && (
               <p class="text-lum-text-secondary text-sm">
                 {plugin.description ?? 'Loading...'}
               </p>
             )}
           </div>
 
-          <div class="flex-1 flex-col items-center gap-2">
-            {plugin.updateDate && (
-              <p class="text-lum-text-secondary flex-1 text-right text-sm">
-                Last Updated{' '}
-                {new Date(plugin.updateDate).toLocaleDateString(undefined, {
-                  year: 'numeric',
-                  month: 'short',
-                  day: 'numeric',
-                })}
-              </p>
-            )}
-            {plugin.currentVersion && (
-              <p class="text-lum-text-secondary flex-1 text-right text-sm">
-                Current:{' '}
-                <span
-                  class={{
-                    'font-mono': true,
-                    'text-red-500': updateAvailable,
-                    'text-lum-accent': !updateAvailable,
-                  }}
-                >
-                  {plugin.currentVersion.name}
-                </span>
-              </p>
-            )}
-            {plugin.latestVersion && (
-              <p class="text-lum-text-secondary flex-1 text-right text-sm">
-                Latest:{' '}
-                <span class="font-mono text-green-500">
-                  {plugin.latestVersion.name}
-                </span>
-              </p>
-            )}
-            {plugin.type !== 'misc' && !plugin && (
-              <Loader2 size={16} class="animate-spin" />
-            )}
-          </div>
+          {(plugin.updateDate ||
+            plugin.currentVersion ||
+            plugin.latestVersion) && (
+            <div class="flex-1 flex-col items-center gap-2">
+              {plugin.updateDate && (
+                <p class="text-lum-text-secondary flex-1 text-right text-sm">
+                  Last Updated{' '}
+                  {new Date(plugin.updateDate).toLocaleDateString(undefined, {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                  })}
+                </p>
+              )}
+              {plugin.currentVersion && (
+                <p class="text-lum-text-secondary flex-1 text-right text-sm">
+                  Current:{' '}
+                  <span
+                    class={{
+                      'font-mono': true,
+                      'text-red-500': updateAvailable,
+                      'text-lum-accent': !updateAvailable,
+                    }}
+                  >
+                    {plugin.currentVersion.name}
+                  </span>
+                </p>
+              )}
+              {plugin.latestVersion && (
+                <p class="text-lum-text-secondary flex-1 text-right text-sm">
+                  Latest:{' '}
+                  <span class="font-mono text-green-500">
+                    {plugin.latestVersion.name}
+                  </span>
+                </p>
+              )}
+              {plugin.type !== 'misc' && !plugin && (
+                <Loader2 size={16} class="animate-spin" />
+              )}
+            </div>
+          )}
         </div>
 
         {!noActions && (

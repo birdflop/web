@@ -28,6 +28,8 @@ export interface ServerFormInput {
   votifierHost?: string;
   votifierPort?: string | number;
   votifierToken?: string;
+  pluginsPublic?: boolean;
+  hiddenPlugins?: string[];
 }
 
 export interface NormalizedServer {
@@ -49,6 +51,8 @@ export interface NormalizedServer {
   votifierHost: string | null;
   votifierPort: number | null;
   votifierToken: string | null;
+  pluginsPublic: boolean;
+  hiddenPlugins: string[];
 }
 
 export interface ValidationResult {
@@ -196,6 +200,23 @@ export function validateServerInput(input: ServerFormInput): ValidationResult {
     }
   }
 
+  // Types don't survive the server$ boundary, so re-check at runtime. Ids
+  // that aren't plain short strings are dropped rather than rejected, since
+  // they can only come from a tampered request.
+  const pluginsPublic = input.pluginsPublic !== false;
+  const hiddenPlugins = [
+    ...new Set(
+      (Array.isArray(input.hiddenPlugins) ? input.hiddenPlugins : []).filter(
+        (id): id is string =>
+          typeof id === 'string' &&
+          id.length > 0 &&
+          id.length <= LIMITS.pluginId
+      )
+    ),
+  ];
+  if (hiddenPlugins.length > LIMITS.maxHiddenPlugins)
+    errors.push(`You can hide at most ${LIMITS.maxHiddenPlugins} plugins.`);
+
   if (errors.length > 0) return { valid: false, errors };
 
   return {
@@ -220,6 +241,8 @@ export function validateServerInput(input: ServerFormInput): ValidationResult {
       votifierHost,
       votifierPort: votifierPort ?? null,
       votifierToken,
+      pluginsPublic,
+      hiddenPlugins,
     },
   };
 }

@@ -41,6 +41,8 @@ import ServerCard from '~/components/ServerList/ServerCard';
 import VoteSection from '~/components/ServerList/VoteSection';
 import ServerControls from '~/components/ServerList/ServerControls';
 import { useSession } from '~/routes/plugin@auth';
+import PluginCard from '~/components/plugins/PluginCard';
+import { getPluginDetails } from '~/util/plugins/details';
 
 export const useServer = routeLoader$(async (event) => {
   const db = getDB();
@@ -84,11 +86,13 @@ export const useServer = routeLoader$(async (event) => {
       .get(),
   ]);
 
-  const [status, serverspulse] = await Promise.all([
+  const [status, serverspulse, plugins] = await Promise.all([
     getServerStatus(serverRow),
     // Cached ServersPulse payload written by the background poller — a pure
     // D1 read (never fetches upstream), null when not connected.
     getPublicServersPulseStats(db, serverRow.id),
+    // Public view: only public, non-hidden plugins (see toPublicServer).
+    getPluginDetails(toPublicServer(serverRow).plugins),
   ]);
 
   // Strip Votifier secrets and the owner's account details before the row
@@ -98,6 +102,7 @@ export const useServer = routeLoader$(async (event) => {
     owner: toPublicOwner(server.owner),
     status,
     serverspulse,
+    plugins,
     monthlyVotes: Number(monthlyRow?.count ?? 0),
     totalVotes: Number(totalRow?.count ?? 0),
     sitekey: event.env.get('TURNSTILE_SITEKEY') ?? '',
@@ -238,40 +243,6 @@ export default component$(() => {
               RGB Gradient
             </Link>
           </div>
-
-          {s.plugins && Object.keys(s.plugins).length > 0 && (
-            <div class="lum-card mt-4 p-4">
-              <h2 class="mb-3 flex items-center gap-2 text-lg font-bold">
-                <Blocks size={20} /> Plugins ({Object.keys(s.plugins).length})
-              </h2>
-              <div class="flex flex-wrap gap-2">
-                {Object.values(s.plugins).map((plugin) => (
-                  <div
-                    key={String(plugin.id)}
-                    class="lum-card lum-bg-lum-input-bg/30 rounded-lum-1 flex items-center gap-2 px-3 py-1.5 text-xs"
-                  >
-                    {plugin.iconUrl && (
-                      <img
-                        src={plugin.iconUrl}
-                        alt={plugin.name || String(plugin.id)}
-                        class="h-4 w-4 rounded object-cover"
-                        width={16}
-                        height={16}
-                      />
-                    )}
-                    <span class="font-semibold">
-                      {plugin.name || plugin.id}
-                    </span>
-                    {plugin.currentVersion?.name && (
-                      <span class="text-lum-text-secondary">
-                        {plugin.currentVersion.name}
-                      </span>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
 
         <div class="flex flex-col gap-4">
@@ -307,6 +278,39 @@ export default component$(() => {
               </div>
             )}
           </div>
+          {data.plugins.length > 0 && (
+            <div class="lum-card gap-3">
+              <h2 class="flex items-center gap-2 text-lg font-bold">
+                <Blocks size={20} /> Plugins ({data.plugins.length})
+              </h2>
+              <div class="flex flex-col gap-2">
+                {data.plugins.map((plugin) => {
+                  // isolate goes on the wrapper, not the card: the card's -z-1
+                  // blurred icon then paints above this section's background
+                  // but still under the card's own translucent background,
+                  // matching the plugin updater.
+                  const card = (
+                    <PluginCard plugin={plugin} noActions noDescription />
+                  );
+                  return plugin.url ? (
+                    <a
+                      key={String(plugin.id)}
+                      href={plugin.url}
+                      target="_blank"
+                      rel="noopener noreferrer nofollow"
+                      class="isolate flex transition-transform hover:scale-[1.01]"
+                    >
+                      {card}
+                    </a>
+                  ) : (
+                    <div key={String(plugin.id)} class="isolate flex">
+                      {card}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </section>

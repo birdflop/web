@@ -1,13 +1,15 @@
 import {
   $,
   component$,
+  Slot,
   useContext,
   useSignal,
   useStore,
   useVisibleTask$,
 } from '@qwik.dev/core';
-import { useNavigate } from '@qwik.dev/router';
-import { Label, SelectMenu } from '@luminescent/ui-qwik';
+import { Link, useNavigate } from '@qwik.dev/router';
+import { Label, SelectMenu, Toggle } from '@luminescent/ui-qwik';
+import Blocks from 'lucide-icons-qwik/icons/Blocks';
 import Save from 'lucide-icons-qwik/icons/Save';
 import Send from 'lucide-icons-qwik/icons/Send';
 import FileText from 'lucide-icons-qwik/icons/FileText';
@@ -47,15 +49,20 @@ import {
   DEFAULT_VOTIFIER_PORT,
 } from '~/util/serverlist/constants';
 import type { ServerFormInput } from '~/util/serverlist/validation';
+import type { PluginDetails } from '~/util/plugins/details';
 import BBCodeEditor from './BBCodeEditor';
 import SiDiscord from 'simple-icons-qwik/icons/SiDiscord';
 
 interface ServerFormProps {
   mode: 'create' | 'edit';
   initial?: Server;
+  // Edit mode: the listing's plugins, looked up for display in the plugins
+  // card. Anything passed as children renders as extra grid cards above the
+  // save button.
+  plugins?: PluginDetails[];
 }
 
-export default component$<ServerFormProps>(({ mode, initial }) => {
+export default component$<ServerFormProps>(({ mode, initial, plugins }) => {
   const nav = useNavigate();
   const notifications = useContext(NotificationContext);
   const session = useSession();
@@ -125,7 +132,9 @@ export default component$<ServerFormProps>(({ mode, initial }) => {
     }
   });
 
-  const form = useStore<ServerFormInput & { tags: string[] }>({
+  const form = useStore<
+    ServerFormInput & { tags: string[]; hiddenPlugins: string[] }
+  >({
     name: initial?.name ?? '',
     edition: initial?.edition ?? 'java',
     minVersion: initial?.minVersion ?? '',
@@ -146,6 +155,8 @@ export default component$<ServerFormProps>(({ mode, initial }) => {
     votifierHost: initial?.votifierHost ?? '',
     votifierPort: initial?.votifierPort ?? '',
     votifierToken: initial?.votifierToken ?? '',
+    pluginsPublic: initial?.pluginsPublic ?? true,
+    hiddenPlugins: initial?.hiddenPlugins ?? [],
   });
 
   const showJava = form.edition === 'java' || form.edition === 'both';
@@ -686,6 +697,74 @@ export default component$<ServerFormProps>(({ mode, initial }) => {
           </Label>
         </div>
       </div>
+
+      {mode === 'edit' && (
+        <div class="lum-card gap-3">
+          <h2 class="flex items-center gap-2 text-lg font-bold">
+            <Blocks size={20} />
+            Plugins
+          </h2>
+          <p class="text-lum-text-secondary text-sm">
+            Plugins come from this server's tab in the{' '}
+            <Link href="/resources/plugins" class="text-lum-accent underline">
+              Plugin Updater
+            </Link>
+            . They show on your listing unless you turn this off.
+          </p>
+          <Toggle
+            id="plugins-public"
+            checked={form.pluginsPublic}
+            onChange$={(e, el) => (form.pluginsPublic = el.checked)}
+          >
+            Show plugins on your listing
+          </Toggle>
+
+          {!plugins?.length ? (
+            <p class="text-lum-text-secondary text-sm">
+              This server has no plugins yet.
+            </p>
+          ) : (
+            form.pluginsPublic && (
+              <div class="border-lum-input-bg/60 flex flex-col gap-2 border-t pt-4">
+                <p class="text-lum-text-secondary text-sm">
+                  Untick a plugin to keep it off your listing.
+                </p>
+                {plugins.map((plugin) => {
+                  const id = String(plugin.id);
+                  return (
+                    <Toggle
+                      key={id}
+                      id={`plugin-visible-${id}`}
+                      checkbox
+                      checked={!form.hiddenPlugins.includes(id)}
+                      onChange$={(e, el) => {
+                        form.hiddenPlugins = el.checked
+                          ? form.hiddenPlugins.filter((h) => h !== id)
+                          : [...form.hiddenPlugins, id];
+                      }}
+                    >
+                      <span class="flex items-center gap-2">
+                        {plugin.iconUrl && (
+                          <img
+                            src={plugin.iconUrl}
+                            alt={`${plugin.name} icon`}
+                            width={20}
+                            height={20}
+                            class="rounded-lum-1 h-5 w-5 object-cover"
+                          />
+                        )}
+                        {plugin.name}
+                      </span>
+                    </Toggle>
+                  );
+                })}
+              </div>
+            )
+          )}
+        </div>
+      )}
+
+      <Slot />
 
       <div class="sm:col-span-2">
         <button

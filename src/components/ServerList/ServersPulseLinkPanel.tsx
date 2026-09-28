@@ -78,7 +78,7 @@ export default component$<{
   const showForm = !state.linked || state.linked.status === 'revoked';
 
   return (
-    <div class="lum-card lum-bg-lum-input-bg/30 mt-6 flex flex-col gap-3">
+    <div class="lum-card lum-bg-lum-input-bg/30 flex flex-col gap-3">
       <h2 class="flex items-center gap-2 text-base font-semibold">
         <Activity size={18} /> ServersPulse Live Stats
       </h2>

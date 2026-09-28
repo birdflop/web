@@ -106,4 +106,7 @@ export const LIMITS = {
   version: 8,
   // Listings per account, to bound spam from a single login.
   maxServersPerOwner: 10,
+  // Bounds on the hidden-plugins list (ids are short platform ids/slugs).
+  maxHiddenPlugins: 500,
+  pluginId: 100,
 } as const;
