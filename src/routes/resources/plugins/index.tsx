@@ -87,10 +87,20 @@ function mapPluginsForExport(plugins: { [id: string]: PluginType }): {
   const mapped: { [id: string]: PluginType } = {};
   Object.keys(plugins).forEach((id) => {
     const plugin = plugins[id];
+    const version = plugin.currentVersion;
     mapped[id] = {
       id: plugin.id,
       type: plugin.type,
-      currentVersion: plugin.currentVersion,
+      // misc plugins can't be looked up again, so keep what the user typed
+      ...(plugin.type === 'misc' && { name: plugin.name, url: plugin.url }),
+      // Copy to a plain object: a version picked in AddPluginDialog is still a
+      // proxy of that dialog's store, and sending it to a server$ drags the
+      // dialog's subscribers (its useComputed$) along, which fails with Q6.
+      currentVersion: version && {
+        id: version.id,
+        name: version.name,
+        releaseDate: version.releaseDate,
+      },
     };
   });
   return mapped;
