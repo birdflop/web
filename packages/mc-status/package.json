@@ -24,7 +24,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
-    "test": "vitest run"
+    "test": "vp test run"
   },
   "devDependencies": {
     "@types/node": "^25.0.3",

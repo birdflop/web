@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vite-plus/test';
 import { readVarInt, writeVarInt } from '../protocol/varint.js';
 import { parseMotd } from '../motd/parser.js';
 import { shadowColor } from '../motd/colors.js';
