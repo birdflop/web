@@ -53,3 +53,4 @@ worker-configuration.d.ts
 tmp/*
 
 dummy-non-existing-folder
+.vitest/
