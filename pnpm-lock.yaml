@@ -238,38 +238,38 @@ importers:
         specifier: ^1.20.1
         version: 1.20.1(@types/node@26.6.3)(esbuild@0.28.1)(jiti@2.7.0)(less@4.8.1(supports-color@10.2.2))(rollup@4.62.4)(sass@1.102.0)(stylus@0.62.0(supports-color@10.2.2))(supports-color@10.2.2)(tsx@4.23.9)(typescript@7.0.2)(yaml@2.9.1)
       '@luminescent/icons-qwik':
-        specifier: ^0.1.1
-        version: 0.1.1
+        specifier: ^0.1.2
+        version: 0.1.2
       '@luminescent/ui':
         specifier: ^7.2.0
         version: 7.2.0
       '@luminescent/ui-qwik':
-        specifier: 7.0.0-31
-        version: 7.0.0-31(@luminescent/ui@7.2.0)
+        specifier: 7.0.0
+        version: 7.0.0(@luminescent/ui@7.2.0)
       '@qwik.dev/core':
-        specifier: ^2.0.0-beta.45
-        version: 2.0.0-beta.45(@oxc-project/types@0.144.0)(@voidzero-dev/vite-plus-core@1.0.0(@types/node@26.6.3)(esbuild@0.28.1)(jiti@2.7.0)(less@4.8.1(supports-color@10.2.2))(sass@1.102.0)(stylus@0.62.0(supports-color@10.2.2))(tsx@4.23.9)(typescript@7.0.2)(yaml@2.9.1))(esbuild@0.28.1)(rollup@4.62.4)(vitest@5.0.1)
+        specifier: ^2.0.0-rc.0
+        version: 2.0.0-rc.0(@oxc-project/types@0.151.0)(@voidzero-dev/vite-plus-core@1.0.0(@types/node@26.6.3)(esbuild@0.28.1)(jiti@2.7.0)(less@4.8.1(supports-color@10.2.2))(sass@1.102.0)(stylus@0.62.0(supports-color@10.2.2))(tsx@4.23.9)(typescript@7.0.2)(yaml@2.9.1))(esbuild@0.28.1)(rollup@4.62.4)(vitest@5.0.1)
       '@qwik.dev/partytown':
         specifier: ^0.14.4
         version: 0.14.4
       '@qwik.dev/router':
-        specifier: ^2.0.0-beta.45
-        version: 2.0.0-beta.45(@qwik.dev/core@2.0.0-beta.45(@oxc-project/types@0.144.0)(@voidzero-dev/vite-plus-core@1.0.0(@types/node@26.6.3)(esbuild@0.28.1)(jiti@2.7.0)(less@4.8.1(supports-color@10.2.2))(sass@1.102.0)(stylus@0.62.0(supports-color@10.2.2))(tsx@4.23.9)(typescript@7.0.2)(yaml@2.9.1))(esbuild@0.28.1)(rollup@4.62.4)(vitest@5.0.1))(@voidzero-dev/vite-plus-core@1.0.0(@types/node@26.6.3)(esbuild@0.28.1)(jiti@2.7.0)(less@4.8.1(supports-color@10.2.2))(sass@1.102.0)(stylus@0.62.0(supports-color@10.2.2))(tsx@4.23.9)(typescript@7.0.2)(yaml@2.9.1))(rollup@4.62.4)(supports-color@10.2.2)(typescript@7.0.2)
+        specifier: ^2.0.0-rc.0
+        version: 2.0.0-rc.0(@qwik.dev/core@2.0.0-rc.0(@oxc-project/types@0.151.0)(@voidzero-dev/vite-plus-core@1.0.0(@types/node@26.6.3)(esbuild@0.28.1)(jiti@2.7.0)(less@4.8.1(supports-color@10.2.2))(sass@1.102.0)(stylus@0.62.0(supports-color@10.2.2))(tsx@4.23.9)(typescript@7.0.2)(yaml@2.9.1))(esbuild@0.28.1)(rollup@4.62.4)(vitest@5.0.1))(@voidzero-dev/vite-plus-core@1.0.0(@types/node@26.6.3)(esbuild@0.28.1)(jiti@2.7.0)(less@4.8.1(supports-color@10.2.2))(sass@1.102.0)(stylus@0.62.0(supports-color@10.2.2))(tsx@4.23.9)(typescript@7.0.2)(yaml@2.9.1))(rollup@4.62.4)(supports-color@10.2.2)(typescript@7.0.2)
       '@shikijs/colorized-brackets':
-        specifier: ^4.4.3
-        version: 4.4.3
+        specifier: ^4.5.0
+        version: 4.5.0
       '@shikijs/engine-javascript':
-        specifier: ^4.4.3
-        version: 4.4.3
+        specifier: ^4.5.0
+        version: 4.5.0
       '@shikijs/rehype':
-        specifier: ^4.4.3
-        version: 4.4.3
+        specifier: ^4.5.0
+        version: 4.5.0
       '@shikijs/transformers':
-        specifier: ^4.4.3
-        version: 4.4.3
+        specifier: ^4.5.0
+        version: 4.5.0
       '@shikijs/types':
-        specifier: ^4.4.3
-        version: 4.4.3
+        specifier: ^4.5.0
+        version: 4.5.0
       '@tailwindcss/vite':
         specifier: ^4.3.3
         version: 4.3.3(@voidzero-dev/vite-plus-core@1.0.0(@types/node@26.6.3)(esbuild@0.28.1)(jiti@2.7.0)(less@4.8.1(supports-color@10.2.2))(sass@1.102.0)(stylus@0.62.0(supports-color@10.2.2))(tsx@4.23.9)(typescript@7.0.2)(yaml@2.9.1))
@@ -298,8 +298,8 @@ importers:
         specifier: ^2.1.2
         version: 2.1.2
       globals:
-        specifier: 17.12.0
-        version: 17.12.0
+        specifier: 17.13.0
+        version: 17.13.0
       happy-dom:
         specifier: ^20.14.5
         version: 20.14.5
@@ -316,8 +316,8 @@ importers:
         specifier: ^0.24.0
         version: 0.24.0(@builder.io/qwik@1.20.0(@voidzero-dev/vite-plus-core@1.0.0(@types/node@26.6.3)(esbuild@0.28.1)(jiti@2.7.0)(less@4.8.1(supports-color@10.2.2))(sass@1.102.0)(stylus@0.62.0(supports-color@10.2.2))(tsx@4.23.9)(typescript@7.0.2)(yaml@2.9.1)))
       shiki:
-        specifier: ^4.4.3
-        version: 4.4.3
+        specifier: ^4.5.0
+        version: 4.5.0
       simple-icons-qwik:
         specifier: 16.27.0-qwik-v2
         version: 16.27.0-qwik-v2
@@ -352,8 +352,8 @@ importers:
         specifier: 'catalog:'
         version: 1.0.0(@types/node@26.6.3)(@vitest/ui@5.0.1(vitest@5.0.1))(esbuild@0.28.1)(happy-dom@20.14.5)(jiti@2.7.0)(less@4.8.1(supports-color@10.2.2))(sass@1.102.0)(stylus@0.62.0(supports-color@10.2.2))(tsx@4.23.9)(typescript@7.0.2)(yaml@2.9.1)
       wrangler:
-        specifier: ^4.143.0
-        version: 4.143.0(@types/node@26.6.3)
+        specifier: ^4.146.0
+        version: 4.146.0(@types/node@26.6.3)
       yaml:
         specifier: ^2.9.1
         version: 2.9.1
@@ -453,32 +453,32 @@ packages:
       workerd:
         optional: true
 
-  '@cloudflare/workerd-darwin-64@1.20260926.1':
-    resolution: {integrity: sha512-VCIpwgJu5Dm1o+VHLclNOKIdpttEqss7oDHS5DYxgVoonM9Dxxxr1xCQvJbh6IXFuQ1DDrbm5krjte5NsTgX3Q==}
+  '@cloudflare/workerd-darwin-64@1.20261001.1':
+    resolution: {integrity: sha512-4cgSgDf28JSw/P5Dj5GCS59hzVqS5XnmGAWNkvYHLI6ODU9idGaMMNEuhJXDkEG/lsABmlVlnCgsdh2VbKWepw==}
     engines: {node: '>=16'}
     cpu: [x64]
     os: [darwin]
 
-  '@cloudflare/workerd-darwin-arm64@1.20260926.1':
-    resolution: {integrity: sha512-oVuLXfCnr1Xu9sBMNYrEPcFZQNMcviNcacz9l+oqQiLHc5UrVp++lpKbsuWstCfh+/c39Pp37TVeaNBLA8+ReA==}
+  '@cloudflare/workerd-darwin-arm64@1.20261001.1':
+    resolution: {integrity: sha512-8ulAWruEVouNmEIsQsy9WSSCS9zkLu93W2MTwp5esiFyoPp05BNSVFIFsYSPi1pkFmBBd7fsnwMpbLkaJLaVPQ==}
     engines: {node: '>=16'}
     cpu: [arm64]
     os: [darwin]
 
-  '@cloudflare/workerd-linux-64@1.20260926.1':
-    resolution: {integrity: sha512-BjmiDvYBVBG5248gCHSZS3yONbcm3/3qKTu9RaQA8o7jQHJfXx9JnWbhkld2KsbXnRGEGHFwpLLidIpIGtQYUA==}
+  '@cloudflare/workerd-linux-64@1.20261001.1':
+    resolution: {integrity: sha512-kZbTZJGrhsMOdqZ2BIybjaBRLZjYsRLWj7mcNw/6Y3hodOhp5MrNzcz4iWGwNVWwyIV+7Pl+/LX5VcgnRqdHOg==}
     engines: {node: '>=16'}
     cpu: [x64]
     os: [linux]
 
-  '@cloudflare/workerd-linux-arm64@1.20260926.1':
-    resolution: {integrity: sha512-28bdfQDIFcpaKXMPisADy8BchpIsX+tEAhD+bhfEBXukFGFr8F3ouyiG3HzN3CqAh/OYvifJizzFZtptUPCy7w==}
+  '@cloudflare/workerd-linux-arm64@1.20261001.1':
+    resolution: {integrity: sha512-oOk3Zj6k/8oP0FJgZBWDn7+BqbsqIMEMaV95pulHPVbwVu4wYoLfQq2hp0vkbCNsCFLqZb7cqixXdrwD54ZIow==}
     engines: {node: '>=16'}
     cpu: [arm64]
     os: [linux]
 
-  '@cloudflare/workerd-windows-64@1.20260926.1':
-    resolution: {integrity: sha512-ehdL3ataKdEmlnW9oom6OZUR8n3XsTL/zl8+KGREpLi5sMSW0mek0PrF4wK9SX51f3Alnlu8tF8eKBg+mc3xFw==}
+  '@cloudflare/workerd-windows-64@1.20261001.1':
+    resolution: {integrity: sha512-uRxm5W4VyBkoSaoP1BfOuH0873tE+vxsknF4sab6/5YIRvIAufChq3QDp+zlAn67PuGPGcn7W8QraA0t4ucmOQ==}
     engines: {node: '>=16'}
     cpu: [x64]
     os: [win32]
@@ -1287,15 +1287,15 @@ packages:
   '@kurkle/color@0.3.4':
     resolution: {integrity: sha512-M5UknZPHRu3DEDWoipU6sE8PdkZ6Z/S+v4dD+Ke8IaNlpdSQah50lz1KtcFBa2vsdOnwbbnxJwVM4wty6udA5w==}
 
-  '@luminescent/icons-qwik@0.1.1':
-    resolution: {integrity: sha512-W69uzPt9qAhqShl74bma9yzRqXv8FNJLz3R/R6vC4Z5rXYaZJ4W2fcITOUX33WBmKIlq6YNPrm6rWWY6tfMikw==}
-    engines: {node: ^18.17.0 || ^20.3.0 || >=21.0.0}
+  '@luminescent/icons-qwik@0.1.2':
+    resolution: {integrity: sha512-HDKTxsR/vasxzj6qS18rTTdlmZjM6oqNr46TuX1wJMEAdwaQ47nDTq9WyAd5b8DA3qzOJeX8VnVZhHSOKlbCng==}
+    engines: {node: ^22.18.0 || ^24.11.0 || >=26.0.0}
 
-  '@luminescent/ui-qwik@7.0.0-31':
-    resolution: {integrity: sha512-2Tsjzql2pMenFLySmiodzTyi1g914LnqmLn0t7GSq/JiEJqvibMX27bAgp1pYdehW11XFluzuTF+VJNgAa9GjQ==}
+  '@luminescent/ui-qwik@7.0.0':
+    resolution: {integrity: sha512-XnsAsC8RLrkziniXv5/yymKVRtDfFAZJ8eae2KNDjocvUfMTROIg1vkSShsUvqBS4Sfajj8gC5gWxoN2Mx87/A==}
     engines: {node: ^22.18.0 || ^24.11.0 || >=26.0.0}
     peerDependencies:
-      '@luminescent/ui': 7.2.0-1
+      '@luminescent/ui': 7.2.0
 
   '@luminescent/ui@7.2.0':
     resolution: {integrity: sha512-gyKOY4sA1jFEhlGfnh7j77NGnf/zjLbJ2KZpHcQIxuni32DvWtSvd3xBPsrIsuoqFoobhpU/c7fc4loBRMfNow==}
@@ -1951,8 +1951,8 @@ packages:
   '@poppinss/exception@1.2.3':
     resolution: {integrity: sha512-dCED+QRChTVatE9ibtoaxc+WkdzOSjYTKi/+uacHWIsfodVfpsueo3+DKpgU5Px8qXjgmXkSvhXvSCz3fnP9lw==}
 
-  '@qwik.dev/core@2.0.0-beta.45':
-    resolution: {integrity: sha512-+J1MqfTmsAARJduDLGFg6Y2Lp/fzyh8eojN9wdecOL8kKJMF2Xf4JWcObc1xbPYl7Txt/rKjpo8w1Jh3Z2Qa5g==}
+  '@qwik.dev/core@2.0.0-rc.0':
+    resolution: {integrity: sha512-URY5uYDboQWV7jzaSYZE02ObiKxXT86SWDa4z3O06isOFks1ijTCv51+n/UivjosHiAGWKFKQbbvzz/nAWFlwA==}
     engines: {node: ^20.3.0 || >=21.0.0}
     hasBin: true
     peerDependencies:
@@ -1974,11 +1974,11 @@ packages:
     engines: {node: '>=18.0.0'}
     hasBin: true
 
-  '@qwik.dev/router@2.0.0-beta.45':
-    resolution: {integrity: sha512-aTr0aD0KbsHEGe9B5Il8GqCtwujW907H5yD3Cg11P1+OpLormi+NoK1Mc0EYAKlqVwVstR82ufl1GSfsXvlnDQ==}
+  '@qwik.dev/router@2.0.0-rc.0':
+    resolution: {integrity: sha512-g/8ryK/SK7H5FLnSm5w67XeOakEcRc490ih5vHuFtrNLlIby0AB+AlXIZcnNrf7/h/1grvXLZNwZUkRTnZIRAQ==}
     engines: {node: ^18.17.0 || ^20.3.0 || >=21.0.0}
     peerDependencies:
-      '@qwik.dev/core': 2.0.0-beta.45
+      '@qwik.dev/core': 2.0.0-rc.0
       vite: '>=8 <9'
 
   '@rollup/pluginutils@5.4.0':
@@ -2128,44 +2128,44 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@shikijs/colorized-brackets@4.4.3':
-    resolution: {integrity: sha512-7+G9lY/EDD84MzO6jU2SkS/kmZmyshesuDTPXi/vioULBv5/cAsLM4vwRmb2Rsup89zj4jASOnoZQvDkj0/ZqA==}
+  '@shikijs/colorized-brackets@4.5.0':
+    resolution: {integrity: sha512-CI3XYkXaFvAE2wkMK+7ERrCRmhioMvxehLHgsS0Cu/cUJ/8j5fYfut4yhbBTlLSoe2UjkT6wcov89XkaEmaboQ==}
     engines: {node: '>=20'}
 
-  '@shikijs/core@4.4.3':
-    resolution: {integrity: sha512-QCR4q2ZO/ILJEuwiBMel4wdcTDb1JGwfjKTxPDF6x8ixOaluPrVqIn06C99AcRPhmYlBR56d/Fb+GN58GzExpg==}
+  '@shikijs/core@4.5.0':
+    resolution: {integrity: sha512-6CIgwq+bt2JZ3OSjb/nBkkwEf/CfpHcbam+Mg5Pllco7HAGRQ2/EFhZrrJtbyNTgKwknfVS+llsXGygiDGwJWw==}
     engines: {node: '>=20'}
 
-  '@shikijs/engine-javascript@4.4.3':
-    resolution: {integrity: sha512-FbOjFJp9VLdo1Wevs10BBtVxiTWwNLqZh5Gkhjgda/ioL15YOgeSl9n+6XMa3qRlPQzfhFNe641SrynFHYG0nQ==}
+  '@shikijs/engine-javascript@4.5.0':
+    resolution: {integrity: sha512-Ed6UdEj84LyYkwnxM5CvSMWAD+id9ExTYri0/+x41U9zrgNifPSS9lZm0JqBP0VfYI8yr8tY5nbNq9+p9R0kFA==}
     engines: {node: '>=20'}
 
-  '@shikijs/engine-oniguruma@4.4.3':
-    resolution: {integrity: sha512-EcOQkxdxGQrc1Row/cC2c96/v1dbZqGnEVu1qTuT/MJmp6+cXCvQussowVmCv5Tqr3KuY3c7IbM6HTW3LJ1k9w==}
+  '@shikijs/engine-oniguruma@4.5.0':
+    resolution: {integrity: sha512-dKVmbJecVdB9recl8a/CU4jdpNXyjJQrIcesIkpS70s5HS02ohpnCSpMUbotPnEUzbAcLQ+S4hwZYbkBBiTcJw==}
     engines: {node: '>=20'}
 
-  '@shikijs/langs@4.4.3':
-    resolution: {integrity: sha512-ePic0yfAJGOF83D5wBHK/00EjK65oahBYxFk5epgq33WRv7X9UuxLEV8PtR0szC0z8dl7INIpIodB99JRFlR+A==}
+  '@shikijs/langs@4.5.0':
+    resolution: {integrity: sha512-wwBTqwduXSz0X4v9Qa2EWeFaYJEw1clCncWjoRNQRbVDu3SPRTRWucnouYapKj3b8Q+sk/41Vbc4B5c8nuYzLA==}
     engines: {node: '>=20'}
 
-  '@shikijs/primitive@4.4.3':
-    resolution: {integrity: sha512-m0wBeLDQDeIxRdUmrCPdQqfuUamDwRL5isCfYbguKD6NiaKpVbsv+3J81DyIKgNW5h4WAIIr8T4EkgQrBBxvaQ==}
+  '@shikijs/primitive@4.5.0':
+    resolution: {integrity: sha512-UM7ShlA8oz0OWxLLO8BmO9Ip6fVqdkt8yF0EH7nOCqHfrx1eEAzF0ZUVK7L+I8NEgeu1PEWSRlxaiPPeCb4iDg==}
     engines: {node: '>=20'}
 
-  '@shikijs/rehype@4.4.3':
-    resolution: {integrity: sha512-vkG9jG1aRnrx05R31uAOKQHE8qpY7r1cBXE2sAZgFK2IaPnQHwaP4L1C6amQixmZ8thBsKwfbSsYxMDoo46UWQ==}
+  '@shikijs/rehype@4.5.0':
+    resolution: {integrity: sha512-+OnQqc4Pdjo4m13sBdlBrPxuylSqWwnw6qOjmLRKGf6yDr1SdhZcKFUEXFGoFRBeRSwogmZp8M3LIAO7Urmxjw==}
     engines: {node: '>=20'}
 
-  '@shikijs/themes@4.4.3':
-    resolution: {integrity: sha512-w8UHjeUnIR965KMWJHUPXOc2mNJUnK3vpVLYLvw5IYU2mnTTJ89E24OrJDBNiJDQ0qzb0tc4l7mrIXx5cFeIyw==}
+  '@shikijs/themes@4.5.0':
+    resolution: {integrity: sha512-zGb87H3UBbpuI4yoh5UguB1XbU+2BDU3kflM7UfZ+Cy2hWo9lBtqjSVK20gmLY6ukYl040hAypGXMgud9vul8Q==}
     engines: {node: '>=20'}
 
-  '@shikijs/transformers@4.4.3':
-    resolution: {integrity: sha512-oJSARV6NaWd+rnNJbtnpAdj3Zg0ZVyzsnMgb3vi3HA+35y8lBWUCpOnWsmyiXZIikY+x1BDqrQUgmxfzWh7Jvw==}
+  '@shikijs/transformers@4.5.0':
+    resolution: {integrity: sha512-LM7twi043qCC3gRyGQfjoC2/sowzbEltWuruyRtT3RlBlk1hKzWk9ETnU7RcDBoVWQBmC8Mebnr7p28W7kPoaA==}
     engines: {node: '>=20'}
 
-  '@shikijs/types@4.4.3':
-    resolution: {integrity: sha512-UEJxmRR++MAGR6hugn0vgVS2W/6lWAts84FFSrnlH9sP0LNol7E5+NQ792pH8liWUhyMyjhTgSUH3k7iD7tc5g==}
+  '@shikijs/types@4.5.0':
+    resolution: {integrity: sha512-drtPrtD8N0DENyD2cyt6Ajy+IWsiCLgMxODwLTpvH1UsN6a9jf90tNTPjqwHvA+0Lzu9e0txk8DjfqH1p9UJRw==}
     engines: {node: '>=20'}
 
   '@shikijs/vscode-textmate@10.0.2':
@@ -3212,8 +3212,8 @@ packages:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
     deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
-  globals@17.12.0:
-    resolution: {integrity: sha512-cezEd/DTyyht9cvSSURyygXPfy04GtWO/5e6ZPvH7fCtjKz9PYOmuawphw1Ctd1f6C+5JypXfGD7ahNMXvevBA==}
+  globals@17.13.0:
+    resolution: {integrity: sha512-RwMTC61u7hrG3ZJMkZQOK4JLJrKS8QtoTii63EmWvFXHqycY9FObBJQCbsLxSO8kjKhWE5kV1GC+Vb1g3RI0Zg==}
     engines: {node: '>=18'}
 
   graceful-fs@4.2.11:
@@ -3733,8 +3733,8 @@ packages:
     engines: {node: '>=4'}
     hasBin: true
 
-  miniflare@5.20260926.0-alpha:
-    resolution: {integrity: sha512-m/M3rpLnaouw6QSoKzylfw6Z1dnOwRM48idnZ7kc5ivRqBXANFQ8XqKCyQ/V+xqQ9Rg1L99j4WkZGVU9uT4L2w==}
+  miniflare@5.20261001.0-alpha:
+    resolution: {integrity: sha512-GaimS5mSIOMyvd16ga+e1/QkI8cmp3z35QPHFex0DktqNQf2RVZQwMPQXdyoUreUiFP/0Gpe2MoQInTyMAD5xA==}
     engines: {node: '>=22.0.0'}
 
   minimatch@10.2.6:
@@ -4092,8 +4092,8 @@ packages:
     resolution: {integrity: sha512-w1aiOKwKuRgtwAReIIj89puqg+I7GvX4IbLrvmhXbzQsj1+Zwi4VO3+fa6ZF91TWSjIxoEkKnMeHcLEODK5ZXA==}
     engines: {node: '>= 0.4'}
 
-  shiki@4.4.3:
-    resolution: {integrity: sha512-Mb/GvXPHBAXdgGIcnfU5L3ldpn1XcxrGkPHwqgRx17/I2XRfqlFKk2vGkHWINn1kdXvzJZeuO3is6I9KLPFm0g==}
+  shiki@4.5.0:
+    resolution: {integrity: sha512-OcRW72ngQvc+MSVWBRIovC/BTW589iUE/Vxav7VeM4RcY9MUjqB+IR6ILG1k9nuW6LiG/nct9uma4/MBtnZbmQ==}
     engines: {node: '>=20'}
 
   siginfo@2.0.0:
@@ -4251,8 +4251,8 @@ packages:
   undici-types@8.9.0:
     resolution: {integrity: sha512-KTDyRTYX8sWmKXAikPHHSyc63CRPETMctyjKFupcC6OBLXT3xsN0e9aF7m+mIXutFWpUXuedtowG7iLOzp0kQg==}
 
-  undici@7.29.0:
-    resolution: {integrity: sha512-IDxfleLmmbSskfWSUATiN1nfn2rDuvnMOqb5CWR92iIfojA0Ud+ulOAAEQ57LPr9rWmsreUyf5lwyao+7GNNVw==}
+  undici@7.29.1:
+    resolution: {integrity: sha512-RYONW2MeafgYlkVOKYKkA/Ag7BmXqgIWCa8t1m0JcxrQg9pI9lEqRhAOruOBCbAohOa/gkCF+iPi9hrgvTzu6Q==}
     engines: {node: '>=20.18.1'}
 
   undici@8.10.0:
@@ -4417,17 +4417,17 @@ packages:
     engines: {node: '>=8'}
     hasBin: true
 
-  workerd@1.20260926.1:
-    resolution: {integrity: sha512-YojhsWBuZwk3Jk9OC0QfTgVbLeQOD1tK1olC9ZXAUcmeip8z4NE/xtttpxCsuTvQBRqppvy7Tkac0kxPYMjIXA==}
+  workerd@1.20261001.1:
+    resolution: {integrity: sha512-d/SIYHFO0PT/wiFZg8in4NpRIxYuFwslX1HdylOtWkBIIUmSpkGFhK820cV84XACFylwJ48xuRoWW/8DWDPsPQ==}
     engines: {node: '>=16'}
     hasBin: true
 
-  wrangler@4.143.0:
-    resolution: {integrity: sha512-c2lHXVr1uDzqrHLdB07zGloUI+AoCBPa06fk+JMrX5TfoydISdhfVAR1IK1Ry2eu2RJmsMsGJY3vJNykJWik2Q==}
+  wrangler@4.146.0:
+    resolution: {integrity: sha512-c27eHUH0Isr8HTmgZ6cLtLr/0cxtiBoLren6ywBeTW8ZIzj/dINVNBcqsbZc+iETnI5jrzO7E7Z8mLgLZ/l9iw==}
     engines: {node: '>=22.0.0'}
     hasBin: true
     peerDependencies:
-      '@cloudflare/workers-types': ^5.20260926.1
+      '@cloudflare/workers-types': ^5.20261001.1
     peerDependenciesMeta:
       '@cloudflare/workers-types':
         optional: true
@@ -4591,25 +4591,25 @@ snapshots:
 
   '@cloudflare/kv-asset-handler@0.5.0': {}
 
-  '@cloudflare/unenv-preset@2.16.2(unenv@2.0.0-rc.24)(workerd@1.20260926.1)':
+  '@cloudflare/unenv-preset@2.16.2(unenv@2.0.0-rc.24)(workerd@1.20261001.1)':
     dependencies:
       unenv: 2.0.0-rc.24
     optionalDependencies:
-      workerd: 1.20260926.1
+      workerd: 1.20261001.1
 
-  '@cloudflare/workerd-darwin-64@1.20260926.1':
+  '@cloudflare/workerd-darwin-64@1.20261001.1':
     optional: true
 
-  '@cloudflare/workerd-darwin-arm64@1.20260926.1':
+  '@cloudflare/workerd-darwin-arm64@1.20261001.1':
     optional: true
 
-  '@cloudflare/workerd-linux-64@1.20260926.1':
+  '@cloudflare/workerd-linux-64@1.20261001.1':
     optional: true
 
-  '@cloudflare/workerd-linux-arm64@1.20260926.1':
+  '@cloudflare/workerd-linux-arm64@1.20261001.1':
     optional: true
 
-  '@cloudflare/workerd-windows-64@1.20260926.1':
+  '@cloudflare/workerd-windows-64@1.20261001.1':
     optional: true
 
   '@cspotcode/source-map-support@0.8.1':
@@ -5091,9 +5091,9 @@ snapshots:
 
   '@kurkle/color@0.3.4': {}
 
-  '@luminescent/icons-qwik@0.1.1': {}
+  '@luminescent/icons-qwik@0.1.2': {}
 
-  '@luminescent/ui-qwik@7.0.0-31(@luminescent/ui@7.2.0)':
+  '@luminescent/ui-qwik@7.0.0(@luminescent/ui@7.2.0)':
     dependencies:
       '@luminescent/ui': 7.2.0
 
@@ -5467,7 +5467,7 @@ snapshots:
 
   '@poppinss/exception@1.2.3': {}
 
-  '@qwik.dev/core@2.0.0-beta.45(@oxc-project/types@0.144.0)(@voidzero-dev/vite-plus-core@1.0.0(@types/node@26.6.3)(esbuild@0.28.1)(jiti@2.7.0)(less@4.8.1(supports-color@10.2.2))(sass@1.102.0)(stylus@0.62.0(supports-color@10.2.2))(tsx@4.23.9)(typescript@7.0.2)(yaml@2.9.1))(esbuild@0.28.1)(rollup@4.62.4)(vitest@5.0.1)':
+  '@qwik.dev/core@2.0.0-rc.0(@oxc-project/types@0.151.0)(@voidzero-dev/vite-plus-core@1.0.0(@types/node@26.6.3)(esbuild@0.28.1)(jiti@2.7.0)(less@4.8.1(supports-color@10.2.2))(sass@1.102.0)(stylus@0.62.0(supports-color@10.2.2))(tsx@4.23.9)(typescript@7.0.2)(yaml@2.9.1))(esbuild@0.28.1)(rollup@4.62.4)(vitest@5.0.1)':
     dependencies:
       '@emnapi/core': 1.11.3
       '@emnapi/runtime': 1.11.3
@@ -5478,7 +5478,7 @@ snapshots:
       magic-string: 0.30.21
       oxc-parser: 0.144.0
       oxc-transform: 0.144.0
-      oxc-walker: 1.1.1(@oxc-project/types@0.144.0)(oxc-parser@0.144.0)
+      oxc-walker: 1.1.1(@oxc-project/types@0.151.0)(oxc-parser@0.144.0)
       pathe: 2.0.3
       siphash: 1.2.0
       vite: '@voidzero-dev/vite-plus-core@1.0.0(@types/node@26.6.3)(esbuild@0.28.1)(jiti@2.7.0)(less@4.8.1(supports-color@10.2.2))(sass@1.102.0)(stylus@0.62.0(supports-color@10.2.2))(tsx@4.23.9)(typescript@7.0.2)(yaml@2.9.1)'
@@ -5500,12 +5500,12 @@ snapshots:
 
   '@qwik.dev/partytown@0.14.4': {}
 
-  '@qwik.dev/router@2.0.0-beta.45(@qwik.dev/core@2.0.0-beta.45(@oxc-project/types@0.144.0)(@voidzero-dev/vite-plus-core@1.0.0(@types/node@26.6.3)(esbuild@0.28.1)(jiti@2.7.0)(less@4.8.1(supports-color@10.2.2))(sass@1.102.0)(stylus@0.62.0(supports-color@10.2.2))(tsx@4.23.9)(typescript@7.0.2)(yaml@2.9.1))(esbuild@0.28.1)(rollup@4.62.4)(vitest@5.0.1))(@voidzero-dev/vite-plus-core@1.0.0(@types/node@26.6.3)(esbuild@0.28.1)(jiti@2.7.0)(less@4.8.1(supports-color@10.2.2))(sass@1.102.0)(stylus@0.62.0(supports-color@10.2.2))(tsx@4.23.9)(typescript@7.0.2)(yaml@2.9.1))(rollup@4.62.4)(supports-color@10.2.2)(typescript@7.0.2)':
+  '@qwik.dev/router@2.0.0-rc.0(@qwik.dev/core@2.0.0-rc.0(@oxc-project/types@0.151.0)(@voidzero-dev/vite-plus-core@1.0.0(@types/node@26.6.3)(esbuild@0.28.1)(jiti@2.7.0)(less@4.8.1(supports-color@10.2.2))(sass@1.102.0)(stylus@0.62.0(supports-color@10.2.2))(tsx@4.23.9)(typescript@7.0.2)(yaml@2.9.1))(esbuild@0.28.1)(rollup@4.62.4)(vitest@5.0.1))(@voidzero-dev/vite-plus-core@1.0.0(@types/node@26.6.3)(esbuild@0.28.1)(jiti@2.7.0)(less@4.8.1(supports-color@10.2.2))(sass@1.102.0)(stylus@0.62.0(supports-color@10.2.2))(tsx@4.23.9)(typescript@7.0.2)(yaml@2.9.1))(rollup@4.62.4)(supports-color@10.2.2)(typescript@7.0.2)':
     dependencies:
       '@azure/functions': 3.5.1
       '@mdx-js/mdx': 3.1.1(supports-color@10.2.2)
       '@netlify/edge-functions': 3.0.8
-      '@qwik.dev/core': 2.0.0-beta.45(@oxc-project/types@0.144.0)(@voidzero-dev/vite-plus-core@1.0.0(@types/node@26.6.3)(esbuild@0.28.1)(jiti@2.7.0)(less@4.8.1(supports-color@10.2.2))(sass@1.102.0)(stylus@0.62.0(supports-color@10.2.2))(tsx@4.23.9)(typescript@7.0.2)(yaml@2.9.1))(esbuild@0.28.1)(rollup@4.62.4)(vitest@5.0.1)
+      '@qwik.dev/core': 2.0.0-rc.0(@oxc-project/types@0.151.0)(@voidzero-dev/vite-plus-core@1.0.0(@types/node@26.6.3)(esbuild@0.28.1)(jiti@2.7.0)(less@4.8.1(supports-color@10.2.2))(sass@1.102.0)(stylus@0.62.0(supports-color@10.2.2))(tsx@4.23.9)(typescript@7.0.2)(yaml@2.9.1))(esbuild@0.28.1)(rollup@4.62.4)(vitest@5.0.1)
       '@types/mdx': 2.0.14
       estree-util-value-to-estree: 3.5.0
       github-slugger: 2.0.0
@@ -5618,58 +5618,58 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.62.4':
     optional: true
 
-  '@shikijs/colorized-brackets@4.4.3':
+  '@shikijs/colorized-brackets@4.5.0':
     dependencies:
-      shiki: 4.4.3
+      shiki: 4.5.0
 
-  '@shikijs/core@4.4.3':
+  '@shikijs/core@4.5.0':
     dependencies:
-      '@shikijs/primitive': 4.4.3
-      '@shikijs/types': 4.4.3
+      '@shikijs/primitive': 4.5.0
+      '@shikijs/types': 4.5.0
       '@shikijs/vscode-textmate': 10.0.2
       '@types/hast': 3.0.5
       hast-util-to-html: 9.0.5
 
-  '@shikijs/engine-javascript@4.4.3':
+  '@shikijs/engine-javascript@4.5.0':
     dependencies:
-      '@shikijs/types': 4.4.3
+      '@shikijs/types': 4.5.0
       '@shikijs/vscode-textmate': 10.0.2
       oniguruma-to-es: 4.3.6
 
-  '@shikijs/engine-oniguruma@4.4.3':
+  '@shikijs/engine-oniguruma@4.5.0':
     dependencies:
-      '@shikijs/types': 4.4.3
+      '@shikijs/types': 4.5.0
       '@shikijs/vscode-textmate': 10.0.2
 
-  '@shikijs/langs@4.4.3':
+  '@shikijs/langs@4.5.0':
     dependencies:
-      '@shikijs/types': 4.4.3
+      '@shikijs/types': 4.5.0
 
-  '@shikijs/primitive@4.4.3':
+  '@shikijs/primitive@4.5.0':
     dependencies:
-      '@shikijs/types': 4.4.3
+      '@shikijs/types': 4.5.0
       '@shikijs/vscode-textmate': 10.0.2
       '@types/hast': 3.0.5
 
-  '@shikijs/rehype@4.4.3':
+  '@shikijs/rehype@4.5.0':
     dependencies:
-      '@shikijs/types': 4.4.3
+      '@shikijs/types': 4.5.0
       '@types/hast': 3.0.5
       hast-util-to-string: 3.0.1
-      shiki: 4.4.3
+      shiki: 4.5.0
       unified: 11.0.5
       unist-util-visit: 5.1.0
 
-  '@shikijs/themes@4.4.3':
+  '@shikijs/themes@4.5.0':
     dependencies:
-      '@shikijs/types': 4.4.3
+      '@shikijs/types': 4.5.0
 
-  '@shikijs/transformers@4.4.3':
+  '@shikijs/transformers@4.5.0':
     dependencies:
-      '@shikijs/core': 4.4.3
-      '@shikijs/types': 4.4.3
+      '@shikijs/core': 4.5.0
+      '@shikijs/types': 4.5.0
 
-  '@shikijs/types@4.4.3':
+  '@shikijs/types@4.5.0':
     dependencies:
       '@shikijs/vscode-textmate': 10.0.2
       '@types/hast': 3.0.5
@@ -6510,7 +6510,7 @@ snapshots:
       path-is-absolute: 1.0.1
     optional: true
 
-  globals@17.12.0: {}
+  globals@17.13.0: {}
 
   graceful-fs@4.2.11: {}
 
@@ -7321,12 +7321,12 @@ snapshots:
   mime@1.6.0:
     optional: true
 
-  miniflare@5.20260926.0-alpha(@types/node@26.6.3):
+  miniflare@5.20261001.0-alpha(@types/node@26.6.3):
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       sharp: 0.35.4(@types/node@26.6.3)
-      undici: 7.29.0
-      workerd: 1.20260926.1
+      undici: 7.29.1
+      workerd: 1.20261001.1
       ws: 8.21.0
       youch: 4.1.0-beta.10
     transitivePeerDependencies:
@@ -7448,9 +7448,9 @@ snapshots:
       '@oxc-transform/binding-win32-ia32-msvc': 0.144.0
       '@oxc-transform/binding-win32-x64-msvc': 0.144.0
 
-  oxc-walker@1.1.1(@oxc-project/types@0.144.0)(oxc-parser@0.144.0):
+  oxc-walker@1.1.1(@oxc-project/types@0.151.0)(oxc-parser@0.144.0):
     optionalDependencies:
-      '@oxc-project/types': 0.144.0
+      '@oxc-project/types': 0.151.0
       oxc-parser: 0.144.0
 
   oxfmt@0.70.0(vite-plus@1.0.0(@types/node@26.6.3)(@vitest/ui@5.0.1(vitest@5.0.1))(esbuild@0.28.1)(happy-dom@20.14.5)(jiti@2.7.0)(less@4.8.1(supports-color@10.2.2))(sass@1.102.0)(stylus@0.62.0(supports-color@10.2.2))(tsx@4.23.9)(typescript@7.0.2)(yaml@2.9.1)):
@@ -7876,14 +7876,14 @@ snapshots:
 
   shell-quote@1.10.0: {}
 
-  shiki@4.4.3:
+  shiki@4.5.0:
     dependencies:
-      '@shikijs/core': 4.4.3
-      '@shikijs/engine-javascript': 4.4.3
-      '@shikijs/engine-oniguruma': 4.4.3
-      '@shikijs/langs': 4.4.3
-      '@shikijs/themes': 4.4.3
-      '@shikijs/types': 4.4.3
+      '@shikijs/core': 4.5.0
+      '@shikijs/engine-javascript': 4.5.0
+      '@shikijs/engine-oniguruma': 4.5.0
+      '@shikijs/langs': 4.5.0
+      '@shikijs/themes': 4.5.0
+      '@shikijs/types': 4.5.0
       '@shikijs/vscode-textmate': 10.0.2
       '@types/hast': 3.0.5
 
@@ -8076,7 +8076,7 @@ snapshots:
 
   undici-types@8.9.0: {}
 
-  undici@7.29.0: {}
+  undici@7.29.1: {}
 
   undici@8.10.0: {}
 
@@ -8254,24 +8254,24 @@ snapshots:
       siginfo: 2.0.0
       stackback: 0.0.2
 
-  workerd@1.20260926.1:
+  workerd@1.20261001.1:
     optionalDependencies:
-      '@cloudflare/workerd-darwin-64': 1.20260926.1
-      '@cloudflare/workerd-darwin-arm64': 1.20260926.1
-      '@cloudflare/workerd-linux-64': 1.20260926.1
-      '@cloudflare/workerd-linux-arm64': 1.20260926.1
-      '@cloudflare/workerd-windows-64': 1.20260926.1
+      '@cloudflare/workerd-darwin-64': 1.20261001.1
+      '@cloudflare/workerd-darwin-arm64': 1.20261001.1
+      '@cloudflare/workerd-linux-64': 1.20261001.1
+      '@cloudflare/workerd-linux-arm64': 1.20261001.1
+      '@cloudflare/workerd-windows-64': 1.20261001.1
 
-  wrangler@4.143.0(@types/node@26.6.3):
+  wrangler@4.146.0(@types/node@26.6.3):
     dependencies:
       '@cloudflare/kv-asset-handler': 0.5.0
-      '@cloudflare/unenv-preset': 2.16.2(unenv@2.0.0-rc.24)(workerd@1.20260926.1)
+      '@cloudflare/unenv-preset': 2.16.2(unenv@2.0.0-rc.24)(workerd@1.20261001.1)
       blake3-wasm: 2.1.5
       esbuild: 0.28.1
-      miniflare: 5.20260926.0-alpha(@types/node@26.6.3)
+      miniflare: 5.20261001.0-alpha(@types/node@26.6.3)
       path-to-regexp: 6.3.0
       unenv: 2.0.0-rc.24
-      workerd: 1.20260926.1
+      workerd: 1.20261001.1
     optionalDependencies:
       fsevents: 2.3.3
     transitivePeerDependencies:

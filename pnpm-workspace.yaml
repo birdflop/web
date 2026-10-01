@@ -8,27 +8,7 @@ allowBuilds:
   sharp: true
   workerd: true
 
-minimumReleaseAgeExclude:
-  - '@luminescent/ui-qwik@7.0.0-25 || 7.0.0-28 || 7.0.0-29 || 7.0.0-30 || 7.0.0-31'
-  - '@luminescent/ui@7.0.2 || 7.1.0 || 7.2.0-1'
-  - lucide-icons-qwik@1.24.0-qwik-v2 || 1.25.0-qwik-v2
-  - happy-dom@20.11.1 || 20.14.5
-  - simple-icons-qwik@16.27.0-qwik-v2
-  - better-sqlite3@13.0.2
-  - miniflare@4.20260722.1
-  - wrangler@4.115.0 || 4.143.0
-  - '@types/better-sqlite3@9.6.0'
-  - yaml@2.9.1
-  - '@voidzero-dev/vite-plus-core@1.0.0'
-  - '@voidzero-dev/vite-plus-darwin-arm64@1.0.0'
-  - '@voidzero-dev/vite-plus-darwin-x64@1.0.0'
-  - '@voidzero-dev/vite-plus-linux-arm64-gnu@1.0.0'
-  - '@voidzero-dev/vite-plus-linux-arm64-musl@1.0.0'
-  - '@voidzero-dev/vite-plus-linux-x64-gnu@1.0.0'
-  - '@voidzero-dev/vite-plus-linux-x64-musl@1.0.0'
-  - '@voidzero-dev/vite-plus-win32-arm64-msvc@1.0.0'
-  - '@voidzero-dev/vite-plus-win32-x64-msvc@1.0.0'
-  - vite-plus@1.0.0
+minimumReleaseAge: 0
 
 onlyBuiltDependencies:
   - better-sqlite3
