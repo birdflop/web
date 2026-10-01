@@ -46,6 +46,8 @@ const { dependencies = {}, devDependencies = {} } = pkg as unknown as {
 errorOnDuplicatesPkgDeps(devDependencies, dependencies);
 
 const qwikDeps = [
+  '@auth/qwik',
+  'qwik-speak',
   'lucide-icons-qwik',
   'simple-icons-qwik',
   '@luminescent/ui-qwik',
@@ -72,6 +74,8 @@ export default defineConfig({
   lint, fmt,
   resolve: {
     tsconfigPaths: true,
+    // Bundle legacy Qwik libraries so the Qwik 2 compatibility aliases apply.
+    noExternal: qwikDeps,
   },
   plugins: [
     qwikRouter({
