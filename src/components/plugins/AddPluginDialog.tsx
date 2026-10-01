@@ -5,10 +5,7 @@ import {
   useSignal,
 } from '@qwik.dev/core';
 import { Notification, NotificationContext } from '~/util/Notification';
-import {
-  pluginsStoreContext,
-  resolvedPluginContext,
-} from '~/routes/resources/plugins';
+import { resolvedPluginContext } from '~/routes/resources/plugins';
 import { SelectList } from '../Elements/SelectList';
 import SiModrinth from 'simple-icons-qwik/icons/SiModrinth';
 import SiSpigotmc from 'simple-icons-qwik/icons/SiSpigotmc';
@@ -20,6 +17,7 @@ import {
 } from '~/util/plugins/ServerPlugin';
 import { Label } from '@luminescent/ui-qwik';
 import Link from 'lucide-icons-qwik/icons/Link';
+import type { ServerType } from '~/util/plugins/types';
 
 function getLoaders(software: string) {
   let loaders;
@@ -54,14 +52,17 @@ const urls = {
 };
 
 export default component$(
-  ({ type = 'modrinth' }: { type?: Exclude<PluginSource, 'misc'> }) => {
-    const pluginsStore = useContext(pluginsStoreContext);
+  ({
+    type = 'modrinth',
+    currentServer,
+  }: {
+    type?: Exclude<PluginSource, 'misc'>;
+    currentServer?: ServerType;
+  }) => {
     const resolvedPlugin = useContext(resolvedPluginContext);
     const notifications = useContext(NotificationContext);
     const loaders = useComputed$(() =>
-      pluginsStore.servers[pluginsStore.openServer!]
-        ? getLoaders(pluginsStore.servers[pluginsStore.openServer!].software)
-        : []
+      currentServer ? getLoaders(currentServer.software) : []
     );
     const isLoading = useSignal<boolean>(false);
 
@@ -104,10 +105,7 @@ export default component$(
 
                 const pluginId = match[1];
                 // check if the plugin is already added
-                const existingPlugin =
-                  pluginsStore.servers[pluginsStore.openServer!].plugins[
-                    pluginId
-                  ];
+                const existingPlugin = currentServer?.plugins[pluginId];
                 if (existingPlugin) {
                   const notification = new Notification()
                     .setTitle('Plugin already added')

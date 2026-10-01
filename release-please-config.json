@@ -19,6 +19,12 @@
       "component": "analyze",
       "include-component-in-tag": true,
       "extra-files": ["package.json"]
+    },
+    "packages/mc-status": {
+      "package-name": "mc-status",
+      "component": "mc-status",
+      "include-component-in-tag": true,
+      "extra-files": ["package.json"]
     }
   },
   "changelog-sections": [
