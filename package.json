@@ -1,30 +1,21 @@
 {
   "name": "birdflop",
-  "author": {
-    "name": "birdflop",
-    "url": "https://birdflop.com"
-  },
+  "version": "13.0.0",
+  "private": true,
+  "description": "The only 501(c)(3) nonprofit Minecraft server host.",
   "homepage": "https://birdflop.com",
   "bugs": {
     "url": "https://github.com/LuminescentDev/web/issues"
   },
-  "version": "13.0.0",
   "license": "AGPL-3.0-or-later",
-  "description": "The only 501(c)(3) nonprofit Minecraft server host.",
+  "author": {
+    "name": "birdflop",
+    "url": "https://birdflop.com"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/birdflop/web.git"
   },
-  "engines": {
-    "node": ">=22"
-  },
-  "devEngines": {
-    "packageManager": {
-      "name": "pnpm",
-      "version": "11.18.0"
-    }
-  },
-  "private": true,
   "type": "module",
   "scripts": {
     "build": "pnpm build.pkg && wrangler types && qwik build",
@@ -105,5 +96,14 @@
     "vite-plus": "catalog:",
     "wrangler": "^4.146.0",
     "yaml": "^2.9.1"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "12.8.1"
+    }
+  },
+  "engines": {
+    "node": ">=22"
   }
 }
