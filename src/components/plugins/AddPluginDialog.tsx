@@ -7,8 +7,6 @@ import {
 import { Notification, NotificationContext } from '~/util/Notification';
 import { resolvedPluginContext } from '~/routes/resources/plugins';
 import { SelectList } from '../Elements/SelectList';
-import SiModrinth from 'simple-icons-qwik/icons/SiModrinth';
-import SiSpigotmc from 'simple-icons-qwik/icons/SiSpigotmc';
 import Loader2 from 'lucide-icons-qwik/icons/Loader2';
 import {
   getPlugin,
@@ -19,7 +17,7 @@ import { Label } from '@luminescent/ui-qwik';
 import Link from 'lucide-icons-qwik/icons/Link';
 import type { ServerType } from '~/util/plugins/types';
 
-function getLoaders(software: string) {
+export function getLoaders(software: string) {
   let loaders;
   switch (software) {
     case 'purpur':
@@ -69,29 +67,14 @@ export default component$(
     return (
       <>
         <div class="mt-6 flex flex-col gap-1">
-          <div class="border-lum-border/10 mb-4 flex flex-col border-b pb-4">
-            <h4 class="flex items-center gap-2 fill-current text-xl font-bold">
-              {type === 'modrinth' && (
-                <>
-                  <SiModrinth size={28} />
-                  Modrinth
-                </>
-              )}
-              {type === 'spigot' && (
-                <>
-                  <SiSpigotmc size={28} />
-                  SpigotMC
-                </>
-              )}
-              {isLoading.value && <Loader2 size={16} class="animate-spin" />}
-            </h4>
-          </div>
-
           <Label
             for="plugin-link"
             label="Search or paste the link of the plugin you want to add."
           >
             <Link size={16} q:slot="before-label" />
+            {isLoading.value && (
+              <Loader2 size={16} class="animate-spin" q:slot="after-label" />
+            )}
             <input
               type="text"
               class="lum-input"

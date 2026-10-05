@@ -25,10 +25,11 @@ import RefreshCw from 'lucide-icons-qwik/icons/RefreshCw';
 import Trash from 'lucide-icons-qwik/icons/Trash';
 import X from 'lucide-icons-qwik/icons/X';
 import { defaultDescription, generateHead } from '~/root';
-import { Label, SelectMenu, Tabs } from '@luminescent/ui-qwik';
+import { SelectMenu, Tabs } from '@luminescent/ui-qwik';
 import PluginCard from '~/components/plugins/PluginCard';
 import AddPluginDialog from '~/components/plugins/AddPluginDialog';
 import AddMiscDialog from '~/components/plugins/AddMiscDialog';
+import AddBulkPlugins from '~/components/plugins/AddBulkPlugins';
 import { deepTrack } from '~/util/track';
 import { softwareOptions } from '~/util/flags';
 import SiModrinth from 'simple-icons-qwik/icons/SiModrinth';
@@ -774,31 +775,16 @@ export default component$(() => {
         class="text-lum-text lum-card lum-grad-bg-lum-card-bg/50 open:animate-in open:fade-in open:slide-in-from-top-8 animate-out fade-out slide-in-from-top-8 m-auto hidden min-w-1/4 overflow-visible drop-shadow-2xl backdrop-blur-xl duration-300 open:flex open:duration-300"
       >
         <div class="flex flex-col">
-          <div class="border-lum-border/10 mb-4 flex flex-col border-b pb-4">
+          <div class="border-lum-border/10 mb-4 flex flex-wrap items-center gap-2 border-b pb-4">
             <h3 class="flex items-center gap-2 text-2xl font-bold">
               <Blocks size={28} />
-              Add a plugin
-              <button
-                class="lum-btn lum-bg-transparent rounded-lum-1 ml-auto p-2"
-                onClick$={() => {
-                  modalRef.value?.close();
-                }}
-              >
-                <X size={20} />
-              </button>
-              {isLoading.value.includes('add-plugin') && (
-                <Loader2 size={16} class="animate-spin" />
-              )}
+              Add a plugin from
             </h3>
-          </div>
-
-          <Label
-            for="add-plugin-type"
-            label={t('plugins.source@@Plugin Source')}
-          >
-            <Globe size={16} q:slot="before-label" />
             <SelectMenu
               id="add-plugin-type"
+              aria-label="Plugin source"
+              class="text-lg font-bold"
+              panelProps={{ class: 'max-w-sm text-base font-normal' }}
               onChange$={(e, el) => {
                 resolvedPlugin.type = el.value as PluginSource;
                 resolvedPlugin.plugin = undefined;
@@ -806,7 +792,12 @@ export default component$(() => {
               values={pluginSources}
             >
               {Object.entries(pluginSourcesIcons).map(([key, Icon]) => (
-                <Icon key={key} size={20} q:slot={`before-${key}`} />
+                <Icon
+                  key={key}
+                  size={20}
+                  q:slot={`before-${key}`}
+                  class="fill-current"
+                />
               ))}
               {Object.entries(pluginSourcesDescriptions).map(
                 ([key, description]) => (
@@ -818,10 +809,27 @@ export default component$(() => {
               )}
               {(() => {
                 const Icon = pluginSourcesIcons[resolvedPlugin.type];
-                return <Icon size={20} q:slot="dropdown-before" />;
+                return (
+                  <Icon
+                    size={20}
+                    q:slot="dropdown-before"
+                    class="fill-current"
+                  />
+                );
               })()}
             </SelectMenu>
-          </Label>
+            <button
+              class="lum-btn lum-bg-transparent rounded-lum-1 ml-auto p-2"
+              onClick$={() => {
+                modalRef.value?.close();
+              }}
+            >
+              <X size={20} />
+            </button>
+            {isLoading.value.includes('add-plugin') && (
+              <Loader2 size={16} class="animate-spin" />
+            )}
+          </div>
 
           {resolvedPlugin.type !== 'misc' && (
             <AddPluginDialog
@@ -860,6 +868,10 @@ export default component$(() => {
                 <Plus size={20} /> Add
               </button>
             </div>
+          )}
+
+          {resolvedPlugin.type !== 'misc' && (
+            <AddBulkPlugins currentServer={CurrentServer} />
           )}
         </div>
       </dialog>

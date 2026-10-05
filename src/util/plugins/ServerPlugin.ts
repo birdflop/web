@@ -94,6 +94,26 @@ export function searchPlugins(
   }
 }
 
+export async function searchAllPluginSources(
+  query: string,
+  loaders?: string[]
+) {
+  const sources = ['modrinth', 'spigot'] as const;
+  const results = await Promise.allSettled(
+    sources.map((source) => searchPlugins(source, query, loaders))
+  );
+  return {
+    plugins: results.flatMap((result) =>
+      result.status === 'fulfilled'
+        ? result.value.map((plugin) => plugin.toJSON())
+        : []
+    ),
+    failedSources: sources.filter(
+      (_, index) => results[index].status === 'rejected'
+    ),
+  };
+}
+
 export interface ServerPlugin<T = Record<string, unknown>> extends PluginType {
   get(): Promise<this>;
   fetch(): Promise<this>;
