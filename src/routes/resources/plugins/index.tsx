@@ -585,15 +585,17 @@ export default component$(() => {
               <SelectMenu
                 id="filter"
                 onChange$={(e, el) => {
-                  if (el.value === 'all') pluginsStore.filter = undefined;
-                  pluginsStore.filter = el.value as 'outdated' | PluginSource;
+                  pluginsStore.filter =
+                    el.value === 'all'
+                      ? undefined
+                      : (el.value as 'outdated' | PluginSource);
                 }}
                 values={[
                   { name: 'All', value: 'all' },
                   { name: 'Outdated', value: 'outdated' },
                   ...pluginSources,
                 ]}
-                value={pluginsStore.filter}
+                value={pluginsStore.filter ?? 'all'}
                 customDropdownButton
                 class="lum-bg-transparent lum-btn-p-1 rounded-lum-1"
               >
