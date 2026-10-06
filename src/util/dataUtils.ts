@@ -18,6 +18,7 @@ import { presetToVector } from './rgb/presets/vectorize';
 import { validatePresetSubmission } from './rgb/presets/presetValidation';
 import { isAdmin, Settings } from '~/routes/layout';
 import { Session } from '@auth/qwik';
+import type { PluginsStoreType } from './plugins/types';
 
 type names =
   | 'rgb'
@@ -220,8 +221,9 @@ export function setCookies<T extends Record<string, unknown>>(
 export const setUserData = server$(async function (data: {
   privatePresets?: rgbPreset[];
   settings?: Settings;
+  plugins?: PluginsStoreType;
 }) {
-  const session = this.sharedMap.get('session') as Session;
+  const session = this.sharedMap.get('session') as Session | undefined;
 
   const db = getDB();
   if (!session || !db || !session.user?.id)
@@ -232,6 +234,7 @@ export const setUserData = server$(async function (data: {
     .set({
       privatePresets: data.privatePresets,
       settings: data.settings,
+      plugins: data.plugins,
     })
     .where(eq(users.id, session.user.id))
     .returning()
@@ -241,7 +244,7 @@ export const setUserData = server$(async function (data: {
 });
 
 export const savePreset = server$(async function (presetId: number) {
-  const session = this.sharedMap.get('session') as Session;
+  const session = this.sharedMap.get('session') as Session | undefined;
   const db = getDB();
 
   if (!session?.user?.id || !db)
@@ -271,7 +274,7 @@ export const savePreset = server$(async function (presetId: number) {
 });
 
 export const unsavePreset = server$(async function (presetId: number) {
-  const session = this.sharedMap.get('session') as Session;
+  const session = this.sharedMap.get('session') as Session | undefined;
   const db = getDB();
 
   if (!session?.user?.id || !db)
@@ -305,7 +308,7 @@ export const unsavePreset = server$(async function (presetId: number) {
 export const publishPreset = server$(async function (
   submission: PublicPresetSubmission
 ) {
-  const session = this.sharedMap.get('session') as Session;
+  const session = this.sharedMap.get('session') as Session | undefined;
 
   const db = getDB();
   if (!session || !db || !session.user?.id)
@@ -353,7 +356,7 @@ export const updatePreset = server$(async function (
   presetId: number,
   presetData: Partial<PresetPartial>
 ) {
-  const session = this.sharedMap.get('session') as Session;
+  const session = this.sharedMap.get('session') as Session | undefined;
 
   const db = getDB();
   if (!session || !db || !session.user?.id)
@@ -385,7 +388,7 @@ export const updatePreset = server$(async function (
 });
 
 export const deletePreset = server$(async function (presetId: number) {
-  const session = this.sharedMap.get('session') as Session;
+  const session = this.sharedMap.get('session') as Session | undefined;
 
   const db = getDB();
   if (!session || !db || !session.user?.id)

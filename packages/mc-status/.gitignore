@@ -1,0 +1,15 @@
+# Build
+/dist
+/lib
+/lib-types
+
+# Development
+node_modules
+*.local
+
+# Cache
+.cache
+tsconfig.tsbuildinfo
+
+# Logs
+*.log

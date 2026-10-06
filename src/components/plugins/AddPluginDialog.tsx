@@ -5,13 +5,8 @@ import {
   useSignal,
 } from '@qwik.dev/core';
 import { Notification, NotificationContext } from '~/util/Notification';
-import {
-  pluginsStoreContext,
-  resolvedPluginContext,
-} from '~/routes/resources/plugins';
+import { resolvedPluginContext } from '~/routes/resources/plugins';
 import { SelectList } from '../Elements/SelectList';
-import SiModrinth from 'simple-icons-qwik/icons/SiModrinth';
-import SiSpigotmc from 'simple-icons-qwik/icons/SiSpigotmc';
 import Loader2 from 'lucide-icons-qwik/icons/Loader2';
 import {
   getPlugin,
@@ -20,8 +15,9 @@ import {
 } from '~/util/plugins/ServerPlugin';
 import { Label } from '@luminescent/ui-qwik';
 import Link from 'lucide-icons-qwik/icons/Link';
+import type { ServerType } from '~/util/plugins/types';
 
-function getLoaders(software: string) {
+export function getLoaders(software: string) {
   let loaders;
   switch (software) {
     case 'purpur':
@@ -54,43 +50,31 @@ const urls = {
 };
 
 export default component$(
-  ({ type = 'modrinth' }: { type?: Exclude<PluginSource, 'misc'> }) => {
-    const pluginsStore = useContext(pluginsStoreContext);
+  ({
+    type = 'modrinth',
+    currentServer,
+  }: {
+    type?: Exclude<PluginSource, 'misc'>;
+    currentServer?: ServerType;
+  }) => {
     const resolvedPlugin = useContext(resolvedPluginContext);
     const notifications = useContext(NotificationContext);
     const loaders = useComputed$(() =>
-      pluginsStore.servers[pluginsStore.openServer!]
-        ? getLoaders(pluginsStore.servers[pluginsStore.openServer!].software)
-        : []
+      currentServer ? getLoaders(currentServer.software) : []
     );
     const isLoading = useSignal<boolean>(false);
 
     return (
       <>
         <div class="mt-6 flex flex-col gap-1">
-          <div class="border-lum-border/10 mb-4 flex flex-col border-b pb-4">
-            <h4 class="flex items-center gap-2 fill-current text-xl font-bold">
-              {type === 'modrinth' && (
-                <>
-                  <SiModrinth size={28} />
-                  Modrinth
-                </>
-              )}
-              {type === 'spigot' && (
-                <>
-                  <SiSpigotmc size={28} />
-                  SpigotMC
-                </>
-              )}
-              {isLoading.value && <Loader2 size={16} class="animate-spin" />}
-            </h4>
-          </div>
-
           <Label
             for="plugin-link"
             label="Search or paste the link of the plugin you want to add."
           >
             <Link size={16} q:slot="before-label" />
+            {isLoading.value && (
+              <Loader2 size={16} class="animate-spin" q:slot="after-label" />
+            )}
             <input
               type="text"
               class="lum-input"
@@ -104,10 +88,7 @@ export default component$(
 
                 const pluginId = match[1];
                 // check if the plugin is already added
-                const existingPlugin =
-                  pluginsStore.servers[pluginsStore.openServer!].plugins[
-                    pluginId
-                  ];
+                const existingPlugin = currentServer?.plugins[pluginId];
                 if (existingPlugin) {
                   const notification = new Notification()
                     .setTitle('Plugin already added')

@@ -68,8 +68,8 @@ export default component$(() => {
               <div class="absolute -inset-2 rounded-2xl blur-lg backdrop-blur-md" />
               <h2 class="animate-in fade-in motion-safe:slide-in-from-top-16 text-xl! font-bold drop-shadow-md motion-safe:duration-800 md:text-2xl! xl:text-3xl!">
                 The only 501(c)(3) nonprofit server host{' '}
-                <br class="hidden sm:block" /> dedicated to{' '}
-                <br class="sm:hidden" />
+                <br class="hidden sm:block" />
+                dedicated to <br class="sm:hidden" />
                 <span
                   class="typer"
                   id="main"
@@ -91,19 +91,22 @@ export default component$(() => {
               href="#plans"
               class="lum-btn lum-btn-p-4 xl:lum-btn-p-6 lum-bg-blue-600/40 hover:lum-bg-blue-700 animate-in fade-in motion-safe:slide-in-from-top-16 text-xl backdrop-blur-sm motion-safe:duration-600"
             >
-              <Server size={32} /> Hosting
+              <Server size={32} />
+              Hosting
             </a>
             <Link
               href="/resources"
               class="lum-btn lum-btn-p-4 xl:lum-btn-p-6 lum-bg-purple-600/40 hover:lum-bg-purple-700 animate-in fade-in motion-safe:slide-in-from-top-16 text-xl backdrop-blur-sm motion-safe:duration-800"
             >
-              <Box size={32} /> Resources
+              <Box size={32} />
+              Resources
             </Link>
             <a
               href={donateLink}
               class="lum-btn lum-btn-p-4 xl:lum-btn-p-6 lum-bg-pink-600/40 hover:lum-bg-pink-700 animate-in fade-in motion-safe:slide-in-from-top-16 text-xl backdrop-blur-sm motion-safe:duration-1000"
             >
-              <PiggyBank size={32} /> Donate Today
+              <PiggyBank size={32} />
+              Donate Today
             </a>
           </div>
         </div>
@@ -195,7 +198,8 @@ export default component$(() => {
                     target="_blank"
                     class="lum-btn lum-bg-red-600/50 hover:lum-bg-red-600 m-auto mt-4 w-min"
                   >
-                    <AlertTriangle size={20} class="text-3xl" /> Out of stock
+                    <AlertTriangle size={20} class="text-3xl" />
+                    Out of stock
                   </a>
                 ) : (
                   <Link
@@ -205,7 +209,8 @@ export default component$(() => {
                     data-umami-event-page="home"
                     data-umami-event-variant={planName}
                   >
-                    <ShoppingCart size={20} class="text-3xl" /> Order Now
+                    <ShoppingCart size={20} class="text-3xl" />
+                    Order Now
                   </Link>
                 )}
               </div>
@@ -218,7 +223,8 @@ export default component$(() => {
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
         >
           <h4 class="mb-2 flex items-center gap-2 text-2xl font-bold">
-            <CheckCircle size={30} /> Benefits Galore
+            <CheckCircle size={30} />
+            Benefits Galore
           </h4>
           <p>
             All plans come with a one-click modpack installer, DDoS protection,
@@ -246,7 +252,8 @@ export default component$(() => {
             onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
           >
             <h4 class="mb-2 flex items-center gap-2 text-2xl font-bold">
-              <Rocket size={30} /> Sheer Performance
+              <Rocket size={30} />
+              Sheer Performance
             </h4>
             <p>
               We don't make compromises. Choose from our blazing fast Ryzen 9
@@ -260,7 +267,8 @@ export default component$(() => {
             onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
           >
             <h4 class="mb-2 flex items-center gap-2 text-2xl font-bold">
-              <Settings size={30} /> Fully Configurable
+              <Settings size={30} />
+              Fully Configurable
             </h4>
             <p>
               You'll have full access to your server. You can set your startup
@@ -274,7 +282,8 @@ export default component$(() => {
             onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
           >
             <h4 class="mb-2 flex items-center gap-2 text-2xl font-bold">
-              <Eye size={30} /> Transparent
+              <Eye size={30} />
+              Transparent
             </h4>
             <p>
               We don't oversell, and we're transparent about that. View our
@@ -291,7 +300,8 @@ export default component$(() => {
             onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
           >
             <h4 class="mb-2 flex items-center gap-2 text-2xl font-bold">
-              <Globe size={30} /> Price Matching
+              <Globe size={30} />
+              Price Matching
             </h4>
             <p>
               We're confident that we have the best plans available. If you
@@ -305,7 +315,8 @@ export default component$(() => {
             onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
           >
             <h4 class="mb-2 flex items-center gap-2 text-2xl font-bold">
-              <Heart size={30} /> Instant Support
+              <Heart size={30} />
+              Instant Support
             </h4>
             <p>
               You can contact support at any time through our{' '}
@@ -326,7 +337,8 @@ export default component$(() => {
             onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
           >
             <h4 class="mb-2 flex items-center gap-2 text-2xl font-bold">
-              <HandCoins size={30} /> Nonprofit
+              <HandCoins size={30} />
+              Nonprofit
             </h4>
             <p>
               Our nonprofit status helps us keep our services affordable and
