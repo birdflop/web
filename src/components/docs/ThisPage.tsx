@@ -40,7 +40,7 @@ export const OnThisPage = component$(({ readOnly }: { readOnly?: boolean }) => {
 
   const githubEditRoute = makeEditPageUrl(url.pathname);
 
-  const editUrl = `https://github.com/birdflop/web/edit/main/src/routes/${githubEditRoute}/index.mdx`;
+  const editUrl = `https://github.com/birdflop/web/edit/birdflop/src/routes/${githubEditRoute}/index.mdx`;
 
   const useActiveItem = (itemIds: string[]) => {
     const activeId = useSignal<string | null>(null);
