@@ -30,6 +30,9 @@ export const { onRequest, useSession, useSignIn, useSignOut } = QwikAuth$(
     return {
       providers: [
         Discord({
+          // Discord now sends the RFC 9207 `iss` param on the authorization
+          // response; without this, Auth.js expects its "https://authjs.dev" fallback
+          issuer: 'https://discord.com',
           profile(profile: DiscordProfile) {
             if (profile.avatar === null) {
               const defaultAvatarNumber =
