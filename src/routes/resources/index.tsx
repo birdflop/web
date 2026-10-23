@@ -19,6 +19,8 @@ import Presentation from 'lucide-icons-qwik/icons/Presentation';
 import Rainbow from 'lucide-icons-qwik/icons/Rainbow';
 import Save from 'lucide-icons-qwik/icons/Save';
 import Server from 'lucide-icons-qwik/icons/Server';
+import Smile from 'lucide-icons-qwik/icons/Smile';
+import Download from 'lucide-icons-qwik/icons/Download';
 import Wrench from 'lucide-icons-qwik/icons/Wrench';
 import Zap from 'lucide-icons-qwik/icons/Zap';
 import { inlineTranslate } from 'qwik-speak';
@@ -335,6 +337,51 @@ export default component$(() => {
         <a
           class="lum-btn lum-bg-transparent fill-current"
           href="https://github.com/birdflop/botflop"
+        >
+          <SiGithub size={20} />
+          Learn More
+        </a>
+      </div>
+
+      <hr />
+
+      <h2
+        id="birdmoji"
+        class="mb-2 flex scroll-mt-20 items-center gap-2 text-2xl font-bold"
+      >
+        <Smile size={30} />
+        Birdmoji
+      </h2>
+      <p class="text-lum-text-secondary">
+        An addon for DiscordSRV and DiscordSRV Ascension that brings your
+        Discord server's custom emojis into Minecraft chat as sprites. Birdmoji
+        builds a resource pack from your emojis and keeps it up to date as they
+        change.
+      </p>
+      <ul class="text-lum-text-secondary my-6 ml-6 list-disc space-y-2">
+        <li>Emojis sent from Discord show up as sprites in Minecraft chat.</li>
+        <li>
+          Players can type :emoji: in Minecraft chat, with tab completion, and
+          it shows up as the real emoji on Discord.
+        </li>
+        <li>Animated emojis stay animated.</li>
+        <li>
+          The resource pack is hosted by the plugin and sent to players
+          automatically, alongside your server's own resource pack.
+        </li>
+        <li>Requires Paper 1.21.9+ and DiscordSRV or DiscordSRV Ascension.</li>
+      </ul>
+      <div class="mt-2 flex gap-2">
+        <a
+          class="lum-btn lum-bg-orange/50 hover:lum-bg-orange"
+          href="https://github.com/birdflop/birdmoji/releases/latest"
+        >
+          <Download size={20} />
+          Download
+        </a>
+        <a
+          class="lum-btn lum-bg-transparent fill-current"
+          href="https://github.com/birdflop/birdmoji"
         >
           <SiGithub size={20} />
           Learn More

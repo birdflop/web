@@ -49,8 +49,10 @@ import {
   base64ToFile,
   loadGifFrames,
   loadImageFromDataURL,
+  loadFramesFromBlob,
 } from '~/util/animtexture';
 import Link from 'lucide-icons-qwik/icons/Link';
+import Smile from 'lucide-icons-qwik/icons/Smile';
 
 export default component$(() => {
   const t = inlineTranslate();
@@ -165,6 +167,24 @@ export default component$(() => {
           'nav.resources.animatedTextures.description@@Easily create textures from GIFs and Discord emojis etc. for use in Minecraft chat with sprites or any resource pack animation.'
         )}
       </p>
+      <a
+        class="lum-card lum-grad-bg-lum-card-bg/30 hover:lum-bg-blue/30 mb-4 flex-row items-center gap-4 transition-all duration-200!"
+        href="/resources#birdmoji"
+      >
+        <Smile size={32} class="shrink-0" />
+        <div>
+          <h2 class="font-bold">
+            {t(
+              'animtexture.birdmoji.title@@Want all of your Discord emojis in Minecraft chat?'
+            )}
+          </h2>
+          <p class="text-lum-text-secondary text-sm">
+            {t(
+              'animtexture.birdmoji.description@@Birdmoji is an addon for DiscordSRV and DiscordSRV Ascension that turns every emoji in your Discord server into a sprite, sends the resource pack to players automatically, and lets players use :emoji: in chat.'
+            )}
+          </p>
+        </div>
+      </a>
 
       <div class="flex gap-4">
         <div class="flex-1">
@@ -413,34 +433,18 @@ export default component$(() => {
                       el.value = url;
                     }
 
-                    const f = await (await fetch(url)).blob();
-
-                    const fileEvent = await readFileAsDataURL(f);
-                    if (!fileEvent.target?.result) return;
+                    const newFrames = await loadFramesFromBlob(
+                      await (await fetch(url)).blob()
+                    );
+                    if (newFrames.length === 0) return;
 
                     const texture =
                       animtextureStore.textures[
                         animtextureStore.activeTexture
                       ] ?? animtextureStore.textures[0];
-                    const frames = animtextureStore.accumulate
-                      ? texture.frames
-                      : [];
-                    const file = await base64ToFile(
-                      fileEvent.target.result as string
-                    );
-                    if (file.mime == 'image/gif') {
-                      frames.push(...(await loadGifFrames(file.buffer)));
-                    } else {
-                      const img = await loadImageFromDataURL(
-                        fileEvent.target.result as string
-                      );
-                      frames.push({
-                        img,
-                        delay: 20,
-                      });
-                    }
-
-                    texture.frames = frames;
+                    texture.frames = animtextureStore.accumulate
+                      ? [...texture.frames, ...newFrames]
+                      : newFrames;
                   }}
                 />
               </Label>
@@ -688,7 +692,7 @@ export default component$(() => {
             <Input
               readOnly
               noFormatRow
-              chatInput={`this is so funny <sprite:"birdflop:gifs":"birdflop:gif"/${texture.name}>`}
+              chatInput={`this is so funny <sprite:"minecraft:gui":"birdflop:gif/${texture.name}">`}
               playerName="AnimatedTexture"
             >
               <span class="items-center gap-2 text-white!">

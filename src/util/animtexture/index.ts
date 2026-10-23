@@ -26,6 +26,13 @@ export type RenderedTexture = {
 
 export const RESOURCE_PACK_FORMAT = 88;
 
+// Textures at birdflop:gif/* are added to the gui atlas so they can be used in chat as
+// <sprite:"minecraft:gui":"birdflop:gif/name">. Minecraft only loads its built-in atlases,
+// so resource packs can't add new ones.
+export const SPRITE_NAMESPACE = 'birdflop';
+export const SPRITE_PATH = 'gif';
+export const SPRITE_ATLAS = 'gui';
+
 export async function base64ToFile(dataURL: string) {
   const arr = dataURL.split(',');
   const match = arr[0].match(/:(.*?);/);
@@ -263,6 +270,35 @@ export const buildResourcePack = async (textures: AnimtextureTexture[]) => {
     )
   );
 
+  const packIcon = await fetch('/minecraft/pack.png');
+  if (packIcon.ok) zip.file('pack.png', await packIcon.blob());
+
+  if (
+    textures.some(
+      (texture) =>
+        texture.frames.length > 0 &&
+        texture.namespace === SPRITE_NAMESPACE &&
+        texture.path === SPRITE_PATH
+    )
+  ) {
+    zip.file(
+      `assets/minecraft/atlases/${SPRITE_ATLAS}.json`,
+      JSON.stringify(
+        {
+          sources: [
+            {
+              type: 'directory',
+              source: SPRITE_PATH,
+              prefix: `${SPRITE_PATH}/`,
+            },
+          ],
+        },
+        null,
+        2
+      )
+    );
+  }
+
   const names = new Set<string>();
   for (const texture of textures) {
     if (texture.frames.length === 0) continue;
@@ -283,4 +319,16 @@ export const buildResourcePack = async (textures: AnimtextureTexture[]) => {
   }
 
   return zip.generateAsync({ type: 'blob' });
+};
+
+export const loadFramesFromBlob = async (
+  blob: Blob
+): Promise<AnimtextureFrame[]> => {
+  const fileEvent = await readFileAsDataURL(blob);
+  const dataURL = fileEvent.target?.result as string | undefined;
+  if (!dataURL) return [];
+
+  const file = await base64ToFile(dataURL);
+  if (file.mime == 'image/gif') return loadGifFrames(file.buffer);
+  return [{ img: await loadImageFromDataURL(dataURL), delay: 20 }];
 };
