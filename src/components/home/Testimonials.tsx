@@ -191,7 +191,8 @@ export default component$(() => {
         onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
       >
         <h4 class="mb-2 flex items-center gap-2 text-2xl font-bold">
-          <Star size={30} /> More
+          <Star size={30} />
+          More
         </h4>
         <p class="text-lum-text-secondary">
           Check out our Trustpilot or Google page for more testimonials.

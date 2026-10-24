@@ -64,7 +64,8 @@ export default component$(() => {
                 value={loc.url.pathname + loc.url.search}
               />
               <button class="lum-btn lum-btn-p-4 lum-grad-bg-blue/60 hover:lum-bg-blue text-white">
-                <CircleUserRound size={20} /> {t('nav.profile.login@@Login')}
+                <CircleUserRound size={20} />
+                {t('nav.profile.login@@Login')}
               </button>
             </Form>
           </div>
@@ -138,7 +139,8 @@ export default component$(() => {
               value={loc.url.pathname + loc.url.search}
             />
             <button class="lum-btn lum-bg-transparent">
-              <LogOut size={20} /> {t('nav.profile.logout@@Logout')}
+              <LogOut size={20} />
+              {t('nav.profile.logout@@Logout')}
             </button>
           </Form>
         </div>

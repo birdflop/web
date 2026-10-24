@@ -18,12 +18,14 @@ import UsersPublicPresets, {
 } from '~/components/rgbirdflop/presets/UsersPublicPresets';
 import { routeLoader$ } from '@qwik.dev/router';
 import { Notification, NotificationContext } from '~/util/Notification';
+import { Session } from '@auth/qwik';
 
 export const useUser = routeLoader$(async ({ sharedMap }) => {
-  const session = sharedMap.get('session') as { user: { id: string } } | null;
+  const session = sharedMap.get('session') as Session | undefined;
   // Logged-out visitors still get the layout's "not logged in" screen,
   // which shows their debug ID — don't error the whole page.
-  if (!session) return { userInfo: null, userPresets: [], errors: [] };
+  if (!session?.user?.id)
+    return { userInfo: null, userPresets: [], errors: [] };
   return getUsersPresets(session.user.id);
 });
 

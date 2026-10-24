@@ -36,6 +36,25 @@ export function loadPreset(p: string): rgbPreset {
   return newPreset;
 }
 
+/**
+ * Reduce a full rgb store down to a storable preset by dropping every key still
+ * at its default, so saved presets stay small and pick up future default
+ * changes. `version` is always kept — migrations key off it.
+ */
+export function stripPresetDefaults(store: rgbPreset): rgbPreset {
+  const preset: rgbPreset = { ...store };
+  (Object.keys(preset) as Array<keyof typeof combinedDefaults>).forEach(
+    (key) => {
+      if (
+        key != 'version' &&
+        JSON.stringify(preset[key]) === JSON.stringify(combinedDefaults[key])
+      )
+        delete preset[key];
+    }
+  );
+  return preset;
+}
+
 export function getPresets(): rgbPreset[] {
   let privatePresets: rgbPreset[] = [];
 

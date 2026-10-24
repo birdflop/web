@@ -14,6 +14,8 @@ export class SpigotPlugin extends BasePlugin<SpigotResource> {
     const searchRes = await fetch(
       `${searchUrl}${encodeURIComponent(query)}?${searchParams.toString()}`
     );
+    if (!searchRes.ok)
+      throw new Error(`Spigot search failed (HTTP ${searchRes.status})`);
     const searchData: SpigotResource[] = await searchRes.json();
     return searchData.map((data) =>
       new SpigotPlugin({ id: data.id }).fromData(data)
@@ -51,6 +53,10 @@ export class SpigotPlugin extends BasePlugin<SpigotResource> {
 
   async fetchData() {
     const res = await fetch(`https://api.spiget.org/v2/resources/${this.id}`);
+    if (!res.ok)
+      throw new Error(
+        `Failed to fetch Spigot resource ${this.id} (HTTP ${res.status})`
+      );
     const data: SpigotResource = await res.json();
 
     return this.fromData(data);
@@ -60,6 +66,10 @@ export class SpigotPlugin extends BasePlugin<SpigotResource> {
     const versionsRes = await fetch(
       `https://api.spiget.org/v2/resources/${this.id}/versions?size=100&sort=-releaseDate`
     );
+    if (!versionsRes.ok)
+      throw new Error(
+        `Failed to fetch Spigot versions for ${this.id} (HTTP ${versionsRes.status})`
+      );
     const versionsData: SpigotVersion[] = await versionsRes.json();
 
     this.versions = versionsData.map((version) => ({

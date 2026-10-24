@@ -23,6 +23,8 @@ export class ModrinthPlugin extends BasePlugin<ModrinthProjectData> {
     });
 
     const searchRes = await fetch(`${searchUrl}?${searchParams.toString()}`);
+    if (!searchRes.ok)
+      throw new Error(`Modrinth search failed (HTTP ${searchRes.status})`);
     const searchData: {
       hits: ModrinthSearchHit[];
     } = await searchRes.json();
@@ -51,6 +53,10 @@ export class ModrinthPlugin extends BasePlugin<ModrinthProjectData> {
 
   async fetchData() {
     const res = await fetch(`https://api.modrinth.com/v2/project/${this.id}`);
+    if (!res.ok)
+      throw new Error(
+        `Failed to fetch Modrinth project ${this.id} (HTTP ${res.status})`
+      );
     const data: ModrinthProjectData = await res.json();
 
     return this.fromData(data);
@@ -60,8 +66,11 @@ export class ModrinthPlugin extends BasePlugin<ModrinthProjectData> {
     const res = await fetch(
       `https://api.modrinth.com/v2/project/${this.id}/version?loaders=["paper"]`
     );
+    if (!res.ok)
+      throw new Error(
+        `Failed to fetch Modrinth versions for ${this.id} (HTTP ${res.status})`
+      );
     const versions: ModrinthVersionData[] = await res.json();
-    console.log('Fetched versions for plugin', this.name, versions);
 
     this.versions = versions.map((version) => ({
       id: version.id,

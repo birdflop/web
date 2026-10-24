@@ -376,7 +376,8 @@ export default component$(() => {
                   data-umami-event-plan={plansStore.plan}
                   data-umami-event-amount={plansStore.gb}
                 >
-                  <ShoppingCart size={26} /> Add to cart
+                  <ShoppingCart size={26} />
+                  Add to cart
                 </a>
               </div>
             </div>

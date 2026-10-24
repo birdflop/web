@@ -6,7 +6,7 @@ import {
 } from '@qwik.dev/core';
 import { defaultDescription, generateHead } from '~/root';
 import { routeLoader$ } from '@qwik.dev/router';
-import { getCookies } from '~/util/dataUtils';
+import { getCookies, parseParams } from '~/util/dataUtils';
 import { generateOutput, rgbDefaults } from '@birdflop/rgbirdflop';
 import {
   previewStyleContext,
@@ -22,12 +22,69 @@ import RGBirdflop, {
 } from '~/components/rgbirdflop/RGBirdflop';
 import AllGradientsPreview from '~/components/rgbirdflop/AllGradientsPreview';
 
-export const useRGBCookies = routeLoader$(({ cookie, url }) => {
+import { eq, or } from 'drizzle-orm';
+import { getDB, servers } from '~/util/db';
+import { loadPreset, type rgbPreset } from '~/util/rgb/presets';
+import { slugify } from '~/util/serverlist/validation';
+
+export const useRGBCookies = routeLoader$(async ({ cookie, url }) => {
   const cookies = getCookies<Partial<typeof rgbDefaults>>(
     cookie,
     'rgb',
     url.searchParams
   );
+
+  const serverParam =
+    url.searchParams.get('s') || url.searchParams.get('server');
+  if (serverParam) {
+    try {
+      const db = getDB();
+      if (db) {
+        const cleanParam = serverParam.trim();
+        // links are generated as `?s=${slug}`; also accept a server name by
+        // slugifying it, but only ever match slugs exactly
+        const slugCandidate = slugify(cleanParam);
+        const serverRow = await db
+          .select({ name: servers.name, rgbPreset: servers.rgbPreset })
+          .from(servers)
+          .where(
+            or(eq(servers.slug, cleanParam), eq(servers.slug, slugCandidate))
+          )
+          .get();
+
+        if (serverRow) {
+          let serverPreset: rgbPreset | null = null;
+          if (serverRow.rgbPreset) {
+            serverPreset =
+              typeof serverRow.rgbPreset === 'string'
+                ? loadPreset(serverRow.rgbPreset)
+                : loadPreset(JSON.stringify(serverRow.rgbPreset));
+          }
+
+          if (!serverPreset) {
+            serverPreset = { text: serverRow.name };
+          } else if (!serverPreset.text) {
+            serverPreset.text = serverRow.name;
+          }
+
+          // precedence: saved cookie < server preset < explicit URL params
+          // (cookies.cookies already has the URL params merged over the cookie)
+          const { params: urlParams } = parseParams(
+            Object.fromEntries(url.searchParams.entries()),
+            'rgb'
+          );
+          cookies.cookies = {
+            ...cookies.cookies,
+            ...serverPreset,
+            ...urlParams,
+          };
+        }
+      }
+    } catch (err) {
+      console.error('Error fetching server preset for RGBirdflop:', err);
+    }
+  }
+
   return cookies;
 });
 

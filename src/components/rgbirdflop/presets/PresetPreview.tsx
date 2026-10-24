@@ -7,7 +7,7 @@ import {
   useSignal,
 } from '@qwik.dev/core';
 import { inlineTranslate } from 'qwik-speak';
-import { combinedDefaults, rgbDefaults } from '@birdflop/rgbirdflop';
+import { ColorStop, combinedDefaults, rgbDefaults } from '@birdflop/rgbirdflop';
 import Loader2 from 'lucide-icons-qwik/icons/Loader2';
 import MousePointer2 from 'lucide-icons-qwik/icons/MousePointer2';
 import Palette from 'lucide-icons-qwik/icons/Palette';
@@ -45,6 +45,15 @@ interface PresetPreviewProps extends LinkProps {
   };
 }
 
+export function getGradient(colors?: ColorStop[]) {
+  if (!colors) {
+    return undefined;
+  }
+  return `linear-gradient(to bottom right, ${colors
+    ?.map((color) => `${color.hex}10 ${color.pos}%`)
+    .join(', ')})`;
+}
+
 export default component$<PresetPreviewProps>(
   ({ Preset, rgbStore, publishRefs, ...props }) => {
     const t = inlineTranslate();
@@ -78,11 +87,7 @@ export default component$<PresetPreviewProps>(
           '--bg-color':
             (Preset.preset.colors ?? rgbDefaults?.colors)?.[0]?.hex + '10',
           '--lum-border-radius': '1rem',
-          background: `linear-gradient(to bottom right, ${(
-            Preset.preset.colors ?? rgbStore?.colors
-          )
-            ?.map((color) => `${color.hex}10 ${color.pos}%`)
-            .join(', ')})`,
+          background: getGradient(Preset.preset.colors ?? rgbStore?.colors),
         }}
       >
         {Preset.author && (
