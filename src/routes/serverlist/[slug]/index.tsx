@@ -283,7 +283,8 @@ export default component$(() => {
               <h2 class="flex items-center gap-2 text-lg font-bold">
                 <Blocks size={20} /> Plugins ({data.plugins.length})
               </h2>
-              <div class="flex flex-col gap-2">
+              {/* p-1/-m-1 leaves room for the hover scale so it isn't clipped */}
+              <div class="-m-1 flex max-h-96 flex-col gap-2 overflow-y-auto p-1">
                 {data.plugins.map((plugin) => {
                   // isolate goes on the wrapper, not the card: the card's -z-1
                   // blurred icon then paints above this section's background
