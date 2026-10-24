@@ -29,8 +29,9 @@
     { "pattern": "www.birdflop.com", "custom_domain": true },
   ],
   // Every minute: refresh cached ServersPulse telemetry for linked listings
-  // (scheduled handler in src/entry.cloudflare-pages.tsx). Page loaders only
-  // read D1; they never call the ServersPulse API.
+  // and the stalest batch of serverStatus rows (scheduled handler in
+  // src/entry.cloudflare-pages.tsx). List pages only read D1; they never call
+  // the ServersPulse API or ping servers.
   "triggers": {
     "crons": ["* * * * *"],
   },

@@ -1,0 +1,1 @@
+ALTER TABLE `servers` ADD `software` text DEFAULT 'paper' NOT NULL;

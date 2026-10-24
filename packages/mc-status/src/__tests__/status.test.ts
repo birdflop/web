@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vite-plus/test';
 import { readVarInt, writeVarInt } from '../protocol/varint.js';
-import { parseMotd } from '../motd/parser.js';
+import { normalizeMotdText, parseMotd, parseMotdLine } from '../motd/parser.js';
 import { shadowColor } from '../motd/colors.js';
 
 describe('@birdflop/mc-status', () => {
@@ -80,3 +80,82 @@ describe('@birdflop/mc-status', () => {
     });
   });
 });
+
+describe('MOTD semantics (Minecraft rules)', () => {
+  it('applies a legacy color after an inline hex color', () => {
+    const runs = parseMotdLine('&#FF54A1Pink &cRed');
+    expect(runs.map((r) => r.style.color)).toEqual(['#FF54A1', '#FF5555']);
+  });
+
+  it('resets formatting on a color code', () => {
+    const runs = parseMotdLine('&l&aBoldless &lbold');
+    expect(runs[0]).toMatchObject({ text: 'Boldless ' });
+    expect(runs[0].style.bold).toBe(false);
+    expect(runs[1].style).toMatchObject({ bold: true, color: '#55FF55' });
+  });
+
+  it('resets formatting on a hex color code', () => {
+    const runs = parseMotdLine('&l&#123456plain');
+    expect(runs[0].style).toMatchObject({ bold: false, color: '#123456' });
+  });
+
+  it('&r restores the default style after hex', () => {
+    const runs = parseMotdLine('&#123456&lA&rB&cC');
+    expect(runs[1].style).toMatchObject({ color: '#FFFFFF', bold: false });
+    expect(runs[2].style.color).toBe('#FF5555');
+  });
+
+  it('keeps literal angle-bracket text', () => {
+    expect(motdClean('&6<<< Welcome >>>')).toBe('<<< Welcome >>>');
+    expect(motdClean('a < b > c <notatag>')).toBe('a < b > c <notatag>');
+  });
+
+  it('still converts MiniMessage tags it knows', () => {
+    const runs = parseMotdLine('<#ff0000><bold>Hi<reset> there');
+    expect(runs[0].style).toMatchObject({ color: '#FF0000', bold: true });
+    expect(runs[1].style).toMatchObject({ color: '#FFFFFF', bold: false });
+  });
+
+  it('round-trips motdRunsToHtml output, decoding entities', () => {
+    const original = parseMotd('&c&lA & B <3 "q"\n&9&osecond');
+    const back = parseMotd(normalizeMotdText(original.html));
+    expect(back.clean).toBe('A & B <3 "q"\nsecond');
+    expect(back.runs[0][0].style).toMatchObject({
+      color: '#FF5555',
+      bold: true,
+    });
+    expect(back.runs[1][0].style).toMatchObject({
+      color: '#5555FF',
+      italic: true,
+    });
+  });
+
+  it('round-trips motdRunsToRaw output (bold/italic preserved)', () => {
+    const original = parseMotd({
+      text: '',
+      extra: [
+        { text: 'Bold ', color: '#FF54A1', bold: true },
+        { text: 'Italic', color: 'aqua', italic: true },
+      ],
+    });
+    const lines = original.raw.split('\n').map((l) => parseMotdLine(l));
+    expect(lines[0][0].style).toMatchObject({ color: '#FF54A1', bold: true });
+    expect(lines[0][1].style).toMatchObject({
+      color: '#55FFFF',
+      italic: true,
+      bold: false,
+    });
+  });
+
+  it('parses a top-level component array', () => {
+    const result = parseMotd([{ text: 'A', color: 'red' }, 'B']);
+    expect(result.clean).toBe('AB');
+    expect(result.runs[0][0].style.color).toBe('#FF5555');
+  });
+});
+
+function motdClean(line: string): string {
+  return parseMotdLine(line)
+    .map((r) => r.text)
+    .join('');
+}

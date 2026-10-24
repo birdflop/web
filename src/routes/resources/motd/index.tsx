@@ -25,10 +25,9 @@ import {
   generateMotdOutput,
   MC_COLORS,
   MC_FORMATS,
-  parseMotdLine,
-  shadowColor,
   type MotdFormat,
 } from '~/util/motd';
+import { renderMotdLine } from '~/components/Elements/MotdText';
 import Output from '~/components/Elements/Output';
 import { MotdPreviewCard } from '~/components/Elements/MotdPreviewCard';
 import darkBackgrounds, {
@@ -76,28 +75,6 @@ const MotdLineInput = component$<MotdLineInputProps>(
     </Label>
   )
 );
-
-// Renders one MOTD line into styled spans matching Minecraft's appearance.
-function renderMotdLine(line: string) {
-  const runs = parseMotdLine(line);
-  if (runs.length === 0) return <span>{' '}</span>;
-  return runs.map((run, i) => (
-    <span
-      key={`run${i}`}
-      data-obf={run.style.obfuscated ? run.text : undefined}
-      class={{
-        ...getFormattingClasses(run.style),
-        'motd-obf': run.style.obfuscated,
-      }}
-      style={{
-        color: run.style.color,
-        textShadow: `2px 2px 0 ${shadowColor(run.style.color)}`,
-      }}
-    >
-      {run.text}
-    </span>
-  ));
-}
 
 export default component$(() => {
   const t = inlineTranslate();

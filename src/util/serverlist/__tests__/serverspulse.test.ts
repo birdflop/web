@@ -6,10 +6,13 @@ import {
   diffMissingRefs,
   fetchServersPulseLinkState,
   isKnownServersPulseStatus,
+  isUnchangedFailure,
+  isUnchangedSuccess,
   isValidServersPulseLinkCode,
   isValidServersPulseListingRef,
   normalizeServersPulseLinkCode,
   toPublicServersPulseStats,
+  UNCHANGED_WRITE_HEARTBEAT_MS,
   type ServersPulseListing,
 } from '../serverspulse';
 import type { ServersPulseLink } from '~/util/db';
@@ -371,5 +374,66 @@ describe('toPublicServersPulseStats', () => {
       })
     );
     expect(stats!.status).toBe('maintenance');
+  });
+});
+
+describe('poller write skipping', () => {
+  const now = Date.now();
+
+  it('skips an unchanged successful payload written recently', () => {
+    const link = makeLink();
+    // Same content, freshly parsed (as a new API response would be).
+    const item = JSON.parse(
+      JSON.stringify(link.lastPayload)
+    ) as ServersPulseListing;
+    expect(isUnchangedSuccess(link, item, now)).toBe(true);
+  });
+
+  it('writes when the payload changed', () => {
+    const link = makeLink();
+    const item = makeListing({
+      observed: { ...makeListing().observed, onlinePlayers: 43 },
+    });
+    expect(isUnchangedSuccess(link, item, now)).toBe(false);
+  });
+
+  it('writes when the slug changed', () => {
+    const link = makeLink();
+    expect(
+      isUnchangedSuccess(link, makeListing({ slug: 'renamed' }), now)
+    ).toBe(false);
+  });
+
+  it('writes to clear a previous error or restore active status', () => {
+    const item = makeListing();
+    expect(
+      isUnchangedSuccess(makeLink({ lastError: 'unreachable' }), item, now)
+    ).toBe(false);
+    expect(
+      isUnchangedSuccess(makeLink({ linkStatus: 'unpublished' }), item, now)
+    ).toBe(false);
+  });
+
+  it('still writes an unchanged payload once the heartbeat has elapsed', () => {
+    const link = makeLink({
+      lastSuccessAt: new Date(now - UNCHANGED_WRITE_HEARTBEAT_MS - 1),
+    });
+    expect(isUnchangedSuccess(link, makeListing(), now)).toBe(false);
+  });
+
+  it('skips re-recording the same failure within the heartbeat', () => {
+    const link = makeLink({ lastError: 'HTTP 503', lastCheckedAt: new Date() });
+    expect(isUnchangedFailure(link, 'HTTP 503', now)).toBe(true);
+    expect(isUnchangedFailure(link, 'unreachable', now)).toBe(false);
+    expect(
+      isUnchangedFailure(
+        makeLink({
+          lastError: 'HTTP 503',
+          lastCheckedAt: new Date(now - UNCHANGED_WRITE_HEARTBEAT_MS - 1),
+        }),
+        'HTTP 503',
+        now
+      )
+    ).toBe(false);
   });
 });

@@ -1,6 +1,8 @@
 // Input validation + normalization for server listings.
 
 import { loadPreset, type rgbPreset } from '../rgb/presets';
+import type { PluginSource, PluginType } from '../plugins/ServerPlugin';
+import type { PluginsType, ServerType } from '../plugins/types';
 import {
   LIMITS,
   isServerEdition,
@@ -76,8 +78,8 @@ function trimOrNull(value: string | undefined): string | null {
   return trimmed ? trimmed : null;
 }
 
-function parsePort(
-  value: string | number | undefined
+export function parsePort(
+  value: string | number | null | undefined
 ): number | null | undefined {
   if (value === undefined || value === '' || value === null) return null;
   const n = typeof value === 'number' ? value : parseInt(value, 10);
@@ -87,6 +89,7 @@ function parsePort(
 }
 
 function isValidUrl(value: string): boolean {
+  if (typeof value !== 'string') return false;
   try {
     const url = new URL(value);
     return url.protocol === 'http:' || url.protocol === 'https:';
@@ -97,6 +100,177 @@ function isValidUrl(value: string): boolean {
 
 // Hostnames: allow domain names and IPv4 (no scheme, no path).
 const HOST_RE = /^[a-zA-Z0-9.-]+$/;
+
+export function isValidHost(host: string): boolean {
+  return host.length <= 253 && HOST_RE.test(host);
+}
+
+const isPlainObject = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null && !Array.isArray(value);
+
+const HEX_RE = /^#?([0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/;
+
+function isColorStops(value: unknown): boolean {
+  return (
+    Array.isArray(value) &&
+    value.length > 0 &&
+    value.length <= 20 &&
+    value.every(
+      (stop) =>
+        isPlainObject(stop) &&
+        typeof stop.hex === 'string' &&
+        HEX_RE.test(stop.hex) &&
+        typeof stop.pos === 'number' &&
+        stop.pos >= 0 &&
+        stop.pos <= 100 &&
+        (stop.opacity === undefined || typeof stop.opacity === 'number')
+    )
+  );
+}
+
+/**
+ * Shape-check an RGBirdflop preset before it's stored or rendered. Only the
+ * fields the title preview reads are checked in depth; the whole thing is
+ * size-capped since it's stored and shipped to every visitor. Returns null
+ * for anything malformed.
+ */
+export function sanitizeRgbPreset(value: unknown): rgbPreset | null {
+  let preset: unknown = value;
+  if (typeof preset === 'string') {
+    try {
+      preset = loadPreset(preset);
+    } catch {
+      return null;
+    }
+  }
+  if (!isPlainObject(preset)) return null;
+  try {
+    if (JSON.stringify(preset).length > LIMITS.rgbPresetBytes) return null;
+  } catch {
+    return null;
+  }
+  if (!isColorStops(preset.colors)) return null;
+  if (preset.shadowColors != null && !isColorStops(preset.shadowColors))
+    return null;
+  if (
+    preset.baseFormatting !== undefined &&
+    !isPlainObject(preset.baseFormatting)
+  )
+    return null;
+  if (
+    preset.colorFormat !== undefined &&
+    !(
+      isPlainObject(preset.colorFormat) &&
+      typeof preset.colorFormat.color === 'string' &&
+      (preset.colorFormat.class === undefined ||
+        typeof preset.colorFormat.class === 'string')
+    )
+  )
+    return null;
+  if (preset.formatting !== undefined && !Array.isArray(preset.formatting))
+    return null;
+  return preset;
+}
+
+const PLUGIN_SOURCES: readonly PluginSource[] = ['spigot', 'modrinth', 'misc'];
+
+// Optional http(s) URL field; anything else is dropped.
+function httpUrlOrUndefined(value: unknown): string | undefined {
+  return typeof value === 'string' &&
+    value.length <= LIMITS.url &&
+    isValidUrl(value)
+    ? value
+    : undefined;
+}
+
+function sanitizePluginId(
+  type: PluginSource,
+  id: unknown
+): string | number | null {
+  // Spigot resources are numeric; Modrinth ids/slugs are short [\w.-]
+  // tokens. Anything else would only feed bogus lookups to Spiget/Modrinth.
+  if (type === 'spigot') {
+    const n = typeof id === 'string' && /^\d{1,10}$/.test(id) ? Number(id) : id;
+    return typeof n === 'number' && Number.isSafeInteger(n) && n > 0
+      ? (id as string | number)
+      : null;
+  }
+  if (typeof id !== 'string' || id.length === 0 || id.length > LIMITS.pluginId)
+    return null;
+  if (type === 'modrinth' && !/^[A-Za-z0-9_.-]+$/.test(id)) return null;
+  return id;
+}
+
+// A Record keyed by the software union, so adding an option to
+// softwareOptions (src/util/flags) fails type-checking until it's listed here.
+// Kept apart from softwareOptions so this module doesn't pull in icon components.
+const SERVER_SOFTWARE: Record<ServerType['software'], true> = {
+  paper: true,
+  purpur: true,
+  velocity: true,
+  waterfall: true,
+  spigot: true,
+  forge: true,
+  fabric: true,
+};
+
+export function isServerSoftware(
+  value: unknown
+): value is ServerType['software'] {
+  return typeof value === 'string' && Object.hasOwn(SERVER_SOFTWARE, value);
+}
+
+/**
+ * Validate a client-sent plugin map (plugins page -> listing row). Malformed
+ * entries are dropped, since they can only come from a tampered request;
+ * only too many plugins is an error. Only the fields the plugins page
+ * persists are kept, and URLs must be http(s) since they end up as hrefs on
+ * the public listing page.
+ */
+export function sanitizeServerPlugins(
+  value: unknown
+): { plugins: PluginsType } | { error: string } {
+  if (!isPlainObject(value)) return { error: 'Invalid plugin list.' };
+  const entries = Object.entries(value);
+  if (entries.length > LIMITS.maxPlugins)
+    return { error: `You can list at most ${LIMITS.maxPlugins} plugins.` };
+
+  const plugins: PluginsType = {};
+  for (const [key, raw] of entries) {
+    if (key.length > LIMITS.pluginId || !isPlainObject(raw)) continue;
+    const type = raw.type as PluginSource;
+    if (!PLUGIN_SOURCES.includes(type)) continue;
+    const id = sanitizePluginId(type, raw.id);
+    if (id === null) continue;
+
+    const plugin: PluginType = { id, type };
+    if (typeof raw.name === 'string' && raw.name.trim())
+      plugin.name = raw.name.trim().slice(0, LIMITS.pluginName);
+    const url = httpUrlOrUndefined(raw.url);
+    if (url) plugin.url = url;
+    const iconUrl = httpUrlOrUndefined(raw.iconUrl);
+    if (iconUrl) plugin.iconUrl = iconUrl;
+
+    const version = raw.currentVersion;
+    if (
+      isPlainObject(version) &&
+      (typeof version.id === 'string' || typeof version.id === 'number') &&
+      String(version.id).length <= LIMITS.pluginId &&
+      typeof version.name === 'string'
+    ) {
+      const releaseDate = new Date(version.releaseDate as Date);
+      plugin.currentVersion = {
+        id: version.id,
+        name: version.name.slice(0, LIMITS.pluginName),
+        releaseDate: Number.isNaN(releaseDate.getTime())
+          ? new Date(0)
+          : releaseDate,
+      };
+    }
+    plugins[key] = plugin;
+  }
+  return { plugins };
+}
 
 export function validateServerInput(input: ServerFormInput): ValidationResult {
   const errors: string[] = [];
@@ -137,9 +311,9 @@ export function validateServerInput(input: ServerFormInput): ValidationResult {
   const javaHost = trimOrNull(input.javaHost);
   const bedrockHost = trimOrNull(input.bedrockHost);
 
-  if (javaHost && !HOST_RE.test(javaHost))
+  if (javaHost && !isValidHost(javaHost))
     errors.push('Java host is not a valid hostname or IP.');
-  if (bedrockHost && !HOST_RE.test(bedrockHost))
+  if (bedrockHost && !isValidHost(bedrockHost))
     errors.push('Bedrock host is not a valid hostname or IP.');
 
   const needsJava = edition === 'java' || edition === 'both';
@@ -180,24 +354,22 @@ export function validateServerInput(input: ServerFormInput): ValidationResult {
     errors.push('One or more selected tags are invalid.');
 
   const votifierHost = trimOrNull(input.votifierHost);
-  if (votifierHost && !HOST_RE.test(votifierHost))
+  if (votifierHost && !isValidHost(votifierHost))
     errors.push('Votifier host is not a valid hostname or IP.');
   const votifierPort = parsePort(input.votifierPort);
   if (votifierPort === undefined)
     errors.push('Votifier port must be a number between 1 and 65535.');
   const votifierToken = trimOrNull(input.votifierToken);
 
+  // Stored and rendered for every visitor, so shape/size-check it rather
+  // than trusting whatever object the client sent.
   let rgbPresetData: rgbPreset | null = null;
-  if (input.rgbPreset) {
-    if (typeof input.rgbPreset === 'object') {
-      rgbPresetData = input.rgbPreset;
-    } else if (typeof input.rgbPreset === 'string' && input.rgbPreset.trim()) {
-      try {
-        rgbPresetData = loadPreset(input.rgbPreset);
-      } catch {
-        errors.push('Invalid RGBirdflop preset JSON.');
-      }
-    }
+  if (
+    input.rgbPreset &&
+    (typeof input.rgbPreset !== 'string' || input.rgbPreset.trim())
+  ) {
+    rgbPresetData = sanitizeRgbPreset(input.rgbPreset);
+    if (!rgbPresetData) errors.push('Invalid RGBirdflop preset JSON.');
   }
 
   // Types don't survive the server$ boundary, so re-check at runtime. Ids
@@ -247,11 +419,12 @@ export function validateServerInput(input: ServerFormInput): ValidationResult {
   };
 }
 
-// Basic Minecraft username sanity check (Java: 3-16 [A-Za-z0-9_];
-// Bedrock gamertags can contain spaces, so we're lenient but bounded).
+// Minecraft username check: Java names are 3-16 [A-Za-z0-9_]. Listings can
+// be Bedrock-only, so a single leading Floodgate/Geyser prefix ('.' by
+// default, '*' on some setups) is allowed for Bedrock players voting through
+// a Java proxy.
 export function isValidMcUsername(username: string): boolean {
-  const trimmed = username.trim();
-  return trimmed.length >= 1 && trimmed.length <= 32;
+  return /^[.*]?[A-Za-z0-9_]{3,16}$/.test(username.trim());
 }
 
 export function formatVersionRange(

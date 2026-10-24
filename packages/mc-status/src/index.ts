@@ -25,6 +25,10 @@ export * from './types.js';
 
 /**
  * Ping a Minecraft server (attempts Java SLP first, then Bedrock UDP if Java fails).
+ *
+ * `port` is the Java port. The Bedrock fallback uses `options.bedrockPort`,
+ * or the Bedrock default (19132) — never the Java port, which is almost
+ * never where a Bedrock listener lives.
  */
 export async function ping(
   host: string,
@@ -35,7 +39,7 @@ export async function ping(
     return await pingJava(host, port ?? 25565, options);
   } catch (javaError) {
     try {
-      return await pingBedrock(host, port ?? 19132, options);
+      return await pingBedrock(host, options.bedrockPort ?? 19132, options);
     } catch {
       throw javaError;
     }

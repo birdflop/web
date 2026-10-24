@@ -50,7 +50,7 @@ export const usePresets = routeLoader$(async ({ url, sharedMap }) => {
   const page = Math.max(1, parseInt(searchParams.get('page') || '1', 10));
   const perPage = Math.max(
     1,
-    Math.min(100, parseInt(searchParams.get('perPage') || '20', 10))
+    Math.min(100, parseInt(searchParams.get('perPage') || '24', 10))
   );
   const searchTerm = searchParams.get('search') || '';
   const showPending = searchParams.get('showPending') === 'true';

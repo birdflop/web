@@ -14,7 +14,7 @@ import type {
   ServerTag,
 } from '../src/util/serverlist/constants';
 import type { PluginType } from '../src/util/plugins/ServerPlugin';
-import type { PluginsStoreType } from '../src/util/plugins/types';
+import type { PluginsStoreType, ServerType } from '../src/util/plugins/types';
 import type {
   ServersPulseLinkStatus,
   ServersPulseListing,
@@ -204,6 +204,11 @@ export const servers = sqliteTable(
     plugins: text('plugins', { mode: 'json' }).$type<{
       [id: string]: PluginType;
     }>(),
+    // Server software picked in the plugin updater (filters plugin versions).
+    software: text('software')
+      .$type<ServerType['software']>()
+      .default('paper')
+      .notNull(),
     // Plugins show on the public listing unless the owner turns them off,
     // and individual plugins (by id) can be left out. Kept apart from
     // `plugins` because the plugin updater rewrites that column wholesale.
@@ -243,6 +248,41 @@ export interface ServerWithVotes extends Server {
   totalVotes: number;
   owner?: User | null;
 }
+
+// -------------------- Server status (polled) --------------------
+// Last known ping result per listing, refreshed in small batches by the
+// every-minute cron (refreshStoredStatuses in src/util/serverlist/status.ts).
+// List pages filter/sort on this table instead of pinging servers live.
+// Timestamps are written explicitly as epoch ms — never rely on a
+// CURRENT_TIMESTAMP default (it stores text and breaks comparisons).
+export const serverStatus = sqliteTable(
+  'serverStatus',
+  {
+    serverId: integer('serverId')
+      .primaryKey()
+      .references(() => servers.id, { onDelete: 'cascade' }),
+    online: integer('online', { mode: 'boolean' }).notNull(),
+    players: integer('players').notNull().default(0),
+    maxPlayers: integer('maxPlayers').notNull().default(0),
+    version: text('version'),
+    // Raw MOTD (`§` codes, hex as `§#RRGGBB`) — render with MotdText.
+    motd: text('motd'),
+    // Favicon data URL (Java only).
+    icon: text('icon'),
+    // Which edition/address actually answered ("both" listings fall back
+    // from Java to Bedrock).
+    edition: text('edition').$type<'java' | 'bedrock'>().notNull(),
+    host: text('host').notNull(),
+    port: integer('port'),
+    checkedAt: integer('checkedAt', { mode: 'timestamp_ms' }).notNull(),
+  },
+  (t) => [
+    index('serverStatus_checked_idx').on(t.checkedAt),
+    index('serverStatus_online_players_idx').on(t.online, t.players),
+  ]
+);
+
+export type StoredServerStatus = typeof serverStatus.$inferSelect;
 
 // -------------------- Server Votes --------------------
 export const serverVotes = sqliteTable(

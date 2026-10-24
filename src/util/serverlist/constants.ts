@@ -109,4 +109,14 @@ export const LIMITS = {
   // Bounds on the hidden-plugins list (ids are short platform ids/slugs).
   maxHiddenPlugins: 500,
   pluginId: 100,
+  // Bounds on a listing's stored plugin list (written via
+  // updateServerListData from the plugins page).
+  maxPlugins: 500,
+  pluginName: 100,
+  // Serialized size cap for a listing's RGBirdflop title preset.
+  rgbPresetBytes: 4000,
 } as const;
+
+// Slugs that collide with static routes under /serverlist/ and so can never
+// be handed out to a listing.
+export const RESERVED_SLUGS: readonly string[] = ['submit'];

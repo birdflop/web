@@ -1,24 +1,27 @@
-// Listing query: DB-level ranking/filtering + on-demand live status.
+// Listing query: ranking, filtering and paging entirely in SQL.
 //
-// Votes, edition, tags and text search are resolved in SQL. Live-only fields
-// (online status, version string, and sorting by current player count) require
-// pinging servers, so when one of those is requested we fetch statuses for a
-// bounded candidate pool, refine in memory, then paginate. This keeps us from
-// fanning out hundreds of status requests on every page view.
+// Votes, edition, tags and text search come from the listing tables. Status
+// fields (online, version, current players) come from the `serverStatus`
+// table, which the every-minute cron keeps fresh (see refreshStoredStatuses in
+// ./status) — a list request never pings a server.
 
-import { and, desc, eq, inArray, like, or, sql } from 'drizzle-orm';
+import { and, desc, eq, inArray, or, sql, type SQL } from 'drizzle-orm';
+import type { SQLiteColumn } from 'drizzle-orm/sqlite-core';
 import {
   type AppDatabase,
   servers,
+  serverStatus,
   serverVotes,
   users,
   type Server,
   type User,
 } from '~/util/db';
-import { getServerStatus, type ServerStatus } from './status';
+import {
+  STORED_STATUS_MAX_AGE_MS,
+  storedRowToStatus,
+  type ServerStatus,
+} from './status';
 import type { ServerSort, ServerTag } from './constants';
-
-const CANDIDATE_CAP = 75;
 
 // Public projection of a listing. Loader payloads are visible to every
 // visitor, so NuVotifier delivery secrets and the owner's account row (which
@@ -88,10 +91,9 @@ export interface ServerListParams {
 export interface ServerListResult {
   rows: PublicServerWithVotes[];
   total: number;
+  /** The page actually returned (requested page clamped to the last page). */
+  page: number;
   statuses: Record<number, ServerStatus | null>;
-  // True when results were refined using live status over a capped pool, so
-  // the total reflects that pool rather than the whole table.
-  liveRefined: boolean;
 }
 
 function startOfMonthMs(): number {
@@ -99,9 +101,25 @@ function startOfMonthMs(): number {
   return Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1);
 }
 
-function buildWhere(params: ServerListParams) {
-  const conditions = [];
-  if (params.search) conditions.push(like(servers.name, `%${params.search}%`));
+/** Escape LIKE wildcards so user input matches literally (ESCAPE '\\'). */
+export function escapeLike(value: string): string {
+  return value.replace(/[\\%_]/g, '\\$&');
+}
+
+function containsInsensitive(column: SQLiteColumn, value: string): SQL {
+  return sql`${column} LIKE ${`%${escapeLike(value)}%`} ESCAPE '\\'`;
+}
+
+// Stored status counts as online only while it is fresh (mirrors
+// storedRowToStatus), so a starved cron can't keep dead servers "online".
+function onlineCondition(now: number): SQL {
+  return sql`(${serverStatus.online} = 1 AND ${serverStatus.checkedAt} >= ${now - STORED_STATUS_MAX_AGE_MS})`;
+}
+
+function buildWhere(params: ServerListParams, now: number) {
+  const conditions: (SQL | undefined)[] = [];
+  if (params.search)
+    conditions.push(containsInsensitive(servers.name, params.search));
   if (params.edition === 'java')
     conditions.push(inArray(servers.edition, ['java', 'both']));
   else if (params.edition === 'bedrock')
@@ -114,11 +132,13 @@ function buildWhere(params: ServerListParams) {
   if (params.version) {
     conditions.push(
       or(
-        like(servers.minVersion, `%${params.version}%`),
-        like(servers.maxVersion, `%${params.version}%`)
+        containsInsensitive(servers.minVersion, params.version),
+        containsInsensitive(servers.maxVersion, params.version),
+        containsInsensitive(serverStatus.version, params.version)
       )
     );
   }
+  if (params.onlineOnly) conditions.push(onlineCondition(now));
   if (params.verifiedOnly) {
     // Admin-granted OR auto-detected (see src/util/serverlist/birdflop.ts).
     conditions.push(
@@ -128,14 +148,21 @@ function buildWhere(params: ServerListParams) {
   return conditions.length ? and(...conditions) : undefined;
 }
 
-function orderClause(sort: ServerSort) {
+function orderClause(sort: ServerSort, now: number) {
   // Sponsored/featured always pinned on top.
   switch (sort) {
     case 'newest':
       return [desc(servers.featured), desc(servers.createdAt)];
     case 'allTimeVotes':
       return [desc(servers.featured), desc(sql`totalVotes`)];
-    case 'players': // resolved live; fall back to monthly votes for the DB pull
+    case 'players':
+      return [
+        desc(servers.featured),
+        desc(
+          sql`CASE WHEN ${onlineCondition(now)} THEN ${serverStatus.players} ELSE 0 END`
+        ),
+        desc(sql`monthlyVotes`),
+      ];
     case 'votes':
     default:
       return [desc(servers.featured), desc(sql`monthlyVotes`)];
@@ -146,14 +173,19 @@ async function selectRanked(
   db: AppDatabase,
   where: ReturnType<typeof buildWhere>,
   sort: ServerSort,
+  now: number,
   limit: number,
   offset: number
-): Promise<PublicServerWithVotes[]> {
+): Promise<{
+  rows: PublicServerWithVotes[];
+  statuses: Record<number, ServerStatus | null>;
+}> {
   const monthStart = startOfMonthMs();
-  const rows = await db
+  const result = await db
     .select({
       server: servers,
       owner: users,
+      status: serverStatus,
       monthlyVotes:
         sql<number>`COALESCE(SUM(CASE WHEN ${serverVotes.createdAt} >= ${monthStart} THEN 1 ELSE 0 END), 0)`.as(
           'monthlyVotes'
@@ -162,93 +194,54 @@ async function selectRanked(
     })
     .from(servers)
     .leftJoin(users, eq(users.id, servers.ownerId))
+    .leftJoin(serverStatus, eq(serverStatus.serverId, servers.id))
     .leftJoin(serverVotes, eq(serverVotes.serverId, servers.id))
     .where(where)
     .groupBy(servers.id)
-    .orderBy(...orderClause(sort))
+    .orderBy(...orderClause(sort, now))
     .limit(limit)
     .offset(offset);
 
-  return rows.map((r) => ({
-    ...toPublicServer(r.server),
-    monthlyVotes: Number(r.monthlyVotes),
-    totalVotes: Number(r.totalVotes),
-    owner: toPublicOwner(r.owner),
-  }));
-}
-
-async function fetchStatuses(
-  rows: PublicServerWithVotes[]
-): Promise<Record<number, ServerStatus | null>> {
-  const entries = await Promise.all(
-    rows.map(async (s) => [s.id, await getServerStatus(s)] as const)
-  );
-  return Object.fromEntries(entries);
+  const statuses: Record<number, ServerStatus | null> = {};
+  const rows = result.map((r) => {
+    statuses[r.server.id] = storedRowToStatus(r.status, now);
+    return {
+      ...toPublicServer(r.server),
+      monthlyVotes: Number(r.monthlyVotes),
+      totalVotes: Number(r.totalVotes),
+      owner: toPublicOwner(r.owner),
+    };
+  });
+  return { rows, statuses };
 }
 
 export async function queryServers(
   db: AppDatabase,
   params: ServerListParams
 ): Promise<ServerListResult> {
-  const where = buildWhere(params);
-  const needsLive =
-    params.onlineOnly || params.version !== '' || params.sort === 'players';
+  const now = Date.now();
+  const where = buildWhere(params, now);
 
-  if (!needsLive) {
-    const totalRow = await db
-      .select({ count: sql<number>`COUNT(*)` })
-      .from(servers)
-      .where(where)
-      .get();
-    const total = Number(totalRow?.count ?? 0);
+  const totalRow = await db
+    .select({ count: sql<number>`COUNT(*)` })
+    .from(servers)
+    .leftJoin(serverStatus, eq(serverStatus.serverId, servers.id))
+    .where(where)
+    .get();
+  const total = Number(totalRow?.count ?? 0);
 
-    const rows = await selectRanked(
-      db,
-      where,
-      params.sort,
-      params.perPage,
-      (params.page - 1) * params.perPage
-    );
-    return {
-      rows,
-      total,
-      statuses: await fetchStatuses(rows),
-      liveRefined: false,
-    };
-  }
+  // A page past the end (stale link, perPage change) shows the last page.
+  const lastPage = Math.max(1, Math.ceil(total / params.perPage));
+  const page = Math.min(Math.max(1, params.page), lastPage);
+  if (total === 0) return { rows: [], total, page, statuses: {} };
 
-  // Live-refinement path: pull a bounded pool, ping it, then filter/sort/page.
-  const pool = await selectRanked(db, where, params.sort, CANDIDATE_CAP, 0);
-  const statuses = await fetchStatuses(pool);
-
-  let filtered = pool;
-  if (params.onlineOnly)
-    filtered = filtered.filter((s) => statuses[s.id]?.online);
-  if (params.version) {
-    const v = params.version.toLowerCase();
-    filtered = filtered.filter(
-      (s) =>
-        s.minVersion?.toLowerCase().includes(v) ||
-        s.maxVersion?.toLowerCase().includes(v) ||
-        statuses[s.id]?.version?.toLowerCase().includes(v)
-    );
-  }
-
-  if (params.sort === 'players') {
-    filtered = [...filtered].sort((a, b) => {
-      if (a.featured !== b.featured) return a.featured ? -1 : 1;
-      return (
-        (statuses[b.id]?.players.online ?? 0) -
-        (statuses[a.id]?.players.online ?? 0)
-      );
-    });
-  }
-
-  const total = filtered.length;
-  const start = (params.page - 1) * params.perPage;
-  const rows = filtered.slice(start, start + params.perPage);
-  const pageStatuses: Record<number, ServerStatus | null> = {};
-  for (const s of rows) pageStatuses[s.id] = statuses[s.id];
-
-  return { rows, total, statuses: pageStatuses, liveRefined: true };
+  const { rows, statuses } = await selectRanked(
+    db,
+    where,
+    params.sort,
+    now,
+    params.perPage,
+    (page - 1) * params.perPage
+  );
+  return { rows, total, page, statuses };
 }

@@ -20,19 +20,31 @@ const detailsCache = new Map<
 
 const cacheKey = (type: string, id: string | number) => `${type}:${id}`;
 
+// These end up as href/src on the public listing page, so anything that
+// isn't plain http(s) (e.g. a stored javascript: URL) is dropped.
+function httpUrl(value: string | undefined): string | undefined {
+  if (!value) return undefined;
+  try {
+    const { protocol } = new URL(value);
+    return protocol === 'http:' || protocol === 'https:' ? value : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 const pluginPageUrl = (plugin: PluginType) => {
   if (plugin.type === 'modrinth')
-    return `https://modrinth.com/plugin/${plugin.id}`;
+    return `https://modrinth.com/plugin/${encodeURIComponent(plugin.id)}`;
   if (plugin.type === 'spigot')
-    return `https://www.spigotmc.org/resources/${plugin.id}`;
-  return plugin.url;
+    return `https://www.spigotmc.org/resources/${encodeURIComponent(plugin.id)}`;
+  return httpUrl(plugin.url);
 };
 
 function pickDetails(plugin: PluginType): FetchedDetails {
   return {
     name: plugin.name,
     url: pluginPageUrl(plugin),
-    iconUrl: plugin.iconUrl,
+    iconUrl: httpUrl(plugin.iconUrl),
   };
 }
 
@@ -57,15 +69,20 @@ async function fetchModrinth(ids: string[]) {
   return found;
 }
 
-// Spiget has no bulk endpoint; one request per resource.
+// Spiget has no bulk endpoint; one request per resource. Ids that don't
+// resolve are cached too (as empty details), so bogus ids can't make every
+// view refetch them.
 async function fetchSpigot(ids: (string | number)[]) {
   const found = new Map<string, FetchedDetails>();
   await Promise.allSettled(
-    ids.map(async (id) => {
-      const plugin = await new SpigotPlugin({ id }).fetchData();
-      // Spiget answers a missing resource with an error body, not a throw.
-      if (plugin.name) found.set(String(id), pickDetails(plugin));
-    })
+    ids
+      .filter((id) => /^\d{1,10}$/.test(String(id)))
+      .map(async (id) => {
+        found.set(String(id), {});
+        const plugin = await new SpigotPlugin({ id }).fetchData();
+        // Spiget answers a missing resource with an error body, not a throw.
+        if (plugin.name) found.set(String(id), pickDetails(plugin));
+      })
   );
   return found;
 }
@@ -108,10 +125,11 @@ export async function getPluginDetails(
     const fetched = plugin.type
       ? detailsCache.get(cacheKey(plugin.type, plugin.id))?.details
       : undefined;
+    const stored = pickDetails(plugin);
     return {
-      ...pickDetails(plugin),
-      ...fetched,
       name: fetched?.name ?? plugin.name ?? String(plugin.id),
+      url: httpUrl(fetched?.url) ?? stored.url,
+      iconUrl: httpUrl(fetched?.iconUrl) ?? stored.iconUrl,
       id: plugin.id,
       type: plugin.type,
     };

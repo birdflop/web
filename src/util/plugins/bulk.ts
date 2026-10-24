@@ -1,3 +1,5 @@
+import type { PluginVersion } from './ServerPlugin';
+
 export function parsePluginFilenames(value: string) {
   return [
     ...new Set(
@@ -62,4 +64,3 @@ export function findFilenameVersion(
 export function normalizePluginName(value: string) {
   return value.toLowerCase().replace(/[^a-z0-9]/g, '');
 }
-import type { PluginVersion } from './ServerPlugin';

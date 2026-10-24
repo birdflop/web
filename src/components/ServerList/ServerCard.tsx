@@ -6,10 +6,12 @@ import Hash from 'lucide-icons-qwik/icons/Hash';
 import type { PublicServerWithVotes } from '~/util/serverlist/queries';
 import type { ServerStatus } from '~/util/serverlist/status';
 import { rgbDefaults } from '@birdflop/rgbirdflop';
-import { loadPreset, type rgbPreset } from '~/util/rgb/presets';
 import RgbPreview from '~/components/rgbirdflop/RgbPreview';
 import { stripBBCode } from '~/util/serverlist/bbcode';
-import { formatVersionRange } from '~/util/serverlist/validation';
+import {
+  formatVersionRange,
+  sanitizeRgbPreset,
+} from '~/util/serverlist/validation';
 import Output from '../Elements/Output';
 import { getFormattingClasses } from '../rgbirdflop/preview';
 import { Birdflop } from '@luminescent/icons-qwik';
@@ -34,21 +36,11 @@ export default component$<ServerCardProps>(({ server, status, rank }) => {
     status?.version
   );
 
-  let titlePreset: rgbPreset | null = null;
-  if (server.rgbPreset) {
-    if (typeof server.rgbPreset === 'object') {
-      titlePreset = server.rgbPreset;
-    } else if (
-      typeof server.rgbPreset === 'string' &&
-      (server.rgbPreset as string).trim()
-    ) {
-      try {
-        titlePreset = loadPreset(server.rgbPreset);
-      } catch {
-        titlePreset = null;
-      }
-    }
-  }
+  // Rows stored before presets were validated may hold anything, so a
+  // malformed preset falls back to the plain name instead of breaking the card.
+  const titlePreset = server.rgbPreset
+    ? sanitizeRgbPreset(server.rgbPreset)
+    : null;
 
   const primaryHost = server.javaHost || server.bedrockHost;
   const displayIp = primaryHost
@@ -121,9 +113,7 @@ export default component$<ServerCardProps>(({ server, status, rank }) => {
               href={`/serverlist/${server.slug}`}
               class="hover:text-lum-accent min-w-0 flex-1 truncate text-lg font-bold after:absolute after:inset-0 after:content-['']"
             >
-              {titlePreset &&
-              titlePreset.colors &&
-              titlePreset.colors.length > 0 ? (
+              {titlePreset ? (
                 <span
                   class={{
                     ...getFormattingClasses(

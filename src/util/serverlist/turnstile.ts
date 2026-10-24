@@ -4,8 +4,11 @@
 //   TURNSTILE_SITEKEY  - public site key (env var, sent to the client widget)
 //   TURNSTILE_SECRET   - secret key (Workers secret, never sent to the client)
 //
-// If TURNSTILE_SECRET is unset, verification is skipped (returns true) so the
-// feature still works in local/dev environments without Turnstile configured.
+// If TURNSTILE_SECRET is unset, verification is skipped only in dev builds
+// (so local environments work without Turnstile). Production fails closed:
+// a missing secret must never silently disable the CAPTCHA.
+
+import { isDev } from '@qwik.dev/core';
 
 const VERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
 
@@ -19,8 +22,13 @@ export async function verifyTurnstile(
   secret: string | undefined,
   remoteIp?: string
 ): Promise<{ success: boolean; error?: string }> {
-  // No secret configured -> Turnstile disabled, allow through.
-  if (!secret) return { success: true };
+  if (!secret) {
+    if (isDev) return { success: true };
+    console.error(
+      'TURNSTILE_SECRET is not set; rejecting CAPTCHA-gated request.'
+    );
+    return { success: false, error: 'CAPTCHA is not configured.' };
+  }
 
   if (!token) return { success: false, error: 'Missing CAPTCHA token' };
 

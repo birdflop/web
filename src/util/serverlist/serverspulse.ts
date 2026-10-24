@@ -56,6 +56,11 @@ const STATE_RECHECK_MS = 6 * 60 * 60 * 1000;
 // Cap /links/self calls per poll run so a mass outage (every ref missing at
 // once) can't blow the shared 60 req/min budget.
 const MAX_STATE_CHECKS_PER_RUN = 5;
+// The poller skips the D1 write when nothing changed since the last cycle,
+// but still rewrites an unchanged row this often so lastSuccessAt /
+// lastCheckedAt keep advancing (staleness note, 7-day hide window).
+export const UNCHANGED_WRITE_HEARTBEAT_MS = 15 * 60 * 1000;
+const MISSING_REF_ERROR = 'missing from discover response';
 
 // ---------- API types (shape per the ServersPulse Discover API) ----------
 
@@ -439,6 +444,44 @@ function stateCheckIsDue(
   return now - link.lastStateCheckAt.getTime() > STATE_RECHECK_MS;
 }
 
+function isRecent(at: Date | null, now: number): boolean {
+  return !!at && now - at.getTime() < UNCHANGED_WRITE_HEARTBEAT_MS;
+}
+
+/**
+ * Whether a successful poll result would leave the row unchanged (same
+ * payload and slug, already active and error-free) and the row was written
+ * recently enough that the write can be skipped.
+ */
+export function isUnchangedSuccess(
+  link: Pick<
+    ServersPulseLink,
+    'lastPayload' | 'slug' | 'linkStatus' | 'lastError' | 'lastSuccessAt'
+  >,
+  item: ServersPulseListing,
+  now: number
+): boolean {
+  return (
+    link.linkStatus === 'active' &&
+    link.lastError === null &&
+    (item.slug ?? link.slug) === link.slug &&
+    isRecent(link.lastSuccessAt, now) &&
+    JSON.stringify(link.lastPayload) === JSON.stringify(item)
+  );
+}
+
+/**
+ * Whether a failed poll (chunk error or missing ref with no state change)
+ * would only rewrite the same error on a recently written row.
+ */
+export function isUnchangedFailure(
+  link: Pick<ServersPulseLink, 'lastError' | 'lastCheckedAt'>,
+  error: string,
+  now: number
+): boolean {
+  return link.lastError === error && isRecent(link.lastCheckedAt, now);
+}
+
 /**
  * The 60-second background job: batch-refresh every non-revoked link's
  * cached payload. Page loaders never call the API — they read what this
@@ -477,6 +520,7 @@ export async function pollServersPulseLinks(db: AppDatabase): Promise<void> {
       // Transport/API failure: can't tell anything about individual refs.
       // Record the attempt; last good payloads keep serving.
       for (const link of chunk) {
+        if (isUnchangedFailure(link, result.error, now.getTime())) continue;
         await db
           .update(serverspulseLinks)
           .set({ lastCheckedAt: now, lastError: result.error, updatedAt: now })
@@ -497,6 +541,9 @@ export async function pollServersPulseLinks(db: AppDatabase): Promise<void> {
           !isKnownServersPulseStatus(status, options)
         )
           item.observed = { ...item.observed, status: null };
+        // Most cycles return exactly what we already cached — skip the
+        // write (a D1 write per link per minute adds up).
+        if (isUnchangedSuccess(link, item, now.getTime())) continue;
         await db
           .update(serverspulseLinks)
           .set({
@@ -542,12 +589,17 @@ export async function pollServersPulseLinks(db: AppDatabase): Promise<void> {
           }
         }
       }
+      if (
+        Object.keys(changes).length === 0 &&
+        isUnchangedFailure(link, MISSING_REF_ERROR, now.getTime())
+      )
+        continue;
       await db
         .update(serverspulseLinks)
         .set({
           ...changes,
           lastCheckedAt: now,
-          lastError: 'missing from discover response',
+          lastError: MISSING_REF_ERROR,
           updatedAt: now,
         })
         .where(eq(serverspulseLinks.serverId, link.serverId));

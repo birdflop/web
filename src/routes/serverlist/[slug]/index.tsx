@@ -22,7 +22,7 @@ import Blocks from 'lucide-icons-qwik/icons/Blocks';
 import SiDiscord from 'simple-icons-qwik/icons/SiDiscord';
 import { generateHead } from '~/root';
 import { getDB, servers, serverVotes, users } from '~/util/db';
-import { getServerStatus } from '~/util/serverlist/status';
+import { getLiveOrStoredStatus } from '~/util/serverlist/status';
 import { renderBBCode, stripBBCode } from '~/util/serverlist/bbcode';
 import {
   DEFAULT_JAVA_PORT,
@@ -87,7 +87,8 @@ export const useServer = routeLoader$(async (event) => {
   ]);
 
   const [status, serverspulse, plugins] = await Promise.all([
-    getServerStatus(serverRow),
+    // One live ping, falling back to the cron-polled status if it fails.
+    getLiveOrStoredStatus(db, serverRow),
     // Cached ServersPulse payload written by the background poller — a pure
     // D1 read (never fetches upstream), null when not connected.
     getPublicServersPulseStats(db, serverRow.id),
@@ -179,7 +180,7 @@ export default component$(() => {
               class="rounded-lum-2 border border-white/10 p-3 text-base sm:text-lg"
               style={{ background: 'rgba(0,0,0,0.45)' }}
             >
-              <MotdText text={data.status.motd.html || data.status.motd.raw} />
+              <MotdText text={data.status.motd.raw} />
             </div>
           )}
           <div class="lum-card">

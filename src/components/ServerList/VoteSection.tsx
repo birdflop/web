@@ -36,6 +36,8 @@ export default component$<VoteSectionProps>(
     const notifications = useContext(NotificationContext);
     const username = useSignal('');
     const token = useSignal('');
+    // Bumped after each attempt so the Turnstile widget issues a new token.
+    const captchaReset = useSignal(0);
     const voting = useSignal(false);
     const votes = useSignal(monthlyVotes);
     const voted = useSignal(false);
@@ -131,6 +133,9 @@ export default component$<VoteSectionProps>(
         }
       } finally {
         voting.value = false;
+        // Turnstile tokens are single-use: the server has consumed this one
+        // whatever the outcome, so a retry needs a fresh challenge.
+        if (sitekey) captchaReset.value++;
       }
     });
 
@@ -175,10 +180,14 @@ export default component$<VoteSectionProps>(
                 value={username.value}
                 onInput$={(e, el) => (username.value = el.value)}
                 placeholder="Notch"
-                maxLength={32}
+                maxLength={17}
               />
             </Label>
-            <Turnstile sitekey={sitekey} token={token} />
+            <Turnstile
+              sitekey={sitekey}
+              token={token}
+              resetKey={captchaReset}
+            />
             <button
               class="lum-btn lum-bg-blue hover:lum-bg-blue/80 self-start"
               disabled={voting.value}

@@ -283,6 +283,7 @@ export const fmt: UserConfig['fmt'] = {
     'yarn.lock',
     'server',
     '**/CHANGELOG.md',
+    'drizzle/migrations',
     '*.md',
   ],
 };

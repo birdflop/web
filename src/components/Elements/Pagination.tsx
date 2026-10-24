@@ -38,7 +38,14 @@ export default component$<PaginationProps>(
           {totalPages > 1 &&
             ` - ${t('pagination.pageInfo@@Page ')}${page} ${t('pagination.of@@of')} ${totalPages}`}
         </p>
-        <div class="flex flex-1 items-center justify-center gap-2">
+        {/* Page controls only when there is more than one page; the
+            per-page selector stays so a large perPage can be undone. */}
+        <div
+          class={{
+            'flex flex-1 items-center justify-center gap-2': true,
+            invisible: totalPages <= 1,
+          }}
+        >
           <button
             class="lum-btn rounded-lum-1 p-1"
             disabled={page <= 1}

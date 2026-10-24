@@ -13,8 +13,23 @@ export interface VotifierConfig {
 
 export interface VotifierResult {
   delivered: boolean;
+  // Diagnostic detail for server-side logs only: it can contain text sent by
+  // the remote end, so it must not be echoed back to users.
   error?: string;
+  // Coarse failure category, safe to surface to listing owners.
+  reason?: VotifierFailure;
 }
+
+export type VotifierFailure =
+  | 'connect'
+  | 'timeout'
+  | 'protocol'
+  | 'rejected'
+  | 'internal';
+
+// Remote text included in log messages is truncated to keep logs bounded.
+const clip = (text: string) =>
+  text.length > 120 ? `${text.slice(0, 120)}…` : text;
 
 const MAGIC = 0x733a; // NuVotifier v2 message magic
 const SOCKET_TIMEOUT_MS = 5000;
@@ -57,26 +72,40 @@ export async function sendVotifierV2(
   }
 ): Promise<VotifierResult> {
   return new Promise((resolve) => {
-    const sock = createConnection(
-      { host: config.host, port: config.port },
-      () => sock.setTimeout(SOCKET_TIMEOUT_MS)
+    const sock = createConnection({ host: config.host, port: config.port });
+    // Idle timeout from creation (not just after connecting), plus a hard
+    // cap on the whole exchange so a slow-dripping or never-answering
+    // endpoint can't hold the request open.
+    sock.setTimeout(SOCKET_TIMEOUT_MS);
+    const overall = setTimeout(
+      () =>
+        done({
+          delivered: false,
+          reason: 'timeout',
+          error: `Votifier exchange exceeded ${SOCKET_TIMEOUT_MS}ms`,
+        }),
+      SOCKET_TIMEOUT_MS
     );
 
     let buf = Buffer.alloc(0);
     let phase: 'handshake' | 'response' = 'handshake';
     let settled = false;
 
-    const done = (result: VotifierResult) => {
+    function done(result: VotifierResult) {
       if (settled) return;
       settled = true;
+      clearTimeout(overall);
       sock.destroy();
       resolve(result);
-    };
+    }
 
-    sock.on('error', (err) => done({ delivered: false, error: err.message }));
+    sock.on('error', (err) =>
+      done({ delivered: false, reason: 'connect', error: err.message })
+    );
     sock.on('timeout', () =>
       done({
         delivered: false,
+        reason: 'timeout',
         error: `Socket timed out after ${SOCKET_TIMEOUT_MS}ms`,
       })
     );
@@ -96,7 +125,8 @@ export async function sendVotifierV2(
           if (parts[0] !== 'VOTIFIER' || parts[1] !== '2' || !parts[2]) {
             done({
               delivered: false,
-              error: `Server does not speak Votifier v2 (got: "${greeting}")`,
+              reason: 'protocol',
+              error: `Server does not speak Votifier v2 (got: "${clip(greeting)}")`,
             });
             return;
           }
@@ -116,6 +146,7 @@ export async function sendVotifierV2(
           } catch (err) {
             done({
               delivered: false,
+              reason: 'internal',
               error: err instanceof Error ? err.message : String(err),
             });
             return;
@@ -131,7 +162,8 @@ export async function sendVotifierV2(
 
           phase = 'response';
           sock.write(frame, (err) => {
-            if (err) done({ delivered: false, error: err.message });
+            if (err)
+              done({ delivered: false, reason: 'connect', error: err.message });
           });
         } else {
           // Response: {"status":"ok"} or {"status":"error",...}
@@ -148,23 +180,27 @@ export async function sendVotifierV2(
             } else {
               done({
                 delivered: false,
-                error:
+                reason: 'rejected',
+                error: clip(
                   parsed.error ||
-                  parsed.cause ||
-                  `Server rejected vote: ${text}`,
+                    parsed.cause ||
+                    `Server rejected vote: ${text}`
+                ),
               });
             }
           } catch {
             // Some implementations just close the socket on success without a response.
             done({
               delivered: false,
-              error: `Unexpected Votifier response: "${text}"`,
+              reason: 'protocol',
+              error: `Unexpected Votifier response: "${clip(text)}"`,
             });
           }
         }
       })().catch((err: unknown) => {
         done({
           delivered: false,
+          reason: 'internal',
           error: err instanceof Error ? err.message : String(err),
         });
       });
@@ -176,7 +212,11 @@ export async function sendVotifierV2(
       if (phase === 'response' && !settled) {
         done({ delivered: true });
       } else {
-        done({ delivered: false, error: 'Connection closed unexpectedly' });
+        done({
+          delivered: false,
+          reason: 'connect',
+          error: 'Connection closed unexpectedly',
+        });
       }
     });
   });

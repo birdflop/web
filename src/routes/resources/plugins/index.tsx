@@ -59,9 +59,13 @@ import { routeLoader$ } from '@qwik.dev/router';
 import { getDB, servers } from '~/util/db';
 import { Session } from '@auth/qwik';
 import { eq } from 'drizzle-orm';
-import { getServerStatus } from '~/util/serverlist/status';
+import { getStoredStatus } from '~/util/serverlist/status';
 
-const debug = true;
+const debug = false;
+
+// plugins currently being fetched (or that failed to fetch) by the page's
+// fetch task, keyed by server name + plugin; only used in the browser
+const pendingPluginFetches = new Set<string>();
 
 type ResolvedPluginType = {
   type: PluginSource;
@@ -145,43 +149,27 @@ export const useUserServers = routeLoader$(async ({ sharedMap }) => {
       name: servers.name,
       slug: servers.slug,
       plugins: servers.plugins,
-      edition: servers.edition,
-      javaHost: servers.javaHost,
-      javaPort: servers.javaPort,
-      bedrockHost: servers.bedrockHost,
-      bedrockPort: servers.bedrockPort,
+      software: servers.software,
     })
     .from(servers)
     .where(eq(servers.ownerId, session.user.id))
     .all();
 
-  const serversWithIcons = await Promise.all(
-    userServers.map(async (server) => {
-      const srv = { ...server };
-      const { edition, javaHost, javaPort, bedrockHost, bedrockPort } = srv;
-
-      let icon: string | null = null;
-      try {
-        const status = await getServerStatus({
-          edition,
-          javaHost,
-          javaPort,
-          bedrockHost,
-          bedrockPort,
-        });
-        icon = status?.icon ?? null;
-      } catch {
-        icon = null;
-      }
-
-      return { ...srv, icon };
-    })
+  // Tab icons come from the cron-refreshed status table: pinging every owned
+  // server live here would add up to the ping timeout to each page load.
+  const statuses = await getStoredStatus(
+    db,
+    userServers.map((server) => server.id)
   );
+  const serversWithIcons = userServers.map((server) => ({
+    ...server,
+    icon: statuses[server.id]?.icon ?? null,
+  }));
 
   return {
     serverListServers: serversWithIcons.reduce((acc: ServersType, server) => {
       acc[server.name] = {
-        software: 'paper',
+        software: server.software,
         plugins: server.plugins ?? {},
         id: server.id,
         slug: server.slug,
@@ -240,12 +228,24 @@ export default component$(() => {
 
   // oxlint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(() => {
-    if (!isBrowser) return; // do not load from localstorage if logged in
-
+    // logged-in users may still have data saved from before they logged in,
+    // which gets merged into the store and then moved over to the database below
     const pluginsData = localStorage.getItem('plugins');
     if (!pluginsData) return;
 
-    const savedPluginsStore = JSON.parse(pluginsData) as PluginsStoreType;
+    let savedPluginsStore: PluginsStoreType;
+    try {
+      savedPluginsStore = JSON.parse(pluginsData) as PluginsStoreType;
+    } catch (e) {
+      const notification = new Notification()
+        .setTitle('Error loading plugins')
+        .setDescription(
+          `There was an error loading your saved plugins: ${e instanceof Error ? e.message : String(e)}.`
+        )
+        .setBgColor('lum-grad-bg-red/50');
+      notifications.push(notification.toJSON());
+      return;
+    }
     // have current pluginsStore take precedence over savedPluginsStore, so that any new servers added since last save are not lost
     pluginsStore.servers = {
       ...savedPluginsStore.servers,
@@ -263,87 +263,146 @@ export default component$(() => {
     if (session.value?.user?.id) localStorage.removeItem('plugins');
   });
 
-  useTask$(async ({ track }) => {
+  useTask$(({ track }) => {
+    track(() => pluginsStore.openServer);
+    track(() => Object.keys(pluginsStore.servers).length);
+    if (
+      !pluginsStore.openServer ||
+      !pluginsStore.servers[pluginsStore.openServer]
+    )
+      pluginsStore.openServer = pickDefaultOpenServer(pluginsStore.servers);
+  });
+
+  // Fetch plugin details in the browser only: on SSR this would block the
+  // page on every plugin's API calls. A visible task (instead of useTask$) is
+  // needed so it also runs on load when nothing in the store changes.
+  // oxlint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(async ({ track }) => {
     deepTrack(track, pluginsStore);
 
-    if (pluginsStore.openServer && CurrentServer) {
-      // check if any plugins are not fetched, and fetch them if so
-      const plugins = CurrentServer.plugins;
-      for (const pluginId in plugins) {
-        const plugin = plugins[pluginId];
-        if (!plugin.versions)
-          Object.assign(plugin, await getPlugin(plugin).fetch());
+    const serverName = pluginsStore.openServer;
+    const currentServer = serverName
+      ? pluginsStore.servers[serverName]
+      : undefined;
+    if (!serverName || !currentServer) return;
+
+    // check if any plugins are not fetched, and fetch them if so. Every
+    // fetched plugin retriggers this task, so mark them all up front to keep
+    // the reruns from fetching the same plugins again.
+    const toFetch = Object.values(currentServer.plugins).filter((plugin) => {
+      const key = `${serverName}:${plugin.type}:${plugin.id}`;
+      if (
+        plugin.versions ||
+        plugin.type === 'misc' ||
+        pendingPluginFetches.has(key)
+      )
+        return false;
+      pendingPluginFetches.add(key);
+      return true;
+    });
+
+    for (const plugin of toFetch) {
+      try {
+        Object.assign(plugin, (await getPlugin(plugin).fetch()).toJSON());
+      } catch (e) {
+        // left in pendingPluginFetches so a failing plugin isn't retried on
+        // every store change; the per-plugin refresh button retries it
+        console.error('Error fetching plugin', plugin.id, e);
+        const notification = new Notification()
+          .setTitle('Error fetching plugin')
+          .setDescription(
+            `Could not load ${plugin.name ?? plugin.id}: ${e instanceof Error ? e.message : String(e)}`
+          )
+          .setBgColor('lum-grad-bg-red/50');
+        notifications.push(notification.toJSON());
       }
-    } else {
-      pluginsStore.openServer = pickDefaultOpenServer(pluginsStore.servers);
     }
+    for (const plugin of toFetch) {
+      if (plugin.versions)
+        pendingPluginFetches.delete(
+          `${serverName}:${plugin.type}:${plugin.id}`
+        );
+    }
+  });
+
+  useTask$(({ track, cleanup }) => {
+    deepTrack(track, pluginsStore);
 
     // Persist only from the browser: on SSR this task fires on every page load,
     // which would re-save the store before the user has changed anything.
     if (!isBrowser) return;
 
-    try {
-      const exportedServers: PluginsStoreType['servers'] = {};
-      Object.keys(pluginsStore.servers).forEach((name) => {
-        exportedServers[name] = {
-          ...pluginsStore.servers[name],
-          plugins: mapPluginsForExport(pluginsStore.servers[name].plugins),
-        };
-      });
-
-      const exportedPluginsStore: PluginsStoreType = {
-        servers: exportedServers,
-        openServer: pluginsStore.openServer,
-        filter: pluginsStore.filter,
-      };
-      // servers linked to a serverlist id persist to their listing's own
-      // row instead of the user's plugins blob, so they don't get duplicated
-      const serversWithoutId: PluginsStoreType['servers'] = {};
-      const serversWithId: PluginsStoreType['servers'] = {};
-      Object.keys(exportedServers).forEach((name) => {
-        if (exportedServers[name].id) {
-          serversWithId[name] = exportedServers[name];
-        } else {
-          serversWithoutId[name] = exportedServers[name];
-        }
-      });
-
-      if (session.value?.user?.id) {
-        // persist to the database for logged in users for the servers that don't have an id
-        await setUserData({
-          plugins: {
-            ...exportedPluginsStore,
-            servers: serversWithoutId,
-          },
+    const persist = async () => {
+      try {
+        const exportedServers: PluginsStoreType['servers'] = {};
+        Object.keys(pluginsStore.servers).forEach((name) => {
+          exportedServers[name] = {
+            ...pluginsStore.servers[name],
+            plugins: mapPluginsForExport(pluginsStore.servers[name].plugins),
+          };
         });
 
-        // persist id-linked servers to their own serverlist row
-        await Promise.all(
-          Object.values(serversWithId).map((server) =>
-            updateServerListData(server.id!, { plugins: server.plugins })
-          )
-        );
-        return;
-      }
+        const exportedPluginsStore: PluginsStoreType = {
+          servers: exportedServers,
+          openServer: pluginsStore.openServer,
+          filter: pluginsStore.filter,
+        };
+        // servers linked to a serverlist id persist to their listing's own
+        // row instead of the user's plugins blob, so they don't get duplicated
+        const serversWithoutId: PluginsStoreType['servers'] = {};
+        const serversWithId: PluginsStoreType['servers'] = {};
+        Object.keys(exportedServers).forEach((name) => {
+          if (exportedServers[name].id) {
+            serversWithId[name] = exportedServers[name];
+          } else {
+            serversWithoutId[name] = exportedServers[name];
+          }
+        });
 
-      // persist to localStorage for non-logged in users
-      // sometimes when a user is logged out, data can be saved in memory and then saved here, so make sure to save servers without id
-      localStorage.setItem(
-        'plugins',
-        JSON.stringify({
-          ...exportedPluginsStore,
-          servers: serversWithoutId,
-        })
-      );
-    } catch (e) {
-      const notification = new Notification()
-        .setTitle('Error saving plugins')
-        .setDescription(
-          `There was an error saving your plugins: ${e instanceof Error ? e.message : String(e)}.`
-        )
-        .setBgColor('lum-grad-bg-red/50');
-      notifications.push(notification.toJSON());
-    }
+        if (session.value?.user?.id) {
+          // persist to the database for logged in users for the servers that don't have an id
+          await setUserData({
+            plugins: {
+              ...exportedPluginsStore,
+              servers: serversWithoutId,
+            },
+          });
+
+          // persist id-linked servers to their own serverlist row
+          await Promise.all(
+            Object.values(serversWithId).map((server) =>
+              updateServerListData(server.id!, {
+                plugins: server.plugins,
+                software: server.software,
+              })
+            )
+          );
+          return;
+        }
+
+        // persist to localStorage for non-logged in users
+        // sometimes when a user is logged out, data can be saved in memory and then saved here, so make sure to save servers without id
+        localStorage.setItem(
+          'plugins',
+          JSON.stringify({
+            ...exportedPluginsStore,
+            servers: serversWithoutId,
+          })
+        );
+      } catch (e) {
+        const notification = new Notification()
+          .setTitle('Error saving plugins')
+          .setDescription(
+            `There was an error saving your plugins: ${e instanceof Error ? e.message : String(e)}.`
+          )
+          .setBgColor('lum-grad-bg-red/50');
+        notifications.push(notification.toJSON());
+      }
+    };
+    // Debounce so bursts of changes (fetching plugins, "mark all updated", ...)
+    // collapse into a single save instead of one round trip per mutation.
+    const timeout = setTimeout(() => void persist(), 1000);
+    cleanup(() => clearTimeout(timeout));
   });
 
   const outdatedPlugins = useComputed$(() => {
@@ -556,7 +615,12 @@ export default component$(() => {
                             `Invalid plugin data: ${JSON.stringify(plugin)}`
                           );
                         }
-                        const fetchedPlugin = await getPlugin(plugin).fetch();
+                        // toJSON so the store holds a plain object: Qwik only
+                        // proxies plain objects, so mutations on a class
+                        // instance wouldn't be reactive or persisted
+                        const fetchedPlugin = (
+                          await getPlugin(plugin).fetch()
+                        ).toJSON();
                         pluginsStore.servers[pluginsStore.openServer!].plugins[
                           fetchedPlugin.id
                         ] = fetchedPlugin;
@@ -649,6 +713,8 @@ export default component$(() => {
                       pluginsStore.servers[pluginsStore.openServer!].plugins;
                     for (const pluginId in plugins) {
                       const plugin = plugins[pluginId];
+                      // misc plugins have no source to check against
+                      if (plugin.type === 'misc') continue;
                       Object.assign(
                         plugin,
                         await getPlugin(plugin).fetchVersions()
@@ -740,7 +806,7 @@ export default component$(() => {
                       try {
                         pluginsStore.servers[pluginsStore.openServer!].plugins[
                           plugin.id
-                        ] = await getPlugin(plugin).fetch();
+                        ] = (await getPlugin(plugin).fetch()).toJSON();
                       } catch (error) {
                         console.error('Error fetching plugin versions:', error);
                         const notification = new Notification()

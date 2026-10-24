@@ -61,27 +61,25 @@ export const useServers = routeLoader$(async ({ url }) => {
 
   try {
     const db = getDB();
-    const { rows, total, statuses, liveRefined } = await queryServers(
-      db,
-      params
-    );
+    const result = await queryServers(db, params);
     return {
-      rows,
-      total,
-      statuses,
-      liveRefined,
       ...params,
-      error: null as string | null,
+      rows: result.rows,
+      total: result.total,
+      statuses: result.statuses,
+      // Clamped: a page past the end shows the last page.
+      page: result.page,
+      error: false,
     };
   } catch (err) {
+    // Log the details server-side; the loader payload is public.
     console.error('Error loading servers:', err);
     return {
+      ...params,
       rows: [],
       total: 0,
       statuses: {},
-      liveRefined: false,
-      ...params,
-      error: String(err),
+      error: true,
     };
   }
 });
@@ -146,7 +144,6 @@ export default component$(() => {
         Discover Minecraft servers and vote for your favorites. Rankings reset
         monthly.
       </p>
-      <div class="flex flex-col gap-2"></div>
 
       {/* Filters */}
       <div class="sm:lum-card mt-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-1 sm:p-1">
@@ -245,12 +242,6 @@ export default component$(() => {
                 onChange$={(e, el) => void updateURL({ version: el.value })}
               />
             </Label>
-
-            {data.liveRefined && (
-              <p class="text-lum-text-secondary text-xs">
-                Live filters apply to the top listings.
-              </p>
-            )}
           </Dropdown>
         </div>
       </div>
@@ -258,11 +249,11 @@ export default component$(() => {
       {data.error && (
         <p class="lum-card lum-bg-red/20 my-2 flex items-center gap-2">
           <AlertCircle size={20} class="text-red-400" />
-          Failed to load servers: {data.error}
+          Failed to load servers. Please try again later.
         </p>
       )}
 
-      {totalPages > 1 && (
+      {data.total > 0 && (
         <Pagination
           page={data.page}
           perPage={data.perPage}
@@ -300,7 +291,7 @@ export default component$(() => {
         )}
       </div>
 
-      {totalPages > 1 && (
+      {data.total > 0 && (
         <Pagination
           page={data.page}
           perPage={data.perPage}

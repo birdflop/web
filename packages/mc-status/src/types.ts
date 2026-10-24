@@ -94,4 +94,8 @@ export type StatusResult = JavaStatusResult | BedrockStatusResult;
 export interface PingOptions {
   timeout?: number; // default 5000ms
   protocolVersion?: number; // default 767 (1.20.6+) for Java
+  /** Bedrock port for ping()'s Bedrock fallback (default 19132). */
+  bedrockPort?: number;
+  /** Max accepted Java status packet size in bytes (default 2 MiB). */
+  maxPacketBytes?: number;
 }

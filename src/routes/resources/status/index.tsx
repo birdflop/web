@@ -1,6 +1,6 @@
 import { component$, useSignal, $ } from '@qwik.dev/core';
 import { routeLoader$, useNavigate } from '@qwik.dev/router';
-import { Label, SelectMenu } from '@luminescent/ui-qwik';
+import { Label, NumberInput, SelectMenu } from '@luminescent/ui-qwik';
 
 import Server from 'lucide-icons-qwik/icons/Server';
 import Globe from 'lucide-icons-qwik/icons/Globe';
@@ -20,8 +20,11 @@ export const useStatusChecker = routeLoader$(async ({ url }) => {
   const editionParam = sp.get('edition');
   const edition: 'java' | 'bedrock' =
     editionParam === 'bedrock' ? 'bedrock' : 'java';
-  const portStr = sp.get('port')?.trim();
-  const port = portStr ? parseInt(portStr, 10) : null;
+  const portNum = parseInt(sp.get('port')?.trim() || '', 10);
+  const port =
+    Number.isInteger(portNum) && portNum >= 1 && portNum <= 65535
+      ? portNum
+      : null;
 
   if (!host) {
     return {
@@ -51,15 +54,15 @@ export default component$(() => {
 
   const hostSignal = useSignal(data.host || '');
   const editionSignal = useSignal<'java' | 'bedrock'>(data.edition || 'java');
-  const portSignal = useSignal(data.port ? String(data.port) : '');
+  const portSignal = useSignal<number | undefined>(data.port ?? undefined);
 
   const handleSearch = $(async () => {
     if (!hostSignal.value.trim()) return;
     const url = new URL(window.location.href);
     url.searchParams.set('host', hostSignal.value.trim());
     url.searchParams.set('edition', editionSignal.value);
-    if (portSignal.value.trim()) {
-      url.searchParams.set('port', portSignal.value.trim());
+    if (portSignal.value) {
+      url.searchParams.set('port', String(portSignal.value));
     } else {
       url.searchParams.delete('port');
     }
@@ -84,8 +87,8 @@ export default component$(() => {
         onSubmit$={handleSearch}
         class="my-4 flex flex-col gap-4"
       >
-        <div class="flex items-center gap-4">
-          <div class="flex min-w-[240px] flex-1 flex-col gap-1">
+        <div class="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-start">
+          <div class="flex flex-col gap-1 sm:min-w-60 sm:flex-1">
             <Label for="host" label={t('status.host.label@@Server Address')}>
               <Globe size={16} q:slot="before-label" />
               <input
@@ -109,7 +112,7 @@ export default component$(() => {
             </p>
           </div>
 
-          <div class="flex max-w-[200px] min-w-[140px] flex-col gap-1">
+          <div class="flex flex-col gap-1 sm:w-44">
             <Label for="edition" label={t('status.edition.label@@Edition')}>
               <Box size={16} q:slot="before-label" />
               <SelectMenu
@@ -119,8 +122,14 @@ export default component$(() => {
                   editionSignal.value = el.value as 'java' | 'bedrock';
                 }}
                 values={[
-                  { name: 'Java Edition', value: 'java' },
-                  { name: 'Bedrock Edition', value: 'bedrock' },
+                  {
+                    name: t('status.edition.java@@Java Edition'),
+                    value: 'java',
+                  },
+                  {
+                    name: t('status.edition.bedrock@@Bedrock Edition'),
+                    value: 'bedrock',
+                  },
                 ]}
                 value={editionSignal.value}
               />
@@ -130,16 +139,21 @@ export default component$(() => {
             </p>
           </div>
 
-          <div class="flex max-w-[180px] min-w-[120px] flex-col gap-1">
+          <div class="flex flex-col gap-1 sm:w-44">
             <Label for="port" label={t('status.port.label@@Port')}>
               <HardDrive size={16} q:slot="before-label" />
-              <input
+              <NumberInput
+                input
                 id="port"
-                class="lum-input w-full font-mono"
+                min={1}
+                max={65535}
+                class="w-full font-mono"
                 placeholder={editionSignal.value === 'java' ? '25565' : '19132'}
                 value={portSignal.value}
                 onInput$={(e, el) => {
-                  portSignal.value = el.value;
+                  const n = parseInt(el.value, 10);
+                  portSignal.value =
+                    Number.isInteger(n) && n >= 1 && n <= 65535 ? n : undefined;
                 }}
               />
             </Label>
@@ -149,10 +163,10 @@ export default component$(() => {
           </div>
           <button
             type="submit"
-            class="lum-btn lum-bg-blue hover:lum-bg-blue flex items-center gap-2 px-6 py-2"
+            class="lum-btn lum-bg-blue hover:lum-bg-blue flex items-center justify-center gap-2 px-6 py-2 sm:mt-7"
           >
             <Search size={18} />
-            Check Status
+            {t('status.submit@@Check Status')}
           </button>
         </div>
       </form>
@@ -171,22 +185,20 @@ export default component$(() => {
                 playersMax={data.status.players.max}
                 class="rounded-lum-1 overflow-hidden"
               >
-                {data.status.motd && (
-                  <MotdText
-                    text={data.status.motd.html || data.status.motd.raw}
-                  />
-                )}
+                {data.status.motd && <MotdText text={data.status.motd.raw} />}
               </MotdPreviewCard>
             </div>
           ) : (
             <div class="border-lum-border/10 border-t pt-6 text-center">
               <p class="text-lg font-bold text-red-400">
-                Could not connect to server
+                {t('status.offline.title@@Could not connect to server')}
               </p>
               <p class="text-lum-text-secondary mt-1 text-sm">
-                Unable to establish ping to{' '}
-                <span class="font-mono">{data.host}</span>. Please check the
-                address and port.
+                {t('status.offline.prefix@@Unable to establish ping to')}{' '}
+                <span class="font-mono">{data.host}</span>
+                {t(
+                  'status.offline.suffix@@. Please check the address and port.'
+                )}
               </p>
             </div>
           )}

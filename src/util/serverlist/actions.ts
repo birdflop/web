@@ -1,7 +1,7 @@
 // Server$ mutations for the server list feature.
 
 import { server$ } from '@qwik.dev/router';
-import { and, eq, gte, ne, or, sql } from 'drizzle-orm';
+import { and, desc, eq, gte, ne, or, sql } from 'drizzle-orm';
 import {
   getDB,
   servers,
@@ -12,13 +12,17 @@ import {
 import { isAdmin } from '~/routes/layout';
 import {
   validateServerInput,
+  isValidHost,
   isValidMcUsername,
+  parsePort,
+  isServerSoftware,
+  sanitizeServerPlugins,
   slugify,
   type ServerFormInput,
 } from './validation';
 import { verifyTurnstile } from './turnstile';
 import { detectBirdflopHosted } from './birdflop';
-import { sendVotifierV2 } from './votifier';
+import { sendVotifierV2, type VotifierFailure } from './votifier';
 import {
   claimServersPulseLink,
   isValidServersPulseLinkCode,
@@ -28,6 +32,7 @@ import {
   DEFAULT_VOTIFIER_PORT,
   LIMITS,
   REPORT_COOLDOWN_MS,
+  RESERVED_SLUGS,
   SERVERSPULSE_ACTION_COOLDOWN_MS,
   SERVERSPULSE_CONSUMER_NAME,
   TEST_VOTE_COOLDOWN_MS,
@@ -51,7 +56,12 @@ async function uniqueSlug(
   const root = base || 'server';
   let candidate = root;
   let suffix = 1;
-  // Try the base, then base-2, base-3, ... until free.
+  // Try the base, then base-2, base-3, ... until free. Slugs that shadow a
+  // static /serverlist/ route are skipped straight to a suffixed variant.
+  if (RESERVED_SLUGS.includes(candidate)) {
+    suffix += 1;
+    candidate = `${root}-${suffix}`;
+  }
 
   while (true) {
     const existing = await db
@@ -198,14 +208,21 @@ export const deleteServer = server$(async function (id: number) {
 
   const admin = await isAdmin();
   try {
-    await db
+    const deleted = await db
       .delete(servers)
       .where(
         and(
           eq(servers.id, id),
           admin ? undefined : eq(servers.ownerId, session.user.id)
         )
-      );
+      )
+      .returning({ id: servers.id });
+    // Nothing matched: the listing doesn't exist or isn't the caller's.
+    if (deleted.length === 0)
+      return {
+        success: false as const,
+        error: 'Listing not found or you do not own it.',
+      };
     return { success: true as const };
   } catch (err) {
     console.error('Error deleting server:', err);
@@ -231,6 +248,11 @@ export const voteForServer = server$(async function (
   const db = getDB();
   if (!db) return { success: false, error: 'Database unavailable.' };
 
+  // Types don't survive the server$ boundary, so check before using them.
+  if (!Number.isInteger(serverId))
+    return { success: false, error: 'Server not found.' };
+  if (typeof username !== 'string')
+    return { success: false, error: 'Enter a valid Minecraft username.' };
   const cleanUsername = username.trim();
   if (!isValidMcUsername(cleanUsername))
     return { success: false, error: 'Enter a valid Minecraft username.' };
@@ -239,7 +261,7 @@ export const voteForServer = server$(async function (
 
   // CAPTCHA.
   const captcha = await verifyTurnstile(
-    captchaToken,
+    typeof captchaToken === 'string' ? captchaToken : null,
     this.env.get('TURNSTILE_SECRET'),
     ip ?? undefined
   );
@@ -253,29 +275,62 @@ export const voteForServer = server$(async function (
     .get();
   if (!target) return { success: false, error: 'Server not found.' };
 
-  // 24h cooldown by username OR ip for this server.
-  const cutoff = new Date(Date.now() - VOTE_COOLDOWN_MS);
-  const recent = await db
-    .select({ id: serverVotes.id, createdAt: serverVotes.createdAt })
-    .from(serverVotes)
-    .where(
-      and(
-        eq(serverVotes.serverId, serverId),
-        gte(serverVotes.createdAt, cutoff),
-        ip
-          ? or(eq(serverVotes.username, cleanUsername), eq(serverVotes.ip, ip))
-          : eq(serverVotes.username, cleanUsername)
+  // Record the vote first, atomically guarded by the 24h cooldown (by
+  // username OR ip for this server), and only then deliver the reward: a
+  // check-then-insert would let parallel requests each pass the check and
+  // each trigger a Votifier reward. Usernames compare case-insensitively
+  // (Minecraft names are). createdAt is an explicit epoch-ms integer: the
+  // CURRENT_TIMESTAMP column default stores a text datetime, which would
+  // break these numeric comparisons (text always sorts above numbers).
+  const now = Date.now();
+  const cutoff = now - VOTE_COOLDOWN_MS;
+  const lowerName = cleanUsername.toLowerCase();
+  let voteId: number | undefined;
+  try {
+    const inserted = await db.get<{ id: number }>(sql`
+      INSERT INTO "serverVotes" ("serverId", "username", "ip", "votifierDelivered", "createdAt")
+      SELECT ${serverId}, ${cleanUsername}, ${ip}, 0, ${now}
+      WHERE NOT EXISTS (
+        SELECT 1 FROM "serverVotes"
+        WHERE "serverId" = ${serverId}
+          AND "createdAt" >= ${cutoff}
+          AND (lower("username") = ${lowerName} OR "ip" = ${ip})
       )
-    )
-    .get();
-  if (recent)
+      RETURNING "id"`);
+    voteId = inserted?.id;
+  } catch (err) {
+    console.error('Error recording vote:', err);
+    return { success: false, error: 'Failed to record your vote.' };
+  }
+
+  if (voteId === undefined) {
+    const recent = await db
+      .select({ createdAt: serverVotes.createdAt })
+      .from(serverVotes)
+      .where(
+        and(
+          eq(serverVotes.serverId, serverId),
+          gte(serverVotes.createdAt, new Date(cutoff)),
+          ip
+            ? or(
+                sql`lower(${serverVotes.username}) = ${lowerName}`,
+                eq(serverVotes.ip, ip)
+              )
+            : sql`lower(${serverVotes.username}) = ${lowerName}`
+        )
+      )
+      .orderBy(desc(serverVotes.createdAt))
+      .get();
     return {
       success: false,
       error: 'You have already voted for this server in the last 24 hours.',
-      nextVoteAt: new Date(recent.createdAt).getTime() + VOTE_COOLDOWN_MS,
+      nextVoteAt: recent
+        ? new Date(recent.createdAt).getTime() + VOTE_COOLDOWN_MS
+        : now + VOTE_COOLDOWN_MS,
     };
+  }
 
-  // Attempt Votifier delivery (best-effort).
+  // Attempt Votifier delivery (best-effort; the vote counts either way).
   let delivered = false;
   let deliveryError: string | undefined;
   if (target.votifierHost && target.votifierToken) {
@@ -289,27 +344,28 @@ export const voteForServer = server$(async function (
         username: cleanUsername,
         serviceName: 'birdflop.com',
         address: ip ?? '0.0.0.0',
-        timestamp: Date.now(),
+        timestamp: now,
       }
     );
     delivered = result.delivered;
-    deliveryError = result.error;
-  }
-
-  try {
-    await db.insert(serverVotes).values({
-      serverId,
-      username: cleanUsername,
-      ip,
-      votifierDelivered: delivered,
-      // Explicit timestamp: the CURRENT_TIMESTAMP column default stores a
-      // text datetime, which would break the numeric cooldown/monthly-window
-      // comparisons above (text always sorts above numbers in SQLite).
-      createdAt: new Date(),
-    });
-  } catch (err) {
-    console.error('Error recording vote:', err);
-    return { success: false, error: 'Failed to record your vote.' };
+    if (!delivered) {
+      // Voters are anonymous, so the raw error (which can echo the target's
+      // address or banner) stays in the logs.
+      console.error(
+        `Votifier delivery failed for server ${serverId}:`,
+        result.error
+      );
+      deliveryError = 'The vote could not be delivered to the server.';
+    } else {
+      try {
+        await db
+          .update(serverVotes)
+          .set({ votifierDelivered: true })
+          .where(eq(serverVotes.id, voteId));
+      } catch (err) {
+        console.error('Error marking vote as delivered:', err);
+      }
+    }
   }
 
   const monthStart = Date.UTC(
@@ -344,6 +400,11 @@ export const reportServer = server$(async function (
   const db = getDB();
   if (!db) return { success: false as const, error: 'Database unavailable.' };
 
+  // Types don't survive the server$ boundary, so check before using them.
+  if (!Number.isInteger(serverId))
+    return { success: false as const, error: 'Server not found.' };
+  if (typeof reason !== 'string')
+    return { success: false as const, error: 'A reason is required.' };
   const cleanReason = reason.trim();
   if (!cleanReason)
     return { success: false as const, error: 'A reason is required.' };
@@ -382,7 +443,10 @@ export const reportServer = server$(async function (
     await db.insert(serverReports).values({
       serverId,
       reason: cleanReason,
-      details: details?.trim()?.slice(0, 1000) || null,
+      details:
+        typeof details === 'string'
+          ? details.trim().slice(0, 1000) || null
+          : null,
       reporterId: session?.user?.id ?? null,
       ip,
       createdAt: new Date(),
@@ -401,7 +465,7 @@ export const reportServer = server$(async function (
 // callable directly from the browser. Form-driven fields (name, hosts, tags,
 // rgbPreset, ...) go through updateServer instead, which validates them.
 type OwnerWritableServerData = Partial<
-  Pick<typeof servers.$inferInsert, 'plugins'>
+  Pick<typeof servers.$inferInsert, 'plugins' | 'software'>
 >;
 
 // Mirrors setUserData's shape (a bag of optional fields on a single call) so
@@ -428,9 +492,20 @@ export const updateServerListData = server$(async function (
   if (!admin && existing.ownerId !== session.user.id)
     return { success: false as const, error: 'Unauthorized' };
 
-  // Types don't survive the network boundary, so re-pick at runtime.
+  // Types don't survive the network boundary, so re-pick and validate at
+  // runtime (stored plugins are rendered as links on the public page).
   const set: OwnerWritableServerData = {};
-  if ('plugins' in data) set.plugins = data.plugins;
+  if (data && typeof data === 'object' && 'plugins' in data) {
+    const plugins = sanitizeServerPlugins(data.plugins);
+    if ('error' in plugins)
+      return { success: false as const, error: plugins.error };
+    set.plugins = plugins.plugins;
+  }
+  if (data && typeof data === 'object' && 'software' in data) {
+    if (!isServerSoftware(data.software))
+      return { success: false as const, error: 'Invalid server software' };
+    set.software = data.software;
+  }
   if (Object.keys(set).length === 0)
     return { success: false as const, error: 'Nothing to update' };
 
@@ -464,6 +539,19 @@ export const setServerVerified = server$(async function (
   return { success: true as const };
 });
 
+// Owner-facing messages per failure category; the raw Votifier error can
+// carry text from the remote end, so it is only logged.
+const TEST_VOTE_ERRORS: Record<VotifierFailure, string> = {
+  connect:
+    'Could not connect to the Votifier host and port. Check that NuVotifier is running and reachable.',
+  timeout: 'The Votifier server did not respond in time.',
+  protocol:
+    'That host and port did not answer as a NuVotifier (v2) server. Check the port.',
+  rejected:
+    'The Votifier server rejected the test vote. Check that the token is correct.',
+  internal: 'The test vote could not be sent. Please try again.',
+};
+
 // Per-isolate cooldown; best-effort (Workers isolates don't share memory),
 // enough to keep a client from hammering arbitrary host:port pairs.
 const lastTestVote = new Map<string, number>();
@@ -496,24 +584,41 @@ export const testVote = server$(async function (data: {
       .where(eq(servers.id, data.serverId))
       .get();
 
-    if (row) {
-      ownerId = row.ownerId;
-      dbJavaHost = row.javaHost;
-    }
+    // A serverId that doesn't resolve must not fall through to an
+    // unchecked test against an arbitrary host.
+    if (!row) return { success: false as const, error: 'Server not found.' };
+    ownerId = row.ownerId;
+    dbJavaHost = row.javaHost;
   }
 
   const admin = await isAdmin.call(this);
   if (ownerId && !admin && ownerId !== session.user.id)
     return { success: false as const, error: 'Unauthorized.' };
 
-  const host = data?.votifierHost?.trim();
-  const token = data?.votifierToken?.trim();
+  const host =
+    typeof data?.votifierHost === 'string' ? data.votifierHost.trim() : '';
+  const token =
+    typeof data?.votifierToken === 'string' ? data.votifierToken.trim() : '';
   if (!host || !token)
     return {
       success: false as const,
       error:
         'No Votifier host or token provided. Fill in Votifier host and token first.',
     };
+  // Same rules as the listing form, so this can't be pointed anywhere a
+  // saved listing couldn't.
+  if (!isValidHost(host))
+    return {
+      success: false as const,
+      error: 'Votifier host is not a valid hostname or IP.',
+    };
+  const parsedPort = parsePort(data?.votifierPort ?? null);
+  if (parsedPort === undefined)
+    return {
+      success: false as const,
+      error: 'Votifier port must be a number between 1 and 65535.',
+    };
+  const port = parsedPort ?? DEFAULT_VOTIFIER_PORT;
 
   const now = Date.now();
   const last = lastTestVote.get(session.user.id) ?? 0;
@@ -524,10 +629,6 @@ export const testVote = server$(async function (data: {
     };
   lastTestVote.set(session.user.id, now);
 
-  const port = data?.votifierPort
-    ? Number(data.votifierPort)
-    : DEFAULT_VOTIFIER_PORT;
-
   const result = await sendVotifierV2(
     { host, port, token },
     {
@@ -536,13 +637,22 @@ export const testVote = server$(async function (data: {
       // off this string, so a test with a different serviceName would
       // validate against a different token than real votes.
       serviceName: 'birdflop.com',
-      address: data?.javaHost?.trim() || dbJavaHost || host,
+      address:
+        (typeof data?.javaHost === 'string' && data.javaHost.trim()) ||
+        dbJavaHost ||
+        host,
       timestamp: now,
     }
   );
 
   if (result.delivered) return { success: true as const };
-  return { success: false as const, error: result.error ?? 'Unknown error.' };
+  // The raw error can echo whatever the remote end sent back; keep it in
+  // the logs and give the owner a generic, actionable message.
+  console.error(`Test vote to ${host}:${port} failed:`, result.error);
+  return {
+    success: false as const,
+    error: TEST_VOTE_ERRORS[result.reason ?? 'internal'],
+  };
 });
 
 // Per-isolate cooldown for ServersPulse link/verify calls; best-effort like

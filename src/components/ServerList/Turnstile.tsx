@@ -11,6 +11,9 @@ interface TurnstileProps {
   sitekey: string;
   // Updated with the solved token; reset to '' on expiry/error.
   token: Signal<string>;
+  // Bump to reset the widget for a fresh challenge. Tokens are single-use,
+  // so the parent must do this after every submit that consumed one.
+  resetKey?: Signal<number>;
 }
 
 declare global {
@@ -27,6 +30,7 @@ declare global {
         }
       ) => string;
       remove: (id: string) => void;
+      reset: (id: string) => void;
     };
   }
 }
@@ -34,18 +38,17 @@ declare global {
 const SCRIPT_SRC =
   'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
 
-export default component$<TurnstileProps>(({ sitekey, token }) => {
+export default component$<TurnstileProps>(({ sitekey, token, resetKey }) => {
   const containerRef = useSignal<HTMLDivElement>();
+  const widgetId = useSignal<string>();
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$((ctx) => {
     if (!sitekey || !containerRef.value) return;
 
-    let widgetId: string | undefined;
-
     const render = () => {
       if (!window.turnstile || !containerRef.value) return;
-      widgetId = window.turnstile.render(containerRef.value, {
+      widgetId.value = window.turnstile.render(containerRef.value, {
         sitekey,
         theme: 'auto',
         callback: (t) => (token.value = t),
@@ -71,8 +74,19 @@ export default component$<TurnstileProps>(({ sitekey, token }) => {
     }
 
     ctx.cleanup(() => {
-      if (widgetId && window.turnstile) window.turnstile.remove(widgetId);
+      if (widgetId.value && window.turnstile)
+        window.turnstile.remove(widgetId.value);
+      widgetId.value = undefined;
     });
+  });
+
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(({ track }) => {
+    // Skip the initial run; only explicit bumps reset the widget.
+    if (!track(() => resetKey?.value)) return;
+    token.value = '';
+    if (widgetId.value && window.turnstile)
+      window.turnstile.reset(widgetId.value);
   });
 
   return <div ref={containerRef} class={sitekey ? 'my-2' : 'hidden'} />;

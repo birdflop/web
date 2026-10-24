@@ -45,11 +45,10 @@ import {
   buildResourcePack,
   RenderedTexture,
   normalizeTextureName,
-  readFileAsDataURL,
-  base64ToFile,
-  loadGifFrames,
-  loadImageFromDataURL,
   loadFramesFromBlob,
+  SPRITE_NAMESPACE,
+  SPRITE_PATH,
+  type AnimtextureFrame,
 } from '~/util/animtexture';
 import Link from 'lucide-icons-qwik/icons/Link';
 import Smile from 'lucide-icons-qwik/icons/Smile';
@@ -324,6 +323,8 @@ export default component$(() => {
                   values={[
                     { name: 'block', value: 'block' },
                     { name: 'item', value: 'item' },
+                    // birdflop:gif/* is what gets added to the gui atlas for chat sprites
+                    { name: SPRITE_PATH, value: SPRITE_PATH },
                   ]}
                   onChange$={(e, el) => {
                     texture.path = el.value;
@@ -379,31 +380,14 @@ export default component$(() => {
                       animtextureStore.textures[
                         animtextureStore.activeTexture
                       ] ?? animtextureStore.textures[0];
-                    const files = Array.from(el.files ?? []);
-                    for (const f of files) {
-                      const fileEvent = await readFileAsDataURL(f);
-                      if (!fileEvent.target?.result) return;
+                    const newFrames: AnimtextureFrame[] = [];
+                    for (const f of Array.from(el.files ?? []))
+                      newFrames.push(...(await loadFramesFromBlob(f)));
+                    if (newFrames.length === 0) return;
 
-                      const frames = animtextureStore.accumulate
-                        ? texture.frames
-                        : [];
-                      const file = await base64ToFile(
-                        fileEvent.target.result as string
-                      );
-                      if (file.mime == 'image/gif') {
-                        frames.push(...(await loadGifFrames(file.buffer)));
-                      } else {
-                        const img = await loadImageFromDataURL(
-                          fileEvent.target.result as string
-                        );
-                        frames.push({
-                          img,
-                          delay: 20,
-                        });
-                      }
-
-                      texture.frames = frames;
-                    }
+                    texture.frames = animtextureStore.accumulate
+                      ? [...texture.frames, ...newFrames]
+                      : newFrames;
                   }}
                 />
               </Label>
@@ -582,6 +566,12 @@ export default component$(() => {
                 checked={texture.showChatPreview}
                 onChange$={(e, el) => {
                   texture.showChatPreview = el.checked;
+                  // chat sprites only work from the gui atlas, which the
+                  // resource pack only extends for birdflop:gif/*
+                  if (el.checked) {
+                    texture.namespace = SPRITE_NAMESPACE;
+                    texture.path = SPRITE_PATH;
+                  }
                 }}
               >
                 {t('animtexture.showChatPreview@@Show Minecraft chat preview')}
@@ -688,11 +678,20 @@ export default component$(() => {
             </>
           )}
 
+          {texture.showChatPreview &&
+            (texture.namespace !== SPRITE_NAMESPACE ||
+              texture.path !== SPRITE_PATH) && (
+              <p class="text-lum-text-secondary text-sm">
+                Only textures at {SPRITE_NAMESPACE}:{SPRITE_PATH}/ are added to
+                the gui atlas, so this sprite won't show in chat with the
+                current namespace and path.
+              </p>
+            )}
           {texture.showChatPreview && (
             <Input
               readOnly
               noFormatRow
-              chatInput={`this is so funny <sprite:"minecraft:gui":"birdflop:gif/${texture.name}">`}
+              chatInput={`this is so funny <sprite:"minecraft:gui":"${texture.namespace}:${texture.path}/${normalizeTextureName(texture.name)}">`}
               playerName="AnimatedTexture"
             >
               <span class="items-center gap-2 text-white!">
