@@ -10,6 +10,7 @@ import Globe from 'lucide-icons-qwik/icons/Globe';
 import Server from 'lucide-icons-qwik/icons/Server';
 import Book from 'lucide-icons-qwik/icons/Book';
 import LogOut from 'lucide-icons-qwik/icons/LogOut';
+import LogIn from 'lucide-icons-qwik/icons/LogIn';
 import User from 'lucide-icons-qwik/icons/User';
 import Palette from 'lucide-icons-qwik/icons/Palette';
 import Rainbow from 'lucide-icons-qwik/icons/Rainbow';
@@ -31,6 +32,7 @@ import { useSession, useSignIn, useSignOut } from '~/routes/plugin@auth';
 import { languages } from '~/speak-config';
 import { SettingsContext } from '~/routes/layout';
 import { setCookies, setUserData } from '~/util/dataUtils';
+import ExternalLink from 'lucide-icons-qwik/icons/ExternalLink';
 
 // Links used in multiple places, defined here to avoid duplication and potential inconsistencies
 export const donateLink =
@@ -240,28 +242,47 @@ export default component$(() => {
       <div q:slot="end" class="hidden gap-2 sm:flex">
         <SocialButtons />
       </div>
-      {session.value && session.value.user && (
-        <Dropdown
-          align="right"
-          q:slot="end"
-          class="lum-bg-transparent hover:lum-bg-nav-bg gap-1 p-2"
-          id="profile"
-          panelProps={{
-            class: 'lum-grad-bg-nav-bg',
-          }}
+      <Dropdown
+        align="right"
+        q:slot="end"
+        class="lum-bg-transparent hover:lum-bg-nav-bg gap-1 p-2"
+        id="profile"
+        panelProps={{
+          class: 'lum-grad-bg-nav-bg',
+        }}
+      >
+        <Fragment q:slot="dropdown">
+          {session.value?.user?.image && (
+            <img
+              alt={session.value?.user.name || 'User'}
+              src={session.value?.user.image}
+              width={20}
+              height={20}
+              class="h-5 min-w-5 rounded-full!"
+            />
+          )}
+          {session.value?.user?.name}
+          {!session.value?.user && t('nav.profile.login@@Login')}
+        </Fragment>
+        <Link
+          href="https://panel.birdflop.com/"
+          target="_blank"
+          class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
         >
-          <span q:slot="dropdown" class="text-lum-text flex items-center gap-2">
-            {session.value.user.image && (
-              <img
-                alt={session.value.user.name || 'User'}
-                src={session.value.user.image}
-                width={20}
-                height={20}
-                class="h-5 min-w-5 rounded-full!"
-              />
-            )}
-            {session.value.user?.name || 'User'}
-          </span>
+          <AppWindow size={20} />
+          {t('nav.hosting.panel@@Panel')}
+          <ExternalLink size={16} />
+        </Link>
+        <Link
+          href="https://client.birdflop.com/"
+          target="_blank"
+          class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
+        >
+          <DollarSign size={20} />
+          {t('nav.hosting.billing@@Billing')}
+          <ExternalLink size={16} />
+        </Link>
+        {session.value && (
           <Link
             href="/profile"
             class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1"
@@ -269,33 +290,28 @@ export default component$(() => {
             <User size={20} />
             {t('nav.profile.title@@Profile')}
           </Link>
-          <Form action={signOut}>
-            <input type="hidden" name="providerId" value="discord" />
-            <input
-              type="hidden"
-              name="options.redirectTo"
-              value={loc.url.pathname + loc.url.search}
-            />
-            <button class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1">
-              <LogOut size={20} />
-              {t('nav.profile.logout@@Logout')}
-            </button>
-          </Form>
-        </Dropdown>
-      )}
-      {!session.value && (
-        <Form action={signIn} q:slot="end">
+        )}
+        <Form action={session.value ? signOut : signIn}>
           <input type="hidden" name="providerId" value="discord" />
           <input
             type="hidden"
             name="options.redirectTo"
             value={loc.url.pathname + loc.url.search}
           />
-          <button class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg p-2">
-            {t('nav.profile.login@@Login')}
-          </button>
+          {session.value && (
+            <button class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1">
+              <LogOut size={20} />
+              {t('nav.profile.logout@@Logout')}
+            </button>
+          )}
+          {!session.value && (
+            <button class="lum-btn lum-bg-transparent hover:lum-bg-nav-bg rounded-lum-1">
+              <LogIn size={20} />
+              {t('nav.profile.login@@Login')}
+            </button>
+          )}
         </Form>
-      )}
+      </Dropdown>
 
       <Link
         q:slot="mobile"
