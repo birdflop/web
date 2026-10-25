@@ -1,5 +1,5 @@
 import { component$ } from '@qwik.dev/core';
-import { SocialButtons } from './Nav';
+import { SocialButtons, csroomLink, nonprofitLink } from './Nav';
 import { inlineTranslate } from 'qwik-speak';
 
 export default component$(() => {
@@ -8,8 +8,19 @@ export default component$(() => {
   return (
     <footer class="bg-lum-card-bg border-t-lum-border/10 text-lum-text-secondary relative mt-20 flex w-full items-center justify-center gap-10 border-t p-6 pb-20 text-sm">
       <p>
-        Birdflop is a registered 501(c)(3) nonprofit organization (EIN:
-        93-2401009).
+        Birdflop is a registered 501(c)(3){' '}
+        <a href={nonprofitLink} class="text-lum-accent hover:underline">
+          nonprofit organization
+        </a>{' '}
+        (EIN: 93-2401009). Learn more at{' '}
+        <a href={nonprofitLink} class="text-lum-accent hover:underline">
+          birdflop.org
+        </a>{' '}
+        and{' '}
+        <a href={csroomLink} class="text-lum-accent hover:underline">
+          csroom.org
+        </a>
+        .
         <br />
         By using this site, you agree to our{' '}
         <a href="/terms" class="text-lum-accent hover:underline">

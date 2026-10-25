@@ -14,14 +14,18 @@ import CheckCircle from 'lucide-icons-qwik/icons/CheckCircle';
 import AlertTriangle from 'lucide-icons-qwik/icons/AlertTriangle';
 import Box from 'lucide-icons-qwik/icons/Box';
 import Settings from 'lucide-icons-qwik/icons/Settings';
-import PiggyBank from 'lucide-icons-qwik/icons/PiggyBank';
 import { initiateTyper } from '~/util/Typer';
 
 import { plans } from './plans';
 import HistoricLinePlot from '~/components/home/HistoricLinePlot';
 import { generateHead } from '~/root';
 import ExpensesChart from '~/components/home/ExpensesChart';
-import { discordLink, donateLink } from '~/components/Elements/Nav';
+import {
+  csroomLink,
+  discordLink,
+  donateLink,
+  nonprofitLink,
+} from '~/components/Elements/Nav';
 import Testimonials from '~/components/home/Testimonials';
 
 export default component$(() => {
@@ -102,11 +106,11 @@ export default component$(() => {
               Resources
             </Link>
             <a
-              href={donateLink}
+              href={nonprofitLink}
               class="lum-btn lum-btn-p-4 xl:lum-btn-p-6 lum-bg-pink-600/40 hover:lum-bg-pink-700 animate-in fade-in motion-safe:slide-in-from-top-16 text-xl backdrop-blur-sm motion-safe:duration-1000"
             >
-              <PiggyBank size={32} />
-              Donate Today
+              <Heart size={32} />
+              Nonprofit Site
             </a>
           </div>
         </div>
@@ -119,7 +123,15 @@ export default component$(() => {
           nurturing a passion for technology and computer science. We uniquely
           approach our mission by offering affordable and accessible hosting
           resources, not just as a service, but as a catalyst for technological
-          curiosity.&nbsp;
+          curiosity. Learn more about the Birdflop nonprofit at{' '}
+          <a href={nonprofitLink} class="text-lum-accent hover:underline">
+            birdflop.org
+          </a>{' '}
+          and our computer science education initiative at{' '}
+          <a href={csroomLink} class="text-lum-accent hover:underline">
+            csroom.org
+          </a>
+          .&nbsp;
           {missionExpanded.value && (
             <>
               Our belief is rooted in the idea that the hands-on experience of

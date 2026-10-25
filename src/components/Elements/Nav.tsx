@@ -38,6 +38,8 @@ import ExternalLink from 'lucide-icons-qwik/icons/ExternalLink';
 export const donateLink =
   'https://www.paypal.com/US/fundraiser/charity/5036975';
 export const discordLink = 'https://discord.gg/nmgtX5z';
+export const nonprofitLink = 'https://birdflop.org';
+export const csroomLink = 'https://csroom.org';
 
 export default component$(() => {
   const t = inlineTranslate();

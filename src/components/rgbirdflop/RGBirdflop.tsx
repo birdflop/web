@@ -510,8 +510,8 @@ export default component$(
               <a href={donateLink}>click here</a> to make a charitable donation,
               100% tax-deductible in the US.
             </p>
-            <p class="sm:text-right">
-              Wanna automate generating gradients or use this in your own
+            <p>
+              Want to automate generating gradients or use this in your own
               project? We have{' '}
               <a
                 class="text-lum-accent hover:underline"
@@ -524,8 +524,9 @@ export default component$(
                 class="text-lum-accent hover:underline"
                 href="/docs/rgbirdflop/api"
               >
-                an API!
+                an API
               </a>
+              !
             </p>
           </div>
         </div>
