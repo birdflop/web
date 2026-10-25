@@ -1,6 +1,6 @@
 {
   "name": "@birdflop/mc-status",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Minecraft Server Status client for Java & Bedrock with full 1.16+ RGB hex color and MOTD component support.",
   "repository": {
     "type": "git",
