@@ -61,7 +61,7 @@ export const plans = {
     },
     features: [
       'US East (NYC / Ashburn VA)',
-      'Ryzen 9 9900X or Better',
+      'Ryzen 9 7950X or Better',
       '6 Logical Cores',
       'Unmetered* NVMe Storage',
     ],
