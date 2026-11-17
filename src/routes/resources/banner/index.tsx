@@ -28,6 +28,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { openItemsContext } from '~/routes/layout';
 import { defaultDescription, generateHead } from '~/root';
 import Output from '~/components/Elements/Output';
+import PatternPicker from '~/components/banner/PatternPicker';
 import { ButtonContainer } from '@luminescent/ui-qwik';
 
 import colors from '~/util/banner/colors';
@@ -457,66 +458,18 @@ export default component$(() => {
                         openPopup.value != i,
                     }}
                   >
-                    <div class="lum-card w-92 p-4">
-                      <div class="flex flex-wrap gap-1">
-                        {Object.entries(colors).map(([colorName, color]) => {
-                          return (
-                            <button
-                              key={colorName}
-                              class="lum-btn lum-grad-bg p-1 hover:brightness-150"
-                              style={{
-                                '--bg-color': `#${color.toString(16).padStart(6, '0')}`,
-                              }}
-                              onClick$={() => {
-                                const newPatterns =
-                                  bannerStore.patterns.slice(0);
-                                newPatterns[i].color =
-                                  colorName as keyof typeof colors;
-                                bannerStore.patterns = newPatterns;
-                              }}
-                            >
-                              <img
-                                width={28}
-                                height={28}
-                                class="h-7 w-7"
-                                src={`/banner/dyes/${colorName}_dye.png`}
-                                alt={colorName}
-                                style={{
-                                  imageRendering: 'pixelated',
-                                }}
-                              />
-                            </button>
-                          );
-                        })}
-                      </div>
-                      <div class="flex flex-wrap gap-1">
-                        {patterns.map((pattern) => {
-                          return (
-                            <button
-                              key={pattern}
-                              class="lum-btn p-0 hover:brightness-150"
-                              onClick$={() => {
-                                const newPatterns =
-                                  bannerStore.patterns.slice(0);
-                                newPatterns[i].pattern = pattern;
-                                bannerStore.patterns = newPatterns;
-                              }}
-                            >
-                              <img
-                                width={36}
-                                height={72}
-                                class="rounded-lum h-18 w-9"
-                                src={`/banner/patterns/previews/${pattern}.png`}
-                                alt={pattern}
-                                style={{
-                                  imageRendering: 'pixelated',
-                                }}
-                              />
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
+                    <PatternPicker
+                      onColor$={(color) => {
+                        const newPatterns = bannerStore.patterns.slice(0);
+                        newPatterns[i] = { ...newPatterns[i], color };
+                        bannerStore.patterns = newPatterns;
+                      }}
+                      onPattern$={(pattern) => {
+                        const newPatterns = bannerStore.patterns.slice(0);
+                        newPatterns[i] = { ...newPatterns[i], pattern };
+                        bannerStore.patterns = newPatterns;
+                      }}
+                    />
                   </div>
                 </div>
               ))}
