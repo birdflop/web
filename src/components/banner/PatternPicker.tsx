@@ -3,37 +3,39 @@ import { component$, type QRL } from '@qwik.dev/core';
 import colors from '~/util/banner/colors';
 import patterns from '~/util/banner/patterns';
 
-// Kept as its own component so each handler only closes over its own loop
-// variables. When these loops were nested inside the banner's patterns.map,
-// the Qwik optimizer hoisted the handlers into the outer loop, where
-// `colorName` is undefined.
+// The color loop iterates over keys with a plain (non-destructured) param and a
+// block body: with `([colorName, color]) => (...)` the Qwik optimizer hoists the
+// click handler's captures out of the loop, where `colorName` is undefined.
 export default component$<{
   onColor$: QRL<(color: keyof typeof colors) => void>;
   onPattern$: QRL<(pattern: (typeof patterns)[number]) => void>;
 }>(({ onColor$, onPattern$ }) => (
   <div class="lum-card w-92 p-4">
     <div class="flex flex-wrap gap-1">
-      {Object.entries(colors).map(([colorName, color]) => (
-        <button
-          key={colorName}
-          class="lum-btn lum-grad-bg p-1 hover:brightness-150"
-          style={{
-            '--bg-color': `#${color.toString(16).padStart(6, '0')}`,
-          }}
-          onClick$={() => onColor$(colorName as keyof typeof colors)}
-        >
-          <img
-            width={28}
-            height={28}
-            class="h-7 w-7"
-            src={`/banner/dyes/${colorName}_dye.png`}
-            alt={colorName}
+      {(Object.keys(colors) as (keyof typeof colors)[]).map((colorName) => {
+        const color = colors[colorName];
+        return (
+          <button
+            key={colorName}
+            class="lum-btn lum-grad-bg p-1 hover:brightness-150"
             style={{
-              imageRendering: 'pixelated',
+              '--bg-color': `#${color.toString(16).padStart(6, '0')}`,
             }}
-          />
-        </button>
-      ))}
+            onClick$={() => onColor$(colorName)}
+          >
+            <img
+              width={28}
+              height={28}
+              class="h-7 w-7"
+              src={`/banner/dyes/${colorName}_dye.png`}
+              alt={colorName}
+              style={{
+                imageRendering: 'pixelated',
+              }}
+            />
+          </button>
+        );
+      })}
     </div>
     <div class="flex flex-wrap gap-1">
       {patterns.map((pattern) => (

@@ -309,7 +309,7 @@ export default component$(() => {
                 )}
               </span>
             </h6>
-            <ButtonContainer class="*:hover:lum-bg shrink-2 flex-wrap *:flex-none *:justify-center *:p-2">
+            <ButtonContainer class="*:hover:lum-bg flex-wrap *:flex-none! *:justify-center *:p-2">
               {Object.entries(colors).map(([colorName, color]) => {
                 return (
                   <button
