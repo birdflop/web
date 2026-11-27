@@ -36,15 +36,10 @@ export default component$(() => {
 
   return (
     <>
-      <section
-        class="relative flex min-h-svh justify-center overflow-hidden"
-        style={{
-          '--lum-border-radius': '1.5rem',
-        }}
-      >
+      <section class="relative flex min-h-svh justify-center overflow-hidden [--lum-border-radius:1.5rem]">
         <div
           id="hero"
-          class="flex w-full max-w-5xl flex-col items-center justify-center px-20 pt-18 text-gray-100 md:flex-row md:justify-between xl:max-w-6xl 2xl:max-w-7xl"
+          class="flex w-full max-w-5xl flex-col items-center justify-center px-6 pt-18 text-gray-100 sm:px-20 md:flex-row md:justify-between xl:max-w-6xl 2xl:max-w-7xl"
         >
           <div class="relative flex flex-col gap-4 xl:gap-8">
             <div class="relative mr-auto">
@@ -57,14 +52,7 @@ export default component$(() => {
                 />
                 <span class="text-transparent!">
                   <span>b</span>
-                  <span
-                    style={{
-                      background: 'linear-gradient(180deg, #54daf4, #545eb6)',
-                      backgroundClip: 'text',
-                    }}
-                  >
-                    irdflop
-                  </span>
+                  <span class="home-title-gradient">irdflop</span>
                 </span>
               </h1>
             </div>
@@ -95,30 +83,30 @@ export default component$(() => {
               href="#plans"
               class="lum-btn lum-btn-p-4 xl:lum-btn-p-6 lum-bg-blue-600/40 hover:lum-bg-blue-700 animate-in fade-in motion-safe:slide-in-from-top-16 text-xl backdrop-blur-sm motion-safe:duration-600"
             >
-              <Server size={32} />
+              <Server class="home-hero-icon" />
               Hosting
             </a>
             <Link
               href="/resources"
               class="lum-btn lum-btn-p-4 xl:lum-btn-p-6 lum-bg-purple-600/40 hover:lum-bg-purple-700 animate-in fade-in motion-safe:slide-in-from-top-16 text-xl backdrop-blur-sm motion-safe:duration-800"
             >
-              <Box size={32} />
+              <Box class="home-hero-icon" />
               Resources
             </Link>
             <a
               href={nonprofitLink}
               class="lum-btn lum-btn-p-4 xl:lum-btn-p-6 lum-bg-pink-600/40 hover:lum-bg-pink-700 animate-in fade-in motion-safe:slide-in-from-top-16 text-xl backdrop-blur-sm motion-safe:duration-1000"
             >
-              <Heart size={32} />
+              <Heart class="home-hero-icon" />
               Nonprofit Site
             </a>
           </div>
         </div>
       </section>
       <div class="to-bg h-20 bg-linear-to-b from-transparent" />
-      <section class="bg-bg flex w-full flex-col items-center justify-center p-10">
-        <h3 class="my-6 text-5xl font-extrabold">Our Nonprofit Mission</h3>
-        <p class="text-lum-text-secondary max-w-3xl">
+      <section class="home-section">
+        <h3 class="home-heading">Our Nonprofit Mission</h3>
+        <p class="home-text max-w-3xl">
           At the heart of our mission, we are dedicated to igniting and
           nurturing a passion for technology and computer science. We uniquely
           approach our mission by offering affordable and accessible hosting
@@ -167,31 +155,24 @@ export default component$(() => {
           </button>
         </p>
       </section>
-      <section
-        class="bg-bg flex w-full flex-col items-center justify-center p-10"
-        style={{
-          '--lum-border-radius': '1.5rem',
-        }}
-      >
+      <section class="home-section">
         <Anchor id="plans">
-          <h3 id="plans" class="my-6 mr-2 text-5xl font-extrabold">
+          <h3 id="plans" class="home-heading-anchored">
             Plans
           </h3>
         </Anchor>
-        <div class="grid max-w-4xl gap-2 md:grid-cols-3">
+        <div class="home-grid max-w-4xl md:grid-cols-3">
           {Object.keys(plans).map((planName) => {
             const plan = plans[planName as keyof typeof plans];
             const ramOptions = Object.keys(plan.ramAndId);
             return (
-              <div class="lum-card lum-grad-bg-lum-card-bg" key={planName}>
+              <div class="home-card" key={planName}>
                 <p class="text-lum-text-secondary">
                   Last quarter, clients paid{' '}
                   <strong>${plan.$PerGBReimbursed}/GB RAM</strong> after
                   reimbursements.
                 </p>
-                <h4 class="mb-2 flex items-center gap-2 text-2xl font-bold">
-                  {planName}
-                </h4>
+                <h4 class="home-card-title">{planName}</h4>
                 <p class="text-lum-text-secondary">
                   {ramOptions[0]} - {ramOptions[ramOptions.length - 1]} GB plans
                   <br />
@@ -210,7 +191,7 @@ export default component$(() => {
                     target="_blank"
                     class="lum-btn lum-bg-red-600/50 hover:lum-bg-red-600 m-auto mt-4 w-min"
                   >
-                    <AlertTriangle size={20} class="text-3xl" />
+                    <AlertTriangle class="home-icon" />
                     Out of stock
                   </a>
                 ) : (
@@ -221,7 +202,7 @@ export default component$(() => {
                     data-umami-event-page="home"
                     data-umami-event-variant={planName}
                   >
-                    <ShoppingCart size={20} class="text-3xl" />
+                    <ShoppingCart class="home-icon" />
                     Order Now
                   </Link>
                 )}
@@ -230,12 +211,12 @@ export default component$(() => {
           })}
         </div>
         <div
-          class="lum-card lum-grad-bg-green/60 mt-5 max-w-xl transition-all duration-200!"
+          class="lum-card lum-grad-bg-green/60 mt-5 max-w-xl min-w-0 transition-all duration-200!"
           onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
           onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
         >
-          <h4 class="mb-2 flex items-center gap-2 text-2xl font-bold">
-            <CheckCircle size={30} />
+          <h4 class="home-card-title">
+            <CheckCircle class="home-icon" />
             Benefits Galore
           </h4>
           <p>
@@ -246,25 +227,20 @@ export default component$(() => {
           </p>
         </div>
       </section>
-      <section
-        class="bg-bg flex w-full flex-col items-center justify-center p-10"
-        style={{
-          '--lum-border-radius': '1.5rem',
-        }}
-      >
+      <section class="home-section">
         <Anchor id="features">
-          <h3 id="features" class="my-6 mr-2 text-5xl font-extrabold">
+          <h3 id="features" class="home-heading-anchored">
             Features
           </h3>
         </Anchor>
-        <div class="grid max-w-5xl gap-2 md:grid-cols-2">
+        <div class="home-grid max-w-5xl">
           <div
-            class="lum-card lum-grad-bg-lum-card-bg transition-all duration-200!"
+            class="home-card-hover"
             onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
             onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
           >
-            <h4 class="mb-2 flex items-center gap-2 text-2xl font-bold">
-              <Rocket size={30} />
+            <h4 class="home-card-title">
+              <Rocket class="home-icon" />
               Sheer Performance
             </h4>
             <p>
@@ -274,12 +250,12 @@ export default component$(() => {
             </p>
           </div>
           <div
-            class="lum-card lum-grad-bg-lum-card-bg transition-all duration-200!"
+            class="home-card-hover"
             onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
             onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
           >
-            <h4 class="mb-2 flex items-center gap-2 text-2xl font-bold">
-              <Settings size={30} />
+            <h4 class="home-card-title">
+              <Settings class="home-icon" />
               Fully Configurable
             </h4>
             <p>
@@ -289,12 +265,12 @@ export default component$(() => {
             </p>
           </div>
           <div
-            class="lum-card lum-grad-bg-lum-card-bg transition-all duration-200!"
+            class="home-card-hover"
             onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
             onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
           >
-            <h4 class="mb-2 flex items-center gap-2 text-2xl font-bold">
-              <Eye size={30} />
+            <h4 class="home-card-title">
+              <Eye class="home-icon" />
               Transparent
             </h4>
             <p>
@@ -307,12 +283,12 @@ export default component$(() => {
             </p>
           </div>
           <div
-            class="lum-card lum-grad-bg-lum-card-bg transition-all duration-200!"
+            class="home-card-hover"
             onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
             onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
           >
-            <h4 class="mb-2 flex items-center gap-2 text-2xl font-bold">
-              <Globe size={30} />
+            <h4 class="home-card-title">
+              <Globe class="home-icon" />
               Price Matching
             </h4>
             <p>
@@ -322,12 +298,12 @@ export default component$(() => {
             </p>
           </div>
           <div
-            class="lum-card lum-grad-bg-lum-card-bg transition-all duration-200!"
+            class="home-card-hover"
             onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
             onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
           >
-            <h4 class="mb-2 flex items-center gap-2 text-2xl font-bold">
-              <Heart size={30} />
+            <h4 class="home-card-title">
+              <Heart class="home-icon" />
               Instant Support
             </h4>
             <p>
@@ -344,12 +320,12 @@ export default component$(() => {
             </p>
           </div>
           <div
-            class="lum-card lum-grad-bg-lum-card-bg transition-all duration-200!"
+            class="home-card-hover"
             onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
             onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
           >
-            <h4 class="mb-2 flex items-center gap-2 text-2xl font-bold">
-              <HandCoins size={30} />
+            <h4 class="home-card-title">
+              <HandCoins class="home-icon" />
               Nonprofit
             </h4>
             <p>
@@ -360,11 +336,9 @@ export default component$(() => {
           </div>
         </div>
       </section>
-      <section class="bg-bg flex w-full flex-col items-center justify-center p-10">
-        <h3 class="my-6 text-5xl font-extrabold">
-          How do reimbursements work?
-        </h3>
-        <p class="text-lum-text-secondary max-w-4xl">
+      <section class="home-section">
+        <h3 class="home-heading">How do reimbursements work?</h3>
+        <p class="home-text">
           As a nonprofit, Birdflop periodically reimburses clients based on
           excess profit. At the end of each reimbursement period, active clients
           receive a reimbursement for excess profit from their plan. These
@@ -375,35 +349,29 @@ export default component$(() => {
           respectively. Not good enough? Find a competitor with similar
           specifications and inquire about our price matching.&nbsp;
         </p>
-        <div
-          class="lum-card lum-grad-bg-lum-card-bg mt-12"
-          style={{
-            '--lum-border-radius': '1.5rem',
-          }}
-        >
-          <h4 class="mb-2 text-2xl font-bold">
+        <div class="home-card mt-12 w-full max-w-4xl">
+          <h4 class="home-card-title">
             Historical Reimbursement Rates for US and EU Clients
           </h4>
-          <HistoricLinePlot />
+          <div class="home-chart">
+            <HistoricLinePlot />
+          </div>
         </div>
       </section>
-      <section class="bg-bg flex w-full flex-col items-center justify-center p-10">
-        <h3 class="my-6 text-5xl font-extrabold">Where do my payments go?</h3>
-        <div class="mt-12 grid max-w-5xl gap-10 md:grid-cols-2">
-          <div
-            class="lum-card lum-grad-bg-lum-card-bg"
-            style={{
-              '--lum-border-radius': '1.5rem',
-            }}
-          >
-            <ExpensesChart />
+      <section class="home-section">
+        <h3 class="home-heading">Where do my payments go?</h3>
+        <div class="home-grid mt-12 max-w-5xl gap-10">
+          <div class="home-card">
+            <div class="home-chart">
+              <ExpensesChart />
+            </div>
             <p class="text-lum-text-secondary py-2 text-center text-sm">
               Plot shows revenue (inner ring) and expenditures (outer ring) for
               Q1 2025. Some numbers may be approximations, and categories may be
               simplified. US Hosting Expenses includes depreciation.
             </p>
           </div>
-          <div class="flex flex-col gap-4">
+          <div class="flex min-w-0 flex-col gap-4">
             <p class="text-lum-text-secondary">
               Birdflop is a 501(c)(3) nonprofit organization. As such, all
               profit generated is reinvested into improving our services and
@@ -429,8 +397,8 @@ export default component$(() => {
         </div>
       </section>
       <Testimonials />
-      <section class="bg-bg flex w-full flex-col items-center justify-center p-10">
-        <h3 class="my-6 text-5xl font-extrabold">Still not convinced?</h3>
+      <section class="home-section">
+        <h3 class="home-heading">Still not convinced?</h3>
         <p class="max-w-4xl">
           Create a ticket on our{' '}
           <a
