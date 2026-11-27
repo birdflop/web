@@ -3,6 +3,7 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 @import '@luminescent/ui';
+@import './components/ServerList/serverlist.css';
 
 .markdown {
   @import '@luminescent/ui/formatting';
