@@ -46,7 +46,7 @@ export default component$<PaginationProps>(
               </p>
               <SelectMenu
                 class="lum-btn-p-1 rounded-lum-1 lum-bg-transparent"
-                value={perPage}
+                value={String(perPage)}
                 onChange$={(e, el) => {
                   const newPerPage = parseInt(el.value, 10);
                   void updateURL({ perPage: newPerPage, page: 1 });
