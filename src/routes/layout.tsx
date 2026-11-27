@@ -319,7 +319,7 @@ export default component$(() => {
       <div
         ref={anchorElementRef}
         class={{
-          'fixed flex max-w-full flex-col gap-1 md:max-w-2/2 lg:max-w-2/3 xl:max-w-2/4': true,
+          'fixed z-50 flex max-w-full flex-col gap-1 md:max-w-2/2 lg:max-w-2/3 xl:max-w-2/4': true,
           'right-4 bottom-4': !settingsStore.flopbird?.toggle,
         }}
         id="notifications"

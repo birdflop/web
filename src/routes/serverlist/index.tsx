@@ -146,8 +146,8 @@ export default component$(() => {
       </p>
 
       {/* Filters */}
-      <div class="sm:lum-card mt-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-1 sm:p-1">
-        <div class="lum-card sm:lum-bg-transparent flex-1 flex-row items-center gap-1 p-1 sm:p-0">
+      <div class="serverlist-filters">
+        <div class="serverlist-search">
           <Search size={20} class="mx-2" />
           <input
             class="lum-input rounded-lum-1 flex-1"
@@ -156,9 +156,9 @@ export default component$(() => {
             onInput$={(e, el) => void debouncedSearch(el.value)}
           />
         </div>
-        <div class="flex flex-wrap items-center justify-center gap-1">
+        <div class="serverlist-filter-group">
           <SelectMenu
-            class="rounded-lum-1 lum-bg-transparent"
+            class="serverlist-filter"
             value={data.sort}
             onChange$={(e, el) => void updateURL({ sort: el.value })}
             title="Sort by"
@@ -170,7 +170,7 @@ export default component$(() => {
             ]}
           />
           <SelectMenu
-            class="rounded-lum-1 lum-bg-transparent"
+            class="serverlist-filter"
             value={data.edition}
             onChange$={(e, el) =>
               void updateURL({ edition: el.value === 'all' ? '' : el.value })
@@ -183,7 +183,7 @@ export default component$(() => {
             ]}
           />
           <SelectMenu
-            class="rounded-lum-1 lum-bg-transparent"
+            class="serverlist-filter"
             value={data.tag ?? ''}
             onChange$={(e, el) => void updateURL({ tag: el.value })}
             title="Tag"
@@ -195,7 +195,7 @@ export default component$(() => {
           <Dropdown
             align="right"
             id="settings"
-            class="rounded-lum-1 lum-bg-transparent p-3"
+            class="serverlist-filter-settings"
             panelProps={{
               class: 'lum-grad-bg-lum-card-bg p-3 gap-3 min-w-56',
             }}

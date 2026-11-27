@@ -1,0 +1,131 @@
+/* Filter bar */
+
+@utility serverlist-filters {
+  @apply md:lum-card mt-2 flex flex-col gap-2 md:flex-row md:items-center md:gap-1 md:p-1;
+}
+
+@utility serverlist-search {
+  @apply lum-card md:lum-bg-transparent flex-1 flex-row items-center gap-1 p-1 md:p-0;
+}
+
+@utility serverlist-filter-group {
+  @apply flex flex-nowrap items-center justify-center gap-1;
+}
+
+@utility serverlist-filter {
+  @apply rounded-lum-1 lum-bg-transparent lum-btn-p-1 md:lum-btn-p-2 text-sm max-[24.375rem]:text-xs md:text-base;
+}
+
+@utility serverlist-filter-settings {
+  @apply rounded-lum-1 lum-bg-transparent p-2 md:p-3;
+}
+
+/* Server card */
+
+@utility server-card {
+  --lum-border-radius: 1rem;
+  @apply lum-card lum-grad-bg-lum-card-bg/90 relative flex-row items-center gap-2 overflow-clip p-2;
+}
+
+@utility server-card-backdrop {
+  @apply absolute inset-0 -z-1 h-full w-full scale-110 object-cover blur-lg saturate-200;
+  image-rendering: pixelated;
+}
+
+@utility server-card-icon {
+  @apply flex size-[clamp(4rem,3.36rem+2.56vw,5rem)] shrink-0 flex-col items-center justify-center gap-1 text-center;
+}
+
+@utility server-card-icon-image {
+  @apply rounded-lum-2 aspect-square h-full w-full;
+  image-rendering: pixelated;
+}
+
+@utility server-card-icon-fallback {
+  @apply text-lum-text-secondary flex h-16 w-16 items-center justify-center text-2xl font-bold;
+}
+
+@utility server-card-details {
+  @apply flex min-w-0 flex-1 items-center justify-between gap-2;
+}
+
+@utility server-card-main {
+  @apply flex min-w-0 flex-1 flex-col;
+}
+
+@utility server-card-header {
+  @apply flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1;
+}
+
+@utility server-card-title-group {
+  @apply flex max-w-full min-w-0 grow items-center gap-2;
+}
+
+@utility server-card-rank {
+  @apply text-lum-text-secondary flex items-center font-mono text-xs;
+}
+
+@utility server-card-title {
+  @apply hover:text-lum-accent min-w-0 truncate text-lg font-bold after:absolute after:inset-0 after:content-[''];
+}
+
+@utility server-card-chip {
+  @apply lum-bg-lum-card-bg/10 rounded-lum-2 flex items-center gap-0.5 px-2 py-0.5 backdrop-brightness-150 backdrop-saturate-150;
+}
+
+@utility server-card-tags {
+  @apply relative z-10 flex max-w-full min-w-0 flex-wrap gap-1 text-xs;
+
+  & > * {
+    @apply server-card-chip;
+  }
+}
+
+@utility server-card-media {
+  @apply flex flex-col gap-2 lg:flex-row;
+}
+
+@utility server-card-description-column {
+  @apply flex min-w-0 flex-1 flex-col;
+}
+
+@utility server-card-description {
+  @apply text-lum-text-secondary mb-1 line-clamp-2 text-sm;
+}
+
+@utility server-card-banner {
+  @apply bg-lum-input-bg/20 rounded-lum-2 pointer-events-none relative order-first mt-2 max-w-full shrink-0 self-start overflow-hidden lg:order-none lg:mt-0 lg:ml-auto lg:self-auto;
+}
+
+@utility server-card-banner-image {
+  @apply h-auto max-h-15 w-auto max-w-full object-contain;
+  image-rendering: pixelated;
+}
+
+@utility server-card-meta {
+  @apply flex min-w-0 flex-wrap items-center gap-1 text-xs;
+}
+
+@utility server-card-status-dot {
+  @apply h-2 w-2 shrink-0 rounded-full;
+}
+
+@utility server-card-ip {
+  @apply lum-bg-lum-card-bg/10 hover:lum-bg-lum-card-bg/30 rounded-lum-2 relative z-10 cursor-pointer overflow-hidden px-2 py-0.5 font-mono text-xs text-ellipsis backdrop-brightness-150 backdrop-saturate-150;
+}
+
+@utility server-card-hosted {
+  @apply text-lum-text-secondary lum-bg-lum-accent/20 rounded-lum-2 flex cursor-pointer items-center gap-1 p-1 px-1.5 text-xs;
+}
+
+@utility server-card-version {
+  @apply text-lum-text-secondary ml-auto text-xs tracking-tighter whitespace-nowrap;
+}
+
+@utility server-card-players {
+  @apply text-lum-text-secondary flex items-center gap-1 whitespace-nowrap;
+}
+
+@utility server-card-sponsored {
+  @apply bg-lum-card-bg/80 rounded-lum-2 absolute top-2 right-2 z-10 flex items-center gap-1 px-1.5 py-0.5 text-xs font-semibold text-yellow-400 backdrop-blur-sm;
+}
