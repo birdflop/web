@@ -1,0 +1,65 @@
+/* Home page */
+
+/* Full-width page band. Narrower side padding on phones so content keeps
+   enough room; every card inside inherits the larger radius. */
+@utility home-section {
+  --lum-border-radius: 1.5rem;
+  @apply bg-bg flex w-full flex-col items-center justify-center px-4 py-10 sm:p-10;
+}
+
+@utility home-heading {
+  @apply my-6 max-w-full text-center text-4xl font-extrabold text-balance wrap-break-word sm:text-5xl;
+}
+
+/* Wraps an <Anchor>'d heading; leaves room for the anchor link icon. */
+@utility home-heading-anchored {
+  @apply home-heading mr-2;
+}
+
+@utility home-text {
+  @apply text-lum-text-secondary max-w-4xl;
+}
+
+/* Grids and the cards that sit under them share these widths so their
+   edges line up at every screen size. */
+@utility home-grid {
+  @apply grid w-full gap-2 md:grid-cols-2;
+}
+
+@utility home-card {
+  @apply lum-card lum-grad-bg-lum-card-bg max-w-full min-w-0;
+}
+
+@utility home-card-hover {
+  @apply home-card transition-all duration-200!;
+}
+
+@utility home-card-title {
+  @apply mb-2 flex items-center gap-2 text-2xl font-bold;
+}
+
+/* Icons are sized in em so they scale with the text beside them:
+   1.25em is 30px in a card title and 20px in a normal button. */
+@utility home-icon {
+  @apply size-[1.25em] shrink-0;
+}
+
+/* Hero buttons (text-xl): 1.6em is 32px. */
+@utility home-hero-icon {
+  @apply size-[1.6em] shrink-0;
+}
+
+/* Chart.js sizes the canvas from its parent, so the parent must be allowed
+   to shrink with the card. */
+@utility home-chart {
+  @apply relative w-full min-w-0;
+
+  & canvas {
+    @apply max-w-full;
+  }
+}
+
+@utility home-title-gradient {
+  background: linear-gradient(180deg, #54daf4, #545eb6);
+  background-clip: text;
+}

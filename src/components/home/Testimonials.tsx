@@ -142,38 +142,33 @@ export default component$(() => {
     .slice(0, 6);
 
   return (
-    <section
-      class="bg-bg flex w-full flex-col items-center justify-center p-10"
-      style={{
-        '--lum-border-radius': '1.5rem',
-      }}
-    >
+    <section class="home-section">
       <Anchor id="testimonials">
-        <h3 id="testimonials" class="my-6 mr-2 text-5xl font-extrabold">
+        <h3 id="testimonials" class="home-heading-anchored">
           Testimonials
         </h3>
       </Anchor>
-      <div class="grid max-w-6xl gap-2 md:grid-cols-2">
+      <div class="home-grid max-w-6xl">
         {sixTestimonials.map(({ name, image, title, description, link }) => {
           return (
             <a
               href={link}
               key={name}
-              class="lum-card lum-grad-bg-lum-card-bg transition-all duration-200!"
+              class="home-card-hover"
               onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
               onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
             >
-              <h4 class="mb-2 flex items-center gap-2 text-2xl font-bold">
+              <h4 class="home-card-title">
                 {image ? (
                   <img
                     src={image}
                     alt={name}
-                    class="rounded-full object-cover"
+                    class="home-icon rounded-full object-cover"
                     width={30}
                     height={30}
                   />
                 ) : (
-                  <CircleUser size={30} />
+                  <CircleUser class="home-icon" />
                 )}
                 {name}
               </h4>
@@ -186,18 +181,18 @@ export default component$(() => {
         })}
       </div>
       <div
-        class="lum-card lum-grad-bg-lum-card-bg mt-2 justify-center px-6 transition-all duration-200!"
+        class="home-card-hover mt-2 w-full max-w-6xl justify-center px-6"
         onMouseMove$={(e, el) => Hoverable.onMouseMove$(e, el)}
         onMouseLeave$={(e, el) => Hoverable.onMouseLeave$(e, el)}
       >
-        <h4 class="mb-2 flex items-center gap-2 text-2xl font-bold">
-          <Star size={30} />
+        <h4 class="home-card-title">
+          <Star class="home-icon" />
           More
         </h4>
         <p class="text-lum-text-secondary">
           Check out our Trustpilot or Google page for more testimonials.
         </p>
-        <div class="flex gap-2">
+        <div class="flex flex-wrap gap-2">
           <a
             href="https://www.trustpilot.com/review/birdflop.com"
             class="lum-btn lum-btn-p-3 rounded-lum-3 flex-1 fill-current"

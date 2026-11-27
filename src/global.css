@@ -4,6 +4,7 @@
 @import 'tw-animate-css';
 @import '@luminescent/ui';
 @import './components/ServerList/serverlist.css';
+@import './components/home/home.css';
 
 .markdown {
   @import '@luminescent/ui/formatting';
