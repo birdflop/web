@@ -32,18 +32,40 @@ export default component$<PaginationProps>(
     const labelText = itemLabel ?? t('pagination.items@@items');
 
     return (
-      <div class="relative my-2 flex flex-col items-center justify-between gap-2 p-1 sm:flex-row">
-        <p class="text-lum-text-secondary lum-btn-p-1 text-center text-xs sm:text-left">
-          {`${t('pagination.totalPrefix@@Total')} ${labelText}: ${rowsLength}/${totalCount}`}
-          {totalPages > 1 &&
-            ` - ${t('pagination.pageInfo@@Page ')}${page} ${t('pagination.of@@of')} ${totalPages}`}
-        </p>
+      <div class="relative my-2 flex flex-col items-center gap-2 p-1 sm:flex-row sm:justify-between">
+        <div class="flex w-full items-center justify-between gap-2 sm:contents">
+          <p class="text-lum-text-secondary lum-btn-p-1 min-w-0 truncate text-xs sm:order-1">
+            {`${t('pagination.totalPrefix@@Total')} ${labelText}: ${rowsLength}/${totalCount}`}
+            {totalPages > 1 &&
+              ` - ${t('pagination.pageInfo@@Page ')}${page} ${t('pagination.of@@of')} ${totalPages}`}
+          </p>
+          {showPerPage && perPage !== undefined && (
+            <div class="flex shrink-0 items-center justify-end gap-2 sm:order-3">
+              <p class="text-lum-text-secondary text-xs whitespace-nowrap">
+                {t('pagination.perPage@@Per page:')}
+              </p>
+              <SelectMenu
+                class="lum-btn-p-1 rounded-lum-1 lum-bg-transparent"
+                value={String(perPage)}
+                onChange$={(e, el) => {
+                  const newPerPage = parseInt(el.value, 10);
+                  void updateURL({ perPage: newPerPage, page: 1 });
+                }}
+                title={t('pagination.perPageTitle@@Items per page')}
+                values={perPageOptions.map((opt) => ({
+                  name: String(opt),
+                  value: String(opt),
+                }))}
+              />
+            </div>
+          )}
+        </div>
         {/* Page controls only when there is more than one page; the
             per-page selector stays so a large perPage can be undone. */}
         <div
           class={{
-            'flex flex-1 items-center justify-center gap-2': true,
-            invisible: totalPages <= 1,
+            'flex items-center justify-center gap-2 sm:order-2 sm:flex-1': true,
+            'invisible max-sm:hidden': totalPages <= 1,
           }}
         >
           <button
@@ -96,26 +118,6 @@ export default component$<PaginationProps>(
             <ChevronRight size={20} />
           </button>
         </div>
-        {showPerPage && perPage !== undefined && (
-          <div class="flex items-center justify-center gap-2 sm:justify-end">
-            <p class="text-lum-text-secondary text-xs whitespace-nowrap">
-              {t('pagination.perPage@@Per page:')}
-            </p>
-            <SelectMenu
-              class="lum-btn-p-1 rounded-lum-1 lum-bg-transparent"
-              value={perPage}
-              onChange$={(e, el) => {
-                const newPerPage = parseInt(el.value, 10);
-                void updateURL({ perPage: newPerPage, page: 1 });
-              }}
-              title={t('pagination.perPageTitle@@Items per page')}
-              values={perPageOptions.map((opt) => ({
-                name: String(opt),
-                value: String(opt),
-              }))}
-            />
-          </div>
-        )}
       </div>
     );
   }

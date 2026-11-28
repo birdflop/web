@@ -193,7 +193,6 @@ export default component$<VoteSectionProps>(
               disabled={voting.value}
               onClick$={vote}
             >
-              <ChevronUp size={18} />
               {voting.value ? 'Voting...' : 'Vote now'}
             </button>
           </>
