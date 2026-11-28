@@ -13,6 +13,7 @@ import {
   sanitizeRgbPreset,
 } from '~/util/serverlist/validation';
 import Output from '../Elements/Output';
+import MotdText from '../Elements/MotdText';
 import { getFormattingClasses } from '../rgbirdflop/preview';
 import { Birdflop } from '@luminescent/icons-qwik';
 
@@ -214,8 +215,8 @@ export default component$<ServerCardProps>(({ server, status, rank }) => {
                 </div>
               )}
             </div>
-            {/* Banner on the right next to title and description */}
-            {server.bannerUrl && (
+            {/* Banner on the right next to title and description, MOTD as fallback */}
+            {server.bannerUrl ? (
               <div class="bg-lum-input-bg/20 rounded-lum-2 pointer-events-none relative shrink-0 overflow-hidden">
                 <img
                   src={server.bannerUrl}
@@ -226,6 +227,15 @@ export default component$<ServerCardProps>(({ server, status, rank }) => {
                   style={{ imageRendering: 'pixelated' }}
                 />
               </div>
+            ) : (
+              status?.motd?.raw && (
+                <div
+                  class="rounded-lum-2 pointer-events-none relative max-h-16 max-w-[200px] shrink-0 overflow-hidden border border-white/10 px-2 py-1 text-xs whitespace-pre sm:max-h-20 sm:max-w-[300px] md:max-w-[468px]"
+                  style={{ background: 'rgba(0,0,0,0.45)' }}
+                >
+                  <MotdText text={status.motd.raw} />
+                </div>
+              )
             )}
           </div>
         </div>

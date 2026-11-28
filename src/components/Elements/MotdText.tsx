@@ -8,6 +8,32 @@ export interface MotdTextProps {
   class?: string;
 }
 
+// One page-wide timer scrambles every obfuscated run, shared by all mounted
+// MotdText instances (e.g. many server cards) instead of one interval each.
+// Mutation stays inside these functions because Qwik moves the task closure
+// into its own module, where it couldn't reassign module-level bindings.
+let obfuscationUsers = 0;
+let obfuscationTimer: ReturnType<typeof setInterval> | undefined;
+
+function acquireObfuscationTimer() {
+  obfuscationUsers++;
+  if (obfuscationTimer !== undefined) return;
+  obfuscationTimer = setInterval(() => {
+    document.querySelectorAll<HTMLElement>('.motd-obf').forEach((el) => {
+      const original = el.getAttribute('data-obf') ?? el.textContent ?? '';
+      el.textContent = obfuscateText(original);
+    });
+  }, 70);
+}
+
+function releaseObfuscationTimer() {
+  obfuscationUsers = Math.max(0, obfuscationUsers - 1);
+  if (obfuscationUsers === 0 && obfuscationTimer !== undefined) {
+    clearInterval(obfuscationTimer);
+    obfuscationTimer = undefined;
+  }
+}
+
 export function renderMotdLine(line: string) {
   const runs = parseMotdLine(line);
   if (runs.length === 0) return <span> </span>;
@@ -34,13 +60,8 @@ export const MotdText = component$<MotdTextProps>(
     // Animate obfuscated (&k / §k) text by scrambling characters
     // oxlint-disable-next-line qwik/no-use-visible-task
     useVisibleTask$((taskCtx) => {
-      const id = setInterval(() => {
-        document.querySelectorAll<HTMLElement>('.motd-obf').forEach((el) => {
-          const original = el.getAttribute('data-obf') ?? el.textContent ?? '';
-          el.textContent = obfuscateText(original);
-        });
-      }, 70);
-      taskCtx.cleanup(() => clearInterval(id));
+      acquireObfuscationTimer();
+      taskCtx.cleanup(releaseObfuscationTimer);
     });
 
     const lines = text.split(/\r?\n/);
